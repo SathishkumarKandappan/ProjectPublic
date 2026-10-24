@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "node server.js",
     "start": "node server.js",
-    "check": "node --check server.js && node --check public/app.js && node --check cloudflare/worker.js && node --check cloudflare/research.js && node --check public/research.js",
+    "check": "node --check server.js && node --check public/app.js && node --check cloudflare/worker.js && node --check cloudflare/research.js && node --check public/research.js && node --check cloudflare/publication-checks.js",
     "build": "node scripts/prepare-assets.js",
     "cf:dev": "npm run build && wrangler dev",
     "deploy": "npm run build && wrangler deploy",

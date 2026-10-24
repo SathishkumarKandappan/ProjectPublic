@@ -1,5 +1,5 @@
 # Papertrail
-A focused research-paper reading room with PDF upload, a four-stage 30-minute guide, chat, and a browser-local exportable notebook.
+A draft-to-research workspace with source discovery, screening, a personal library, untimed passage-by-passage reading, and a coach that keeps original writing separate from AI suggestions.
 
 ## Cloudflare — no Gemini key
 
@@ -10,10 +10,11 @@ Node 24 is available in the cloud environment.
 
 ```sh
 npm ci --cache /tmp/npm-cache
+npm run build
 npm start
 ```
 
-The server listens on port 3000 (override with PORT). A clearly labeled scripted sample works without credentials. Uploads are parsed in memory (15 MB maximum); scanned PDFs require OCR elsewhere. Text is capped at 65,000 characters. Uploaded text and conversation are session-only; notebook entries persist in browser local storage.
+The server listens on port 3000 (override with PORT). A clearly labeled scripted sample works without credentials. Uploads are parsed in memory (50 MB maximum); scanned PDFs require OCR elsewhere. Full extracted text is retained for thorough reading, up to five million characters; larger documents are rejected. Drafts, library texts and reading progress persist in browser IndexedDB; notes also use local storage. Export project backups regularly. Quick overviews remain excerpt-based.
 
 For live paper-specific conversation, get a Gemini API key at https://aistudio.google.com/apikey and securely inject `GEMINI_API_KEY` into the server process, then restart. The server calls Google's Gemini API; default model is `gemini-2.5-flash`, overridable with `GEMINI_MODEL`. Use a model and project eligible for the free tier; quotas and regional availability vary. Do not enable paid billing if you want to stay on the free tier. Free-tier provider data terms may permit use of submitted content to improve products; check Google's current terms before uploading confidential or unpublished papers. Never put keys in frontend code. The application does not automatically load .env files. Paper text is sent to the provider only for live chat. This local development app has no user authentication; add authentication, rate limiting, and deployment controls before public hosting.
 

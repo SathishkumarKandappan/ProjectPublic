@@ -1,0 +1,31 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {readFile} from 'node:fs/promises';import {JSDOM} from 'jsdom';import {indexedDB} from 'fake-indexeddb';
+const wait=()=>new Promise(resolve=>setTimeout(resolve,25));
+test('draft → real source search → library → deep reading → own notes → saved progress',async()=>{
+ const dom=new JSDOM(await readFile(new URL('../public/index.html',import.meta.url),'utf8'),{url:'https://paper.example'});const originalFetch=globalThis.fetch,originalInterval=globalThis.setInterval;
+ Object.assign(globalThis,{window:dom.window,document:dom.window.document,location:dom.window.location,localStorage:dom.window.localStorage,Event:dom.window.Event,CustomEvent:dom.window.CustomEvent,indexedDB,confirm:()=>true});globalThis.setInterval=()=>0;
+ let lastRequest;
+ globalThis.fetch=async(url,opts)=>{if(url==='/api/status')return Response.json({live:true,uploadMode:'browser'});const input=JSON.parse(opts.body);lastRequest=input;if(url==='/api/chat')return Response.json({reply:'The passage supports this comparison. What assumption does the method make?'});if(input.action==='search')return Response.json({items:[{doi:'10.1234/source',title:'Recorded reference',journal:'Journal',abstract:'Source abstract'}]});return Response.json({reply:'AI suggestions: compare your evidence, then write your own argument.'});};
+ try{
+ await import('../public/app.js');await import('../public/research.js');await import('../public/workflow.js');await wait();
+ const $=id=>document.getElementById(id);$('researchNav').click();assert.equal($('researchSection').hidden,false);
+ $('researchArea').value='Learning from examples';$('researchNotes').value='My idea is that context changes learning.';$('researchNotes').dispatchEvent(new Event('input'));
+ await $('draftFile').onchange({target:{files:[{name:'MyDraft.txt',size:100,text:async()=>('My current argument needs evidence about context. ').repeat(10)}],value:'',disabled:false}});assert.match($('draftStatus').textContent,/MyDraft.txt/);
+ await $('draftPlan').onclick();assert.match(lastRequest.paper,/USER DRAFT EXCERPTS/);assert.match($('draftPlanOutput').textContent,/AI suggestions/);
+ $('sourceQuery').value='context and learning';await $('findSources').onclick();assert.match($('sourceResults').textContent,/Recorded reference/);await $('sourceResults').querySelector('button').onclick();assert.match($('sourceLibrary').textContent,/Recorded reference/);
+ const fullText=Array.from({length:1800},(_,i)=>`[PDF page ${i+1}]\nControlled study ${i+1} of learning and context.\n`).join('')+'\nLast-page limitations must be read.';
+ window.dispatchEvent(new CustomEvent('papertrail:library',{detail:{name:'FullReference.pdf',text:fullText,pages:1800}}));await wait();
+ const cards=$('sourceLibrary').querySelectorAll('section');const fullCard=cards[cards.length-1];const byText=(host,text)=>[...host.querySelectorAll('button')].find(b=>b.textContent.includes(text));byText(fullCard,'Read thoroughly').click();const reader=$('projectReader');assert.equal(reader.hidden,false);
+ const sourceBefore=reader.querySelector('pre').textContent;assert.equal(byText(reader,'Next passage').disabled,true);
+ await byText(reader,'Explain this passage').onclick();await byText(reader,'Probe methods').onclick();const fields=reader.querySelectorAll('textarea');fields[0].value='I think the comparison isolates the effect of context.';fields[0].dispatchEvent(new Event('input'));await byText(reader,'Discuss my answer').onclick();fields[1].value='My critique: I need to inspect the controls before generalizing.';fields[1].dispatchEvent(new Event('input'));byText(reader,'mark reviewed').click();assert.equal(byText(reader,'Next passage').disabled,false);byText(reader,'Save my reflection').click();assert.match($('researchNotes').value,/MY REFLECTION/);assert.match($('researchNotes').value,/SOURCE EXCERPT \(not my words\)/);
+ byText(reader,'Next passage').click();assert.notEqual(reader.querySelector('pre').textContent,sourceBefore);assert.equal(byText(reader,'Next passage').disabled,true);byText(reader,'Skip for now').click();await wait();
+ const {loadProject}=await import('../public/project-store.js');const saved=await loadProject('research-workflow');const reference=saved.library.find(i=>i.name==='FullReference.pdf');assert.equal(reference.text,fullText);assert.ok(reference.text.length>80000);assert.equal(reference.reading.reviewed.length,1);assert.equal(reference.reading.skipped.length,1);assert.equal(saved.draft.name,'MyDraft.txt');
+ const before=$('researchNotes').value;await $('runCoach').onclick();assert.equal($('researchNotes').value,before);assert.match($('coachResult').textContent,/AI suggestions/);
+ $('nextResearchTask').value='Find a controlled replication';$('nextResearchTask').dispatchEvent(new Event('input'));$('completeResearchTask').click();await wait();assert.equal((await loadProject('research-workflow')).completedTasks[0].text,'Find a controlled replication');
+ // Export/restore preserves the full source, reading progress, original notes and draft.
+ let exported;const oldCreate=URL.createObjectURL,oldRevoke=URL.revokeObjectURL;URL.createObjectURL=blob=>{exported=blob;return 'blob:test'};URL.revokeObjectURL=()=>{};dom.window.HTMLAnchorElement.prototype.click=()=>{};
+ await $('projectBackup').onclick();const backup=await exported.text();URL.createObjectURL=oldCreate;URL.revokeObjectURL=oldRevoke;assert.equal(JSON.parse(backup).library.find(i=>i.name==='FullReference.pdf').text,fullText);
+ $('researchNotes').value='Temporary changed notes';await $('projectRestore').onchange({target:{files:[{size:backup.length,text:async()=>backup}],disabled:false,value:''}});assert.equal($('researchNotes').value,before);assert.match($('draftStatus').textContent,/MyDraft.txt/);
+ // Restore a standalone reader with progress; no full-text truncation in the persisted source.
+ const {mountDeepReader}=await import('../public/deep-reader.js');const host=document.createElement('section');document.body.append(host);mountDeepReader(host,structuredClone(reference));assert.ok(host.querySelector('[role=status]').textContent.includes('1 reviewed'));assert.match(reference.text,/Last-page limitations/);
+ }finally{globalThis.fetch=originalFetch;globalThis.setInterval=originalInterval;dom.window.close();}
+});

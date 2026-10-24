@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "node server.js",
     "start": "node server.js",
-    "check": "node --check server.js && node --check public/app.js && node --check cloudflare/worker.js && node --check cloudflare/research.js && node --check public/research.js && node --check cloudflare/publication-checks.js",
+    "check": "node --check server.js && node --check public/app.js && node --check cloudflare/worker.js && node --check cloudflare/research.js && node --check public/research.js && node --check cloudflare/publication-checks.js && node --check public/deep-reader.js && node --check public/project-store.js && node --check public/workflow.js && node --check public/document-limits.js",
     "build": "node scripts/prepare-assets.js",
     "cf:dev": "npm run build && wrangler dev",
     "deploy": "npm run build && wrangler deploy",
@@ -18,6 +18,8 @@
     "pdfjs-dist": "^6.4.299"
   },
   "devDependencies": {
+    "fake-indexeddb": "^6.2.6",
+    "jsdom": "^30.1.3",
     "wrangler": "^4.152.0"
   }
 }

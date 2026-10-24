@@ -5,7 +5,7 @@ import { PDFParse } from 'pdf-parse';
 const app=express(); app.use(express.json({limit:'2mb'})); app.use(express.static('public'));
 app.post('/api/research',async(req,res)=>{const response=await researchRequest(new Request('http://localhost/api/research',{method:'POST',body:JSON.stringify(req.body),headers:{'Content-Type':'application/json'}}),{});res.status(response.status).json(await response.json());});
 app.get('/api/status',(_,res)=>res.json({live:!!process.env.GEMINI_API_KEY}));
-app.post('/api/upload',multer({storage:multer.memoryStorage(),limits:{fileSize:15*1024*1024}}).single('paper'),async(req,res)=>{try{if(!req.file || req.file.buffer.subarray(0,5).toString()!=='%PDF-')return res.status(400).json({error:'Please choose a PDF file.'}); const parser=new PDFParse({data:new Uint8Array(req.file.buffer)}); let data; try { data=await parser.getText(); } finally { await parser.destroy(); } if(data.text.trim().length<100)return res.status(400).json({error:'This PDF has no readable text. Please use a text-based PDF rather than a scan.'});res.json({text:data.text.slice(0,65000),pages:data.total,name:req.file.originalname});}catch{res.status(400).json({error:'We could not read that PDF. Try another text-based PDF.'});}});
+app.post('/api/upload',multer({storage:multer.memoryStorage(),limits:{fileSize:50*1024*1024}}).single('paper'),async(req,res)=>{try{if(!req.file || req.file.buffer.subarray(0,5).toString()!=='%PDF-')return res.status(400).json({error:'Please choose a PDF file.'}); const parser=new PDFParse({data:new Uint8Array(req.file.buffer)}); let data; try { data=await parser.getText(); } finally { await parser.destroy(); } if(data.text.length>5000000)return res.status(400).json({error:'Document exceeds five million characters; split the PDF into parts.'}); if(data.text.trim().length<100)return res.status(400).json({error:'This PDF has no readable text. Please use a text-based PDF rather than a scan.'});res.json({text:data.text,pages:data.total,name:req.file.originalname});}catch{res.status(400).json({error:'We could not read that PDF. Try another text-based PDF.'});}});
 app.post('/api/chat', async (req, res) => {
   if (!process.env.GEMINI_API_KEY) return res.status(503).json({error:'Live AI needs GEMINI_API_KEY configured on the server. You can explore the sample session meanwhile.'});
   const {paper, messages, stage} = req.body;
@@ -42,5 +42,5 @@ app.post('/api/chat', async (req, res) => {
     res.status(502).json({error:error.name === 'TimeoutError' ? 'Gemini took too long to respond. Please retry.' : 'Could not reach Gemini. Check the server configuration and try again.'});
   }
 });
-app.use((err,req,res,next)=>res.status(400).json({error:err.code==='LIMIT_FILE_SIZE'?'PDF must be under 15 MB.':'Upload failed. Please try again.'}));
+app.use((err,req,res,next)=>res.status(400).json({error:err.code==='LIMIT_FILE_SIZE'?'PDF must be under 50 MB.':'Upload failed. Please try again.'}));
 app.listen(process.env.PORT||3000,'0.0.0.0',()=>console.log('Papertrail running on port '+(process.env.PORT||3000)));

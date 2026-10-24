@@ -1,9 +1,11 @@
+import {researchRequest} from './research.js';
 const MAX_BODY = 180000;
 const MAX_PAPER = 40000;
 const json = (data, status = 200) => Response.json(data, {status, headers:{'Cache-Control':'no-store'}});
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
+    if (url.pathname === '/api/research') return researchRequest(request,env);
     if (url.pathname === '/api/status') return json({live:!!env.AI, provider:'Cloudflare Workers AI', uploadMode:'browser', maxPaperCharacters:MAX_PAPER});
     if (url.pathname === '/api/chat') {
       if (request.method !== 'POST') return json({error:'Use POST for chat.'},405);

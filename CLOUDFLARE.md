@@ -39,3 +39,13 @@ Login opens Cloudflare in your browser. No credentials should be committed to Gi
 ## Local Node alternative
 
 `npm start` still starts the original Express backend using `GEMINI_API_KEY`. To use Workers AI, use the Cloudflare deployment or Wrangler workflow instead. Never put provider credentials in frontend files.
+
+## Paper screening and My research
+
+The sidebar now has **Paper screening** (PDF, DOI, or the reading-room paper) and **My research** (research area, original notes, a coach, and backup/restore). DOI lookups request public Crossref metadata from the Worker. No extra key is required. DOI-only relevance is provisional: the record may contain only a title, not an abstract or the full paper. Crossref registration is not a journal-quality or authenticity certification. The evidence panel links to source records and manual DOAJ checks; indexing, peer review, editorial conduct, and a complete retraction check are not automatically verified. No predatory-journal blacklist or paywalled database is queried.
+
+Original notes and the research area auto-save to browser local storage, shared by anyone using the same browser profile. Uploaded note files append rather than replace notes. Export backups regularly; clearing browser data loses local work. Backup restore explicitly confirms replacement. AI suggestions remain in a separate panel and export with an AI label; they never overwrite the user's notes. AI suggestions are not persisted across refreshes. PDF note imports use the bundled browser reader; notes are limited to 30,000 characters. Research area is limited to 6,000 characters.
+
+Coach requests send the area and notes to Workers AI only when requested. DOI screening sends the DOI to Crossref and supplied text to Workers AI for analysis. Coach output provides scaffolds, questions, evidence gaps and steps rather than submission-ready ghostwriting. It cannot certify originality or rule out plagiarism. Verify sources and write your final work in your own words.
+
+After pushing updates, check your Cloudflare Worker **Builds/Deployments** for the latest commit and redeploy if automatic builds are not enabled. GitHub Pages remains a static demo and does not implement these API-backed features. The local Node server supports DOI metadata lookup but research AI requires the Cloudflare Worker binding.

@@ -1,7 +1,11 @@
 # Papertrail
 A focused research-paper reading room with PDF upload, a four-stage 30-minute guide, chat, and a browser-local exportable notebook.
 
-## Run
+## Cloudflare — no Gemini key
+
+The full app now supports Cloudflare Workers with Workers AI. Follow [CLOUDFLARE.md](CLOUDFLARE.md) to deploy directly from GitHub or with a browser login from your computer. Free-plan usage limits apply.
+
+## Run locally with Gemini
 Node 24 is available in the cloud environment.
 
 ```sh

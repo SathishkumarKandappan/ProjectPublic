@@ -18,4 +18,4 @@ For live paper-specific conversation, get a Gemini API key at https://aistudio.g
 ## GitHub Pages demo
 The `gh-pages` branch contains the static contents of `public/`. In repository Settings → Pages, select “Deploy from a branch”, branch `gh-pages`, folder `/ (root)`, and save. The Pages version supports the scripted sample, stages, timer, notebook, and export. It cannot run the Node server, PDF extraction, or live AI. Never add API keys to the static deployment.
 
-To refresh the demo after frontend changes, run `git subtree split --prefix public -b pages-update` and `git push origin pages-update:gh-pages`, then delete the temporary local branch.
+To refresh the demo after frontend changes, publish the contents of `public/` to the root of `gh-pages`. Keep all backend code and API keys out of that branch.

@@ -35,9 +35,30 @@ export function extractOffers(html,{name,provider,url,date}){
 async function get(url,fetcher){const r=await fetcher(url,{redirect:'error',signal:AbortSignal.timeout(10000),headers:{'User-Agent':'KitchenLedger/1.0 (public grocery price comparison)'}});if(!r.ok)throw Error('Source returned '+r.status);const length=Number(r.headers.get('content-length')||0);if(length>2000000)throw Error('Source too large');const text=await r.text();if(text.length>2000000)throw Error('Source too large');return text;}
 export async function searchItem({name,date,provider},fetcher=fetch){
  if(!providers[provider])throw Error('Unknown provider');
- const query=(names[name]?.[0]||name)+' price Bangalore INR '+date+' ('+providers[provider].map(h=>'site:'+h).join(' OR ')+')';
- const rss=await get('https://www.bing.com/search?format=rss&q='+encodeURIComponent(query),fetcher);
- const urls=[...rss.matchAll(/<item\b[^>]*>([\s\S]*?)<\/item>/g)].map(m=>m[1].match(/<link>([\s\S]*?)<\/link>/)?.[1]).filter(Boolean).map(decode).filter(u=>allowed(u,provider)).slice(0,3);
+ const query=(names[name]?.[0]||name)+' price site:'+providers[provider][0];
+ let listings=[];const errors=[];
+ try{listings=rssResults(await get('https://www.bing.com/search?format=rss&q='+encodeURIComponent(query),fetcher));}catch{errors.push('Bing search failed');}
+ let candidates=listings.filter(r=>allowed(r.url,provider));
+ let indexed=candidates.map(r=>indexedQuote({...r,name,provider,date})).filter(Boolean);
+ if(!indexed.length){try{const more=duckResults(await get('https://html.duckduckgo.com/html/?q='+encodeURIComponent(query),fetcher));candidates.push(...more.filter(r=>allowed(r.url,provider)));indexed=more.map(r=>indexedQuote({...r,name,provider,date})).filter(Boolean);}catch{errors.push('Alternate search failed');}}
+ const urls=[...new Set(candidates.map(r=>r.url))].slice(0,2);
  const results=await Promise.allSettled(urls.map(async url=>extractOffers(await get(url,fetcher),{name,date,provider,url})));
- return {name,provider,quotes:results.flatMap(r=>r.status==='fulfilled'?r.value:[]),searchedAt:new Date().toISOString(),searched:true,warning:date!==today()?'Search completed; current offers cannot verify historical prices.':!urls.length?'Search returned no matching primary product pages.':undefined};
+ const direct=results.flatMap(r=>r.status==='fulfilled'?r.value:[]);
+ return {name,provider,quotes:[...direct,...indexed.filter(q=>!direct.some(d=>d.url===q.url&&d.unit===q.unit))],searchedAt:new Date().toISOString(),searched:true,warning:date!==today()?'Search completed; current offers cannot verify historical prices.':!urls.length?'Search returned no matching primary product pages.':errors.join('; ')||undefined};
+}
+
+const plain=s=>decode(s.replace(/<[^>]*>/g,' ')).replace(/\s+/g,' ').trim();
+export function indexedQuote({title,snippet,url,name,provider,date}){
+ if(date!==today()||!allowed(url,provider)||!matches(name,title))return null;
+ // A price must be explicitly associated with this single product result.
+ const priceMatch=title.match(/(?:Price(?:\s+of)?|Buy\s+at)\s*(?:₹|Rs\.?\s*)([\d,]+(?:\.\d+)?)/i)||snippet.match(/\bPrice\s*:?\s*(?:₹|Rs\.?\s*)([\d,]+(?:\.\d+)?)/i);
+ if(!priceMatch)return null;
+ const pack=packAmount(title)||packAmount(snippet)||packAmount(decodeURIComponent(new URL(url).pathname).replace(/[-_/]/g,' '));
+ const packPrice=Number(priceMatch[1].replace(/,/g,''));if(!pack||!(packPrice>0)||packPrice>100000)return null;
+ return {retailer:provider,name,unit:pack.unit,price:packPrice/pack.quantity,pack:pack.pack,packQuantity:packPrice,product:title,url,observed:today(),basis:'Search-indexed reference',source:provider+' search-indexed price reference'};
+}
+export function rssResults(xml){return [...xml.matchAll(/<item\b[^>]*>([\s\S]*?)<\/item>/g)].map(m=>{const field=n=>plain((m[1].match(new RegExp('<'+n+'>([\\s\\S]*?)</'+n+'>'))?.[1]||'').replace(/<!\[CDATA\[|\]\]>/g,''));return{title:field('title'),snippet:field('description'),url:field('link')};});}
+export function duckResults(html){
+ const anchors=[...html.matchAll(/<a\b(?=[^>]*class=["'][^"']*result__a\b)([^>]*)>([\s\S]*?)<\/a>/gi)];
+ return anchors.map((m,i)=>{let url=decode(m[1].match(/href=["']([^"']+)["']/)?.[1]||'');try{const link=new URL(url,'https://duckduckgo.com');url=link.searchParams.get('uddg')||link.href;}catch{}const body=html.slice(m.index+m[0].length,anchors[i+1]?.index||html.length);const snippet=body.match(/<(?:a|div)\b[^>]*class=["'][^"']*result__snippet[^"']*["'][^>]*>([\s\S]*?)<\/(?:a|div)>/i)?.[1]||'';return{title:plain(m[2]),snippet:plain(snippet),url};});
 }

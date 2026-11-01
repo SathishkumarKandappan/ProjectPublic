@@ -22,7 +22,7 @@ for(const x of saved.items||[])if(!catalog.has(x.name)&&x.name&&x.unit)catalog.s
 function supplierFor(name,unit){const dated=localQuotes.filter(q=>q.name===name&&q.unit===unit&&q.date<=selectedDate).sort((a,b)=>a.date.localeCompare(b.date)).at(-1);return dated?{...dated,effectiveDate:dated.date}:supplierQuotes.find(q=>q.name===name&&q.unit===unit)||supplierQuotes.find(q=>q.name===name)||null;}
 function quoteForDish(name,unit){const market=marketAsOf(records,name,unit,selectedDate),supplier=supplierFor(name,unit),choices=[];if(market)choices.push({...market,unit});if(supplier?.unit===unit&&(supplier.effectiveDate||selectedDate===todayIST()))choices.push({...supplier,unit});for(const retailer of ['Blinkit','BigBasket','Instamart']){const r=retailerQuote(retailer,name,unit,selectedDate);if(r)choices.push({...r,date:r.observed});}const extra=otherQuote(name,unit,selectedDate);if(extra)choices.push({...extra,date:extra.observed});return choices.sort((a,b)=>a.price-b.price)[0]||null;}
 function priceCell(quote,unit,tone,date){const cell=document.createElement('td'),price=document.createElement('b');price.textContent=money(quote?.price);price.className=tone||'neutral';cell.append(price);if(quote){const suffix=document.createElement('span');suffix.className='unit';suffix.textContent=' / '+unit;const stamp=document.createElement('small');stamp.textContent=date;cell.append(suffix,stamp);cell.title=quote.source||'';}return cell;}
-function retailerCell(quote,tone){if(!quote)return priceCell(null,'kg','neutral','');const cell=priceCell(quote,quote.unit,tone,'Listed '+dateLabel(quote.observed));const value=cell.querySelector('b');const link=document.createElement('a');link.href=quote.url;link.target='_blank';link.rel='noopener';link.title=`${quote.product} · ${quote.pack} for ${money(quote.packQuantity)} · public listed reference`;value.replaceWith(link);link.append(value);const product=document.createElement('small');product.textContent=quote.retailer+' · '+quote.product;cell.append(product);return cell;}
+function retailerCell(quote,tone){if(!quote)return priceCell(null,'kg','neutral','');const cell=priceCell(quote,quote.unit,tone,(quote.basis==='Search-indexed reference'?'Search reference checked ':'Listed ')+dateLabel(quote.observed));const value=cell.querySelector('b');const link=document.createElement('a');link.href=quote.url;link.target='_blank';link.rel='noopener';link.title=`${quote.product} · ${quote.pack} for ${money(quote.packQuantity)} · public listed reference`;value.replaceWith(link);link.append(value);const product=document.createElement('small');product.textContent=quote.retailer+' · '+quote.product;cell.append(product);return cell;}
 function renderPrices(){$('#priceRows').replaceChildren(...[...catalog.values()].map(item=>{
  const market=marketAsOf(records,item.name,item.unit,selectedDate),supplier=supplierFor(item.name,item.unit),retailers=['Blinkit','BigBasket','Instamart'].map(r=>retailerQuote(r,item.name,item.unit,selectedDate)||retailerPrices.find(q=>q.retailer===r&&q.name===item.name&&q.observed<=selectedDate));
  const quotes=[market,supplier,...retailers],comparable=quotes.filter(q=>q&&q.unit===item.unit).map(q=>q.price),low=Math.min(...comparable),high=Math.max(...comparable);
@@ -84,20 +84,23 @@ async function refreshPrices(){
   const results=await Promise.allSettled([
    read('market.json','records',r=>validQuote(r)&&validDate(r.date)),
    read('supplier.json','quotes',r=>validQuote(r)&&(!r.effectiveDate||validDate(r.effectiveDate))),
-   read('retailer-prices.json','quotes',r=>validQuote(r)&&validDate(r.observed)&&typeof r.retailer==='string'&&typeof r.url==='string'&&r.url.startsWith('https://'))
+   read('retailer-prices.json','quotes',r=>validQuote(r)&&validDate(r.observed)&&typeof r.retailer==='string'&&typeof r.url==='string'&&r.url.startsWith('https://')),
+   fetch(root+'update-status.json?t='+Date.now(),{cache:'no-store',signal:controller.signal}).then(async response=>{if(!response.ok)throw Error('Status unavailable');return response.json();})
   ]);
   if(request!==requestId)return;
   if(results[0].status==='fulfilled')records=results[0].value;
   if(results[1].status==='fulfilled')supplierQuotes=results[1].value;
   if(results[2].status==='fulfilled')retailerPrices.splice(0,retailerPrices.length,...results[2].value);
   for(const q of [...records,...supplierQuotes,...retailerPrices])if(!catalog.has(q.name))catalog.set(q.name,{name:q.name,unit:q.unit});
-  const failed=results.map((r,i)=>r.status==='rejected'?['Market','Supplier','Online'][i]:null).filter(Boolean);
+  const failed=results.slice(0,3).map((r,i)=>r.status==='rejected'?['Market','Supplier','Online'][i]:null).filter(Boolean);
   $('#error').hidden=!failed.length;
   $('#error').textContent=failed.length?failed.join(', ')+' refresh failed. Keeping previously loaded prices for these sources.':'';
   const time=new Date().toLocaleTimeString('en-IN',{timeZone:'Asia/Kolkata',hour:'2-digit',minute:'2-digit'});
   status.textContent=(failed.length===3?'Refresh failed':failed.length?'Partly refreshed':'Prices reloaded')+' · '+time+' IST · quote dates shown below';
   clearTimeout(timeout);
-  status.textContent=(failed.length?'Some sources could not reload':'Daily price files reloaded')+' · '+time+' IST · recorded quote dates shown below';
+  const update=results[3].status==='fulfilled'?results[3].value:null;
+  const checked=update?.checkedAt&&!Number.isNaN(Date.parse(update.checkedAt))?new Date(update.checkedAt).toLocaleString('en-IN',{timeZone:'Asia/Kolkata',day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})+' IST':null;
+  status.textContent=(failed.length?'Some sources could not reload':checked?'Daily check '+checked:'Daily price files reloaded · '+time+' IST')+(update?.retailers?.verified===0?' · no new retailer quotes; recorded prices retained':' · recorded quote dates shown below');
  }finally{
   clearTimeout(timeout);
   if(request===requestId){$('#priceDate').removeAttribute('aria-busy');render();}

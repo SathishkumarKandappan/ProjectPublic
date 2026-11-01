@@ -14,7 +14,7 @@ export function mergeQuotes(previous,incoming){
 }
 export async function collect({previous,items,search=searchItem,fetcher=fetch,concurrency=6,onProgress=()=>{},budgetMs=600000}){
  const names=[...new Set(items)],jobs=names.flatMap(name=>providers.map(provider=>({name,date:today(),provider})));
- const started=Date.now(),fresh=[],stats=Object.fromEntries(providers.map(p=>[p,{searched:0,verified:0,failed:0,noQuote:0}]));let cursor=0,completed=0;
+ const started=Date.now(),fresh=[],stats=Object.fromEntries(providers.map(p=>[p,{searched:0,verified:0,failed:0,noQuote:0,blocked:0}]));let cursor=0,completed=0;
  const worker=async()=>{while(cursor<jobs.length&&Date.now()-started<budgetMs){
   const job=jobs[cursor++],stat=stats[job.provider];
   try{
@@ -23,7 +23,7 @@ export async function collect({previous,items,search=searchItem,fetcher=fetch,co
    // Recheck previously verified primary product URLs when search offers no quote.
    if(!result.quotes.length){const known=previous.filter(q=>q.name===job.name&&allowed(q.url,job.provider)&&/\/(pd|prn|pn|p)\//.test(new URL(q.url).pathname)).sort((a,b)=>b.observed.localeCompare(a.observed));
     const urls=[...new Set(known.map(q=>q.url))].slice(0,2);
-    for(const url of urls){try{const r=await fetcher(url,{signal:AbortSignal.timeout(8000),redirect:'error'});if(!r.ok)continue;const text=await r.text();if(text.length>2000000)continue;const found=extractOffers(text,{...job,url});fresh.push(...found);stat.verified+=found.length;}catch{}}
+    for(const url of urls){try{const r=await fetcher(url,{signal:AbortSignal.timeout(8000),redirect:'error'});if(!r.ok){stat.blocked++;continue;}const text=await r.text();if(text.length>2000000)continue;const found=extractOffers(text,{...job,url});fresh.push(...found);stat.verified+=found.length;}catch{}}
     if(stat.verified===before)stat.noQuote++;
    }
   }catch{stat.failed++;}
@@ -38,12 +38,12 @@ async function main(){
  const items=[...defaults,...supplierSeed,...pdfRates,...retailerPrices].map(q=>q.name);
  const result=await collect({previous,items,onProgress:p=>console.log(JSON.stringify(p))});
  writeFileSync(path,JSON.stringify(result,null,2)+'\n');
- // Supplier quotes remain unchanged and undated unless the supplier supplies a date.
- const supplierPath=join(dir,'supplier.json');try{readFileSync(supplierPath);}catch{writeFileSync(supplierPath,JSON.stringify({quotes:[...supplierSeed,...pdfRates]},null,2)+'\n');}
+ // Supplier rates are managed only from a new user-provided list. Never write supplier.json here.
  const market=JSON.parse(readFileSync(join(dir,'market.json'),'utf8'));
  const status={checkedAt:result.checkedAt,retailers:result.collection,marketErrors:market.errors||[]};
  writeFileSync(join(dir,'update-status.json'),JSON.stringify(status,null,2)+'\n');
  console.log(JSON.stringify(status));
+ if(!result.collection.verified)console.log('::warning::No newly verified retailer prices. Retailer quotes retain their previous observation dates.');
  const report=`## Daily kitchen price update\n\n- Search checks completed: ${result.collection.completed}/${result.collection.total}\n- Verified product offers: ${result.collection.verified}\n- Market source errors: ${status.marketErrors.length}\n\nPreviously recorded prices retain their original dates when a source fails. Supplier prices are never changed by market searches.\n`;
  if(process.env.GITHUB_STEP_SUMMARY)writeFileSync(process.env.GITHUB_STEP_SUMMARY,report,{flag:'a'});
 }

@@ -48,7 +48,7 @@ jobs:
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add kitchen/market.json kitchen/retailer-prices.json kitchen/supplier.json kitchen/update-status.json
+          git add kitchen/market.json kitchen/retailer-prices.json kitchen/update-status.json
           if ! git diff --cached --quiet; then
             git commit -m 'Refresh dated kitchen price observations'
             git push origin HEAD:gh-pages

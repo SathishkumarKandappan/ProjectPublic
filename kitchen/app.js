@@ -1,4 +1,3 @@
-import {searchEndpoint} from './search-config.js';
 import {defaults} from './seed.js';
 import {supplierSeed} from './supplier-seed.js';
 import {pdfRates} from './pdf-rates.js';
@@ -98,33 +97,11 @@ async function refreshPrices(){
   const time=new Date().toLocaleTimeString('en-IN',{timeZone:'Asia/Kolkata',hour:'2-digit',minute:'2-digit'});
   status.textContent=(failed.length===3?'Refresh failed':failed.length?'Partly refreshed':'Prices reloaded')+' · '+time+' IST · quote dates shown below';
   clearTimeout(timeout);
-  if(searchEndpoint)await searchPricesForDate({date,request,signal:controller.signal});
-  else status.textContent='Internet search not connected · showing recorded prices';
+  status.textContent=(failed.length?'Some sources could not reload':'Daily price files reloaded')+' · '+time+' IST · recorded quote dates shown below';
  }finally{
   clearTimeout(timeout);
   if(request===requestId){$('#priceDate').removeAttribute('aria-busy');render();}
  }
-}
-async function searchPricesForDate({date,request,signal}){
- const endpoint=new URL(searchEndpoint);if(endpoint.protocol!=='https:')throw Error('Search requires HTTPS');
- const jobs=[...catalog.keys()].flatMap(name=>['Blinkit','BigBasket','Instamart','Other'].map(provider=>({name,provider})));
- let cursor=0,done=0,found=0,errors=0;
- const worker=async()=>{while(cursor<jobs.length&&!signal.aborted){
-  const job=jobs[cursor++],url=new URL(endpoint);url.searchParams.set('date',date);url.searchParams.set('name',job.name);url.searchParams.set('provider',job.provider);
-  try{
-   const response=await fetch(url,{cache:'no-store',signal});if(!response.ok)throw Error('Search failed');
-   const result=await response.json();if(!result.searched||!Array.isArray(result.quotes))throw Error('Invalid search response');
-   if(request!==requestId)return;
-   const quotes=result.quotes.filter(q=>q.name===job.name&&q.observed===date&&q.observed===todayIST()&&Number.isFinite(q.price)&&q.price>0&&typeof q.unit==='string'&&typeof q.url==='string'&&q.url.startsWith('https://')&&typeof q.product==='string');
-   for(const q of quotes){const existing=retailerPrices.findIndex(r=>r.name===q.name&&r.retailer===q.retailer&&r.unit===q.unit&&r.url===q.url&&r.observed===q.observed);if(existing>=0)retailerPrices[existing]=q;else retailerPrices.push(q);}
-   found+=quotes.length;
-  }catch{if(signal.aborted)return;errors++;}
-  done++;if(request!==requestId)return;
-  $('#refreshStatus').textContent='Searching internet · '+done+'/'+jobs.length+' · '+found+' prices found';
-  if(done%4===0)render();
- }};
- await Promise.all(Array.from({length:4},worker));if(request!==requestId)return;
- $('#refreshStatus').textContent='Search finished · '+found+' verified prices'+(errors?' · '+errors+' searches failed':'')+' · older quotes keep their dates';
 }
 $('#priceDate').max=todayIST();$('#priceDate').value=selectedDate;$('#priceDate').addEventListener('change',()=>{const input=$('#priceDate');if(!input.value||!input.validity.valid){input.reportValidity();return;}selectedDate=input.value;render();refreshPrices();});
 const tabs=[...document.querySelectorAll('[data-type]')];

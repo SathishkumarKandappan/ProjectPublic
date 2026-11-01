@@ -1,0 +1,13 @@
+import assert from 'node:assert/strict';
+import {collect,mergeQuotes} from '../scripts/daily-retailer-prices.mjs';
+import {today} from '../server/search-prices.mjs';
+const old={retailer:'BigBasket',name:'Ragi flour',unit:'kg',price:80,observed:'2020-01-01',url:'https://www.bigbasket.com/pd/1'};
+const fresh={...old,price:90,observed:today()};
+assert.equal(mergeQuotes([old],[fresh]).length,2);
+assert.equal(mergeQuotes([old],[{...fresh,price:NaN}]).length,1);
+const seen=[];const success=await collect({previous:[old],items:['Ragi flour'],search:async job=>{seen.push(job.provider);return{quotes:job.provider==='BigBasket'?[fresh]:[]}},fetcher:async()=>new Response('',{status:503})});
+assert.equal(seen.length,4);assert.equal(success.collection.completed,4);assert.equal(success.collection.verified,1);assert.equal(success.quotes[0].observed,'2020-01-01');
+const blocked=await collect({previous:[old],items:['Ragi flour'],search:async()=>{throw Error('blocked')},fetcher:async()=>new Response('',{status:403})});
+assert.deepEqual(blocked.quotes,[old]);assert.equal(blocked.collection.providers.BigBasket.failed,1);assert.equal(blocked.collection.verified,0);
+const deadline=await collect({previous:[old],items:['Ragi flour'],budgetMs:0});assert.equal(deadline.collection.unattempted,4);assert.deepEqual(deadline.quotes,[old]);
+console.log('PASS: dated history, blocked-source fallback, all-provider searches and bounded runs');

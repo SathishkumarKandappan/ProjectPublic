@@ -1,0 +1,1288 @@
+{
+  "quotes": [
+    {
+      "name": "Jaggery",
+      "originalName": "Jaggery",
+      "unit": "kg",
+      "price": 85,
+      "effectiveDate": null,
+      "source": "Supplier price list",
+      "note": "2kg for ₹170; date not supplied"
+    },
+    {
+      "name": "Lemon",
+      "originalName": "Lemon",
+      "unit": "piece",
+      "price": 8,
+      "effectiveDate": null,
+      "source": "Supplier price list",
+      "note": "15 pc for ₹120; date not supplied"
+    },
+    {
+      "name": "Potato",
+      "originalName": "Potato",
+      "unit": "kg",
+      "price": 25,
+      "effectiveDate": null,
+      "source": "Supplier price list",
+      "note": "9kg for ₹225; date not supplied"
+    },
+    {
+      "name": "Milk",
+      "originalName": "Milk",
+      "unit": "litre",
+      "price": 54,
+      "effectiveDate": null,
+      "source": "Supplier price list",
+      "note": "6l for ₹324; date not supplied"
+    },
+    {
+      "name": "Curd",
+      "originalName": "Curd",
+      "unit": "litre",
+      "price": 56,
+      "effectiveDate": null,
+      "source": "Supplier price list",
+      "note": "4l for ₹224; date not supplied"
+    },
+    {
+      "name": "Cabbage",
+      "originalName": "Cabbage",
+      "unit": "kg",
+      "price": 40,
+      "effectiveDate": null,
+      "source": "Supplier price list",
+      "note": "7kg for ₹280; date not supplied"
+    },
+    {
+      "name": "Coconut",
+      "originalName": "Coconut",
+      "unit": "piece",
+      "price": 40,
+      "effectiveDate": null,
+      "source": "Supplier price list",
+      "note": "1 pc for ₹40; date not supplied"
+    },
+    {
+      "name": "Toor dal",
+      "originalName": "Toor Dal",
+      "unit": "kg",
+      "price": 135,
+      "effectiveDate": null,
+      "source": "Supplier price list",
+      "note": "8kg for ₹1080; date not supplied"
+    },
+    {
+      "name": "Moong dal",
+      "originalName": "Moong dal",
+      "unit": "kg",
+      "price": 125,
+      "effectiveDate": null,
+      "source": "Supplier price list",
+      "note": "3kg for ₹375; date not supplied"
+    },
+    {
+      "name": "Urad dal",
+      "originalName": "Urad Dal",
+      "unit": "kg",
+      "price": 214.2857,
+      "effectiveDate": null,
+      "source": "Supplier price list",
+      "note": "0.35kg for ₹75; date not supplied"
+    },
+    {
+      "name": "Black channa",
+      "originalName": "Black channa",
+      "unit": "kg",
+      "price": 100,
+      "effectiveDate": null,
+      "source": "Supplier price list",
+      "note": "1.5 kg for ₹150; date not supplied"
+    },
+    {
+      "name": "Chana dal",
+      "originalName": "Channa Dal",
+      "unit": "kg",
+      "price": 100,
+      "effectiveDate": null,
+      "source": "Supplier price list",
+      "note": "0.1kg for ₹10; date not supplied"
+    },
+    {
+      "name": "Rava",
+      "originalName": "Rava",
+      "unit": "kg",
+      "price": 66.6667,
+      "effectiveDate": null,
+      "source": "Supplier price list",
+      "note": "6kg for ₹400; date not supplied"
+    },
+    {
+      "name": "Poha",
+      "originalName": "Poha",
+      "unit": "kg",
+      "price": 90,
+      "effectiveDate": null,
+      "source": "Supplier price list",
+      "note": "3kg for ₹270; date not supplied"
+    },
+    {
+      "name": "Red rice",
+      "originalName": "Red rice",
+      "unit": "kg",
+      "price": 55,
+      "effectiveDate": null,
+      "source": "Supplier price list",
+      "note": "33kg for ₹1815; date not supplied"
+    },
+    {
+      "name": "White rice (unspecified)",
+      "originalName": "White rice",
+      "unit": "kg",
+      "price": 68.125,
+      "effectiveDate": null,
+      "source": "Supplier price list",
+      "note": "8kg for ₹545; date not supplied"
+    },
+    {
+      "name": "Puffed rice",
+      "originalName": "Puffed rice",
+      "unit": "packet",
+      "price": 45,
+      "effectiveDate": null,
+      "source": "Supplier price list",
+      "note": "1pkt for ₹45; date not supplied"
+    },
+    {
+      "name": "Tamarind",
+      "originalName": "Tamarind",
+      "unit": "kg",
+      "price": 280,
+      "effectiveDate": null,
+      "source": "Supplier price list",
+      "note": "0.5kg for ₹140; date not supplied"
+    },
+    {
+      "name": "Coriander seeds",
+      "originalName": "Dhaniya seeds",
+      "unit": "kg",
+      "price": 240,
+      "effectiveDate": null,
+      "source": "Supplier price list",
+      "note": "0.25kg for ₹60; date not supplied"
+    },
+    {
+      "name": "Hing",
+      "originalName": "Hing",
+      "unit": "kg",
+      "price": 1700,
+      "effectiveDate": null,
+      "source": "Supplier price list",
+      "note": "50g for ₹85; date not supplied"
+    },
+    {
+      "name": "Cooking oil (unspecified)",
+      "originalName": "Oil",
+      "unit": "litre",
+      "price": 187,
+      "effectiveDate": null,
+      "source": "Supplier price list",
+      "note": "3l for ₹561; date not supplied"
+    },
+    {
+      "name": "Salt",
+      "originalName": "Salt",
+      "unit": "kg",
+      "price": 30,
+      "effectiveDate": null,
+      "source": "Supplier price list",
+      "note": "1kg for ₹30; date not supplied"
+    },
+    {
+      "name": "Cumin seeds",
+      "originalName": "Jeera",
+      "unit": "kg",
+      "price": 600,
+      "effectiveDate": null,
+      "source": "Supplier price list",
+      "note": "0.3kg for ₹180; date not supplied"
+    },
+    {
+      "name": "Mustard seeds",
+      "originalName": "Mustard seeds",
+      "unit": "kg",
+      "price": 200,
+      "effectiveDate": null,
+      "source": "Supplier price list",
+      "note": "0.15kg for ₹30; date not supplied"
+    },
+    {
+      "name": "Red chilli",
+      "originalName": "Red chilli",
+      "unit": "kg",
+      "price": 300,
+      "effectiveDate": null,
+      "source": "Supplier price list",
+      "note": "0.2kg for ₹60; date not supplied"
+    },
+    {
+      "name": "Pepper",
+      "originalName": "Pepper",
+      "unit": "kg",
+      "price": 900,
+      "effectiveDate": null,
+      "source": "Supplier price list",
+      "note": "0.1kg for ₹90; date not supplied"
+    },
+    {
+      "name": "Kala jeera",
+      "originalName": "Kala jeera",
+      "unit": "kg",
+      "price": 570,
+      "effectiveDate": null,
+      "source": "Supplier price list",
+      "note": "0.1kg for ₹57; date not supplied"
+    },
+    {
+      "name": "Whole garam masala",
+      "originalName": "Whole garam masala",
+      "unit": "packet",
+      "price": 30,
+      "effectiveDate": null,
+      "source": "Supplier price list",
+      "note": "2pkt for ₹60; date not supplied"
+    },
+    {
+      "name": "ENO",
+      "originalName": "ENO",
+      "unit": "packet",
+      "price": 10,
+      "effectiveDate": null,
+      "source": "Supplier price list",
+      "note": "5pkt for ₹50; date not supplied"
+    },
+    {
+      "name": "Green chilli",
+      "originalName": "Green chillie",
+      "unit": "kg",
+      "price": 120,
+      "effectiveDate": null,
+      "source": "Supplier price list",
+      "note": "0.5kg for ₹60; date not supplied"
+    },
+    {
+      "name": "Ginger",
+      "originalName": "Ginger",
+      "unit": "kg",
+      "price": 200,
+      "effectiveDate": null,
+      "source": "Supplier price list",
+      "note": "0.5kg for ₹100; date not supplied"
+    },
+    {
+      "name": "Curry leaves",
+      "originalName": "Curry leaves",
+      "unit": "bunch",
+      "price": 60,
+      "effectiveDate": null,
+      "source": "Supplier price list",
+      "note": "1 bunch for ₹60; date not supplied"
+    },
+    {
+      "name": "Tomato",
+      "originalName": "Tomato",
+      "unit": "kg",
+      "price": 50,
+      "effectiveDate": null,
+      "source": "Supplier price list",
+      "note": "2kg for ₹100; date not supplied"
+    },
+    {
+      "name": "Bottle gourd",
+      "originalName": "Bottle guard",
+      "unit": "piece",
+      "price": 50,
+      "effectiveDate": null,
+      "source": "Supplier price list",
+      "note": "5pc for ₹250; date not supplied"
+    },
+    {
+      "name": "Cauliflower",
+      "originalName": "Cauliflower",
+      "unit": "piece",
+      "price": 60,
+      "effectiveDate": null,
+      "source": "Supplier price list",
+      "note": "2pc for ₹120; date not supplied"
+    },
+    {
+      "name": "Cucumber",
+      "originalName": "Cucumber",
+      "unit": "kg",
+      "price": 50,
+      "effectiveDate": null,
+      "source": "Supplier price list",
+      "note": "4kg for ₹200; date not supplied"
+    },
+    {
+      "name": "Cauliflower",
+      "unit": "piece",
+      "price": 60,
+      "effectiveDate": null,
+      "source": "PDF weekly budget",
+      "basis": "Budget-derived reference",
+      "page": 1,
+      "note": "PDF p. 1; first usable weekly entry, date unverified"
+    },
+    {
+      "name": "Ragi flour",
+      "unit": "kg",
+      "price": 100,
+      "effectiveDate": null,
+      "source": "PDF weekly budget",
+      "basis": "Budget-derived reference",
+      "page": 2,
+      "note": "PDF p. 2; first usable weekly entry, date unverified"
+    },
+    {
+      "name": "Mangalore cucumber",
+      "unit": "kg",
+      "price": 60,
+      "effectiveDate": null,
+      "source": "PDF weekly budget",
+      "basis": "Budget-derived reference",
+      "page": 2,
+      "note": "PDF p. 2; first usable weekly entry, date unverified"
+    },
+    {
+      "name": "Banana stem",
+      "unit": "kg",
+      "price": 50,
+      "effectiveDate": null,
+      "source": "PDF weekly budget",
+      "basis": "Budget-derived reference",
+      "page": 2,
+      "note": "PDF p. 2; first usable weekly entry, date unverified"
+    },
+    {
+      "name": "Sona Masuri rice (unspecified)",
+      "unit": "kg",
+      "price": 50,
+      "effectiveDate": null,
+      "source": "PDF weekly budget",
+      "basis": "Budget-derived reference",
+      "page": 2,
+      "note": "PDF p. 2; first usable weekly entry, date unverified"
+    },
+    {
+      "name": "Nylon poha",
+      "unit": "kg",
+      "price": 100,
+      "effectiveDate": null,
+      "source": "PDF weekly budget",
+      "basis": "Budget-derived reference",
+      "page": 2,
+      "note": "PDF p. 2; first usable weekly entry, date unverified"
+    },
+    {
+      "name": "Carrot",
+      "unit": "kg",
+      "price": 40,
+      "effectiveDate": null,
+      "source": "PDF weekly budget",
+      "basis": "Budget-derived reference",
+      "page": 2,
+      "note": "PDF p. 2; first usable weekly entry, date unverified"
+    },
+    {
+      "name": "Wheat flour",
+      "unit": "kg",
+      "price": 65,
+      "effectiveDate": null,
+      "source": "PDF weekly budget",
+      "basis": "Budget-derived reference",
+      "page": 2,
+      "note": "PDF p. 2; first usable weekly entry, date unverified"
+    },
+    {
+      "name": "Pumpkin",
+      "unit": "kg",
+      "price": 50,
+      "effectiveDate": null,
+      "source": "PDF weekly budget",
+      "basis": "Budget-derived reference",
+      "page": 2,
+      "note": "PDF p. 2; first usable weekly entry, date unverified"
+    },
+    {
+      "name": "Malabar spinach",
+      "unit": "bunch",
+      "price": 30.6667,
+      "effectiveDate": null,
+      "source": "PDF weekly budget",
+      "basis": "Budget-derived reference",
+      "page": 2,
+      "note": "PDF p. 2; first usable weekly entry, date unverified"
+    },
+    {
+      "name": "Kabuli channa",
+      "unit": "kg",
+      "price": 144,
+      "effectiveDate": null,
+      "source": "PDF weekly budget",
+      "basis": "Budget-derived reference",
+      "page": 3,
+      "note": "PDF p. 3; first usable weekly entry, date unverified"
+    },
+    {
+      "name": "Black salt",
+      "unit": "kg",
+      "price": 200,
+      "effectiveDate": null,
+      "source": "PDF weekly budget",
+      "basis": "Budget-derived reference",
+      "page": 3,
+      "note": "PDF p. 3; first usable weekly entry, date unverified"
+    },
+    {
+      "name": "Masoor dal",
+      "unit": "kg",
+      "price": 110,
+      "effectiveDate": null,
+      "source": "PDF weekly budget",
+      "basis": "Budget-derived reference",
+      "page": 4,
+      "note": "PDF p. 4; first usable weekly entry, date unverified"
+    },
+    {
+      "name": "Spinach",
+      "unit": "bunch",
+      "price": 26.6667,
+      "effectiveDate": null,
+      "source": "PDF weekly budget",
+      "basis": "Budget-derived reference",
+      "page": 4,
+      "note": "PDF p. 4; first usable weekly entry, date unverified"
+    },
+    {
+      "name": "Mint",
+      "unit": "bunch",
+      "price": 15,
+      "effectiveDate": null,
+      "source": "PDF weekly budget",
+      "basis": "Budget-derived reference",
+      "page": 5,
+      "note": "PDF p. 5; first usable weekly entry, date unverified"
+    },
+    {
+      "name": "Coriander leaves",
+      "unit": "bunch",
+      "price": 15,
+      "effectiveDate": null,
+      "source": "PDF weekly budget",
+      "basis": "Budget-derived reference",
+      "page": 5,
+      "note": "PDF p. 5; first usable weekly entry, date unverified"
+    },
+    {
+      "name": "Fenugreek seeds",
+      "unit": "kg",
+      "price": 450,
+      "effectiveDate": null,
+      "source": "PDF weekly budget",
+      "basis": "Budget-derived reference",
+      "page": 5,
+      "note": "PDF p. 5; first usable weekly entry, date unverified"
+    },
+    {
+      "name": "Okra",
+      "unit": "kg",
+      "price": 65,
+      "effectiveDate": null,
+      "source": "PDF weekly budget",
+      "basis": "Budget-derived reference",
+      "page": 6,
+      "note": "PDF p. 6; first usable weekly entry, date unverified"
+    },
+    {
+      "name": "Besan",
+      "unit": "kg",
+      "price": 120,
+      "effectiveDate": null,
+      "source": "PDF weekly budget",
+      "basis": "Budget-derived reference",
+      "page": 6,
+      "note": "PDF p. 6; first usable weekly entry, date unverified"
+    },
+    {
+      "name": "White cowpeas",
+      "unit": "kg",
+      "price": 91.6667,
+      "effectiveDate": null,
+      "source": "PDF weekly budget",
+      "basis": "Budget-derived reference",
+      "page": 6,
+      "note": "PDF p. 6; first usable weekly entry, date unverified"
+    },
+    {
+      "name": "Brinjal",
+      "unit": "kg",
+      "price": 50,
+      "effectiveDate": null,
+      "source": "PDF weekly budget",
+      "basis": "Budget-derived reference",
+      "page": 6,
+      "note": "PDF p. 6; first usable weekly entry, date unverified"
+    },
+    {
+      "name": "Large green chillies",
+      "unit": "kg",
+      "price": 75,
+      "effectiveDate": null,
+      "source": "PDF weekly budget",
+      "basis": "Budget-derived reference",
+      "page": 6,
+      "note": "PDF p. 6; first usable weekly entry, date unverified"
+    },
+    {
+      "name": "Snake gourd",
+      "unit": "kg",
+      "price": 40,
+      "effectiveDate": null,
+      "source": "PDF weekly budget",
+      "basis": "Budget-derived reference",
+      "page": 8,
+      "note": "PDF p. 8; first usable weekly entry, date unverified"
+    },
+    {
+      "name": "Pumpkin",
+      "unit": "piece",
+      "price": 50,
+      "effectiveDate": null,
+      "source": "PDF weekly budget",
+      "basis": "Budget-derived reference",
+      "page": 8,
+      "note": "PDF p. 8; first usable weekly entry, date unverified"
+    },
+    {
+      "name": "All-purpose flour",
+      "unit": "kg",
+      "price": 60,
+      "effectiveDate": null,
+      "source": "PDF weekly budget",
+      "basis": "Budget-derived reference",
+      "page": 8,
+      "note": "PDF p. 8; first usable weekly entry, date unverified"
+    },
+    {
+      "name": "Amchur powder",
+      "unit": "kg",
+      "price": 600,
+      "effectiveDate": null,
+      "source": "PDF weekly budget",
+      "basis": "Budget-derived reference",
+      "page": 9,
+      "note": "PDF p. 9; first usable weekly entry, date unverified"
+    },
+    {
+      "name": "Bottle gourd",
+      "unit": "kg",
+      "price": 60,
+      "effectiveDate": null,
+      "source": "PDF weekly budget",
+      "basis": "Budget-derived reference",
+      "page": 10,
+      "note": "PDF p. 10; first usable weekly entry, date unverified"
+    },
+    {
+      "name": "Dried white peas",
+      "unit": "kg",
+      "price": 140,
+      "effectiveDate": null,
+      "source": "PDF weekly budget",
+      "basis": "Budget-derived reference",
+      "page": 12,
+      "note": "PDF p. 12; first usable weekly entry, date unverified"
+    },
+    {
+      "name": "Turmeric powder",
+      "unit": "packet",
+      "price": 35,
+      "effectiveDate": null,
+      "source": "PDF weekly budget",
+      "basis": "Budget-derived reference",
+      "page": 13,
+      "note": "PDF p. 13; first usable weekly entry, date unverified"
+    },
+    {
+      "name": "Rajma",
+      "unit": "kg",
+      "price": 125,
+      "effectiveDate": null,
+      "source": "PDF weekly budget",
+      "basis": "Budget-derived reference",
+      "page": 14,
+      "note": "PDF p. 14; first usable weekly entry, date unverified"
+    },
+    {
+      "name": "Cinnamon",
+      "unit": "kg",
+      "price": 1100,
+      "effectiveDate": null,
+      "source": "PDF weekly budget",
+      "basis": "Budget-derived reference",
+      "page": 16,
+      "note": "PDF p. 16; first usable weekly entry, date unverified"
+    },
+    {
+      "name": "Kasuri methi",
+      "unit": "kg",
+      "price": 1100,
+      "effectiveDate": null,
+      "source": "PDF weekly budget",
+      "basis": "Budget-derived reference",
+      "page": 16,
+      "note": "PDF p. 16; first usable weekly entry, date unverified"
+    },
+    {
+      "name": "Chayote",
+      "unit": "kg",
+      "price": 40,
+      "effectiveDate": null,
+      "source": "PDF weekly budget",
+      "basis": "Budget-derived reference",
+      "page": 17,
+      "note": "PDF p. 17; first usable weekly entry, date unverified"
+    },
+    {
+      "name": "Raw banana",
+      "unit": "piece",
+      "price": 30,
+      "effectiveDate": null,
+      "source": "PDF weekly budget",
+      "basis": "Budget-derived reference",
+      "page": 17,
+      "note": "PDF p. 17; first usable weekly entry, date unverified"
+    },
+    {
+      "name": "Peanuts",
+      "unit": "kg",
+      "price": 300,
+      "effectiveDate": null,
+      "source": "PDF weekly budget",
+      "basis": "Budget-derived reference",
+      "page": 18,
+      "note": "PDF p. 18; first usable weekly entry, date unverified"
+    },
+    {
+      "name": "Cauliflower",
+      "unit": "kg",
+      "price": 40,
+      "effectiveDate": null,
+      "source": "PDF weekly budget",
+      "basis": "Budget-derived reference",
+      "page": 18,
+      "note": "PDF p. 18; first usable weekly entry, date unverified"
+    },
+    {
+      "name": "Capsicum",
+      "unit": "kg",
+      "price": 60,
+      "effectiveDate": null,
+      "source": "PDF weekly budget",
+      "basis": "Budget-derived reference",
+      "page": 21,
+      "note": "PDF p. 21; first usable weekly entry, date unverified"
+    },
+    {
+      "name": "Sona Masuri rice (raw)",
+      "unit": "kg",
+      "price": 60,
+      "effectiveDate": null,
+      "source": "PDF weekly budget",
+      "basis": "Budget-derived reference",
+      "page": 23,
+      "note": "PDF p. 23; first usable weekly entry, date unverified"
+    },
+    {
+      "name": "Sabudana",
+      "unit": "kg",
+      "price": 120,
+      "effectiveDate": null,
+      "source": "PDF weekly budget",
+      "basis": "Budget-derived reference",
+      "page": 23,
+      "note": "PDF p. 23; first usable weekly entry, date unverified"
+    },
+    {
+      "name": "Salem rice",
+      "unit": "kg",
+      "price": 44,
+      "effectiveDate": null,
+      "source": "PDF weekly budget",
+      "basis": "Budget-derived reference",
+      "page": 23,
+      "note": "PDF p. 23; first usable weekly entry, date unverified"
+    },
+    {
+      "name": "French beans",
+      "unit": "kg",
+      "price": 80,
+      "effectiveDate": null,
+      "source": "PDF weekly budget",
+      "basis": "Budget-derived reference",
+      "page": 24,
+      "note": "PDF p. 24; first usable weekly entry, date unverified"
+    },
+    {
+      "name": "Fenugreek leaves",
+      "unit": "bunch",
+      "price": 60,
+      "effectiveDate": null,
+      "source": "PDF weekly budget",
+      "basis": "Budget-derived reference",
+      "page": 29,
+      "note": "PDF p. 29; first usable weekly entry, date unverified"
+    },
+    {
+      "name": "Fennel seeds",
+      "unit": "kg",
+      "price": 400,
+      "effectiveDate": null,
+      "source": "PDF weekly budget",
+      "basis": "Budget-derived reference",
+      "page": 30,
+      "note": "PDF p. 30; first usable weekly entry, date unverified"
+    },
+    {
+      "name": "Bay leaves",
+      "unit": "kg",
+      "price": 1000,
+      "effectiveDate": null,
+      "source": "PDF weekly budget",
+      "basis": "Budget-derived reference",
+      "page": 30,
+      "note": "PDF p. 30; first usable weekly entry, date unverified"
+    },
+    {
+      "name": "Sundakkai",
+      "unit": "packet",
+      "price": 80,
+      "effectiveDate": null,
+      "source": "PDF weekly budget",
+      "basis": "Budget-derived reference",
+      "page": 35,
+      "note": "PDF p. 35; first usable weekly entry, date unverified"
+    },
+    {
+      "name": "Raw banana",
+      "unit": "kg",
+      "price": 60,
+      "effectiveDate": null,
+      "source": "PDF weekly budget",
+      "basis": "Budget-derived reference",
+      "page": 35,
+      "note": "PDF p. 35; first usable weekly entry, date unverified"
+    },
+    {
+      "name": "Yellow split moong dal",
+      "unit": "kg",
+      "price": 130,
+      "effectiveDate": null,
+      "source": "PDF weekly budget",
+      "basis": "Budget-derived reference",
+      "page": 37,
+      "note": "PDF p. 37; first usable weekly entry, date unverified"
+    },
+    {
+      "name": "Ivy gourd",
+      "unit": "kg",
+      "price": 60,
+      "effectiveDate": null,
+      "source": "PDF weekly budget",
+      "basis": "Budget-derived reference",
+      "page": 39,
+      "note": "PDF p. 39; first usable weekly entry, date unverified"
+    },
+    {
+      "name": "Onion (big)",
+      "unit": "kg",
+      "price": 50,
+      "effectiveDate": null,
+      "source": "PDF weekly budget",
+      "basis": "Budget-derived reference",
+      "page": 40,
+      "note": "PDF p. 40; first usable weekly entry, date unverified"
+    },
+    {
+      "name": "Whole green gram",
+      "unit": "kg",
+      "price": 130,
+      "effectiveDate": null,
+      "source": "PDF weekly budget",
+      "basis": "Budget-derived reference",
+      "page": 40,
+      "note": "PDF p. 40; first usable weekly entry, date unverified"
+    },
+    {
+      "name": "Bitter gourd",
+      "unit": "kg",
+      "price": 60,
+      "effectiveDate": null,
+      "source": "PDF weekly budget",
+      "basis": "Budget-derived reference",
+      "page": 44,
+      "note": "PDF p. 44; first usable weekly entry, date unverified"
+    },
+    {
+      "name": "Cluster beans",
+      "unit": "kg",
+      "price": 60,
+      "effectiveDate": null,
+      "source": "PDF weekly budget",
+      "basis": "Budget-derived reference",
+      "page": 45,
+      "note": "PDF p. 45; first usable weekly entry, date unverified"
+    },
+    {
+      "name": "Radish",
+      "unit": "kg",
+      "price": 56,
+      "effectiveDate": null,
+      "source": "PDF weekly budget",
+      "basis": "Budget-derived reference",
+      "page": 46,
+      "note": "PDF p. 46; first usable weekly entry, date unverified"
+    },
+    {
+      "name": "Whole masoor dal",
+      "unit": "kg",
+      "price": 110,
+      "effectiveDate": null,
+      "source": "PDF weekly budget",
+      "basis": "Budget-derived reference",
+      "page": 46,
+      "note": "PDF p. 46; first usable weekly entry, date unverified"
+    },
+    {
+      "name": "Raw mango",
+      "unit": "kg",
+      "price": 66.6667,
+      "effectiveDate": null,
+      "source": "PDF weekly budget",
+      "basis": "Budget-derived reference",
+      "page": 48,
+      "note": "PDF p. 48; first usable weekly entry, date unverified"
+    },
+    {
+      "name": "Urad dal (black, broken)",
+      "unit": "kg",
+      "price": 116,
+      "effectiveDate": null,
+      "source": "PDF weekly budget",
+      "basis": "Budget-derived reference",
+      "page": 48,
+      "note": "PDF p. 48; first usable weekly entry, date unverified"
+    },
+    {
+      "name": "Ripe mango",
+      "unit": "kg",
+      "price": 66.6667,
+      "effectiveDate": null,
+      "source": "PDF weekly budget",
+      "basis": "Budget-derived reference",
+      "page": 49,
+      "note": "PDF p. 49; first usable weekly entry, date unverified"
+    },
+    {
+      "name": "Green peas",
+      "unit": "kg",
+      "price": 60,
+      "effectiveDate": null,
+      "source": "PDF weekly budget",
+      "basis": "Budget-derived reference",
+      "page": 51,
+      "note": "PDF p. 51; first usable weekly entry, date unverified"
+    },
+    {
+      "name": "Poppy seeds",
+      "unit": "kg",
+      "price": 2000,
+      "effectiveDate": null,
+      "source": "PDF weekly budget",
+      "basis": "Budget-derived reference",
+      "page": 52,
+      "note": "PDF p. 52; first usable weekly entry, date unverified"
+    },
+    {
+      "name": "Dry coconut",
+      "unit": "piece",
+      "price": 60,
+      "effectiveDate": null,
+      "source": "PDF weekly budget",
+      "basis": "Budget-derived reference",
+      "page": 52,
+      "note": "PDF p. 52; first usable weekly entry, date unverified"
+    },
+    {
+      "name": "Rock salt",
+      "unit": "kg",
+      "price": 22,
+      "effectiveDate": null,
+      "source": "PDF weekly budget",
+      "basis": "Budget-derived reference",
+      "page": 52,
+      "note": "PDF p. 52; first usable weekly entry, date unverified"
+    },
+    {
+      "name": "Whole brown masoor dal",
+      "unit": "kg",
+      "price": 116.6667,
+      "effectiveDate": null,
+      "source": "PDF weekly budget",
+      "basis": "Budget-derived reference",
+      "page": 53,
+      "note": "PDF p. 53; first usable weekly entry, date unverified"
+    },
+    {
+      "name": "Sugar",
+      "unit": "kg",
+      "price": 30,
+      "effectiveDate": null,
+      "source": "PDF weekly budget",
+      "basis": "Budget-derived reference",
+      "page": 53,
+      "note": "PDF p. 53; first usable weekly entry, date unverified"
+    },
+    {
+      "name": "Mangalore cucumber",
+      "unit": "piece",
+      "price": 40,
+      "effectiveDate": null,
+      "source": "PDF weekly budget",
+      "basis": "Budget-derived reference",
+      "page": 54,
+      "note": "PDF p. 54; first usable weekly entry, date unverified"
+    },
+    {
+      "name": "Ash gourd",
+      "unit": "piece",
+      "price": 40,
+      "effectiveDate": null,
+      "source": "PDF weekly budget",
+      "basis": "Budget-derived reference",
+      "page": 56,
+      "note": "PDF p. 56; first usable weekly entry, date unverified"
+    },
+    {
+      "name": "Raw mango",
+      "unit": "piece",
+      "price": 30,
+      "effectiveDate": null,
+      "source": "PDF weekly budget",
+      "basis": "Budget-derived reference",
+      "page": 56,
+      "note": "PDF p. 56; first usable weekly entry, date unverified"
+    },
+    {
+      "name": "Hyacinth beans",
+      "unit": "kg",
+      "price": 65,
+      "effectiveDate": null,
+      "source": "PDF weekly budget",
+      "basis": "Budget-derived reference",
+      "page": 57,
+      "note": "PDF p. 57; first usable weekly entry, date unverified"
+    },
+    {
+      "name": "Baby brinjal",
+      "unit": "kg",
+      "price": 48,
+      "effectiveDate": null,
+      "source": "PDF weekly budget",
+      "basis": "Budget-derived reference",
+      "page": 57,
+      "note": "PDF p. 57; first usable weekly entry, date unverified"
+    },
+    {
+      "name": "Chayote",
+      "unit": "piece",
+      "price": 25,
+      "effectiveDate": null,
+      "source": "PDF weekly budget",
+      "basis": "Budget-derived reference",
+      "page": 60,
+      "note": "PDF p. 60; first usable weekly entry, date unverified"
+    },
+    {
+      "name": "Sev mixture",
+      "unit": "packet",
+      "price": 60,
+      "effectiveDate": null,
+      "source": "PDF weekly budget",
+      "basis": "Budget-derived reference",
+      "page": 60,
+      "note": "PDF p. 60; first usable weekly entry, date unverified"
+    },
+    {
+      "name": "Capsicum",
+      "unit": "piece",
+      "price": 16.6667,
+      "effectiveDate": null,
+      "source": "PDF weekly budget",
+      "basis": "Budget-derived reference",
+      "page": 62,
+      "note": "PDF p. 62; first usable weekly entry, date unverified"
+    },
+    {
+      "name": "Onion (big)",
+      "unit": "piece",
+      "price": 10,
+      "effectiveDate": null,
+      "source": "PDF weekly budget",
+      "basis": "Budget-derived reference",
+      "page": 62,
+      "note": "PDF p. 62; first usable weekly entry, date unverified"
+    },
+    {
+      "name": "Watermelon",
+      "unit": "piece",
+      "price": 50,
+      "effectiveDate": null,
+      "source": "PDF weekly budget",
+      "basis": "Budget-derived reference",
+      "page": 65,
+      "note": "PDF p. 65; first usable weekly entry, date unverified"
+    },
+    {
+      "name": "Ripe mango",
+      "unit": "piece",
+      "price": 33.3333,
+      "effectiveDate": null,
+      "source": "PDF weekly budget",
+      "basis": "Budget-derived reference",
+      "page": 67,
+      "note": "PDF p. 67; first usable weekly entry, date unverified"
+    },
+    {
+      "name": "Carrot",
+      "unit": "piece",
+      "price": 15,
+      "effectiveDate": null,
+      "source": "PDF weekly budget",
+      "basis": "Budget-derived reference",
+      "page": 68,
+      "note": "PDF p. 68; first usable weekly entry, date unverified"
+    },
+    {
+      "name": "Muskmelon",
+      "unit": "kg",
+      "price": 50,
+      "effectiveDate": null,
+      "source": "PDF weekly budget",
+      "basis": "Budget-derived reference",
+      "page": 69,
+      "note": "PDF p. 69; first usable weekly entry, date unverified"
+    },
+    {
+      "name": "Green cardamom",
+      "unit": "kg",
+      "price": 4000,
+      "effectiveDate": null,
+      "source": "PDF weekly budget",
+      "basis": "Budget-derived reference",
+      "page": 71,
+      "note": "PDF p. 71; first usable weekly entry, date unverified"
+    },
+    {
+      "name": "Dry ginger powder",
+      "unit": "kg",
+      "price": 1400,
+      "effectiveDate": null,
+      "source": "PDF weekly budget",
+      "basis": "Budget-derived reference",
+      "page": 71,
+      "note": "PDF p. 71; first usable weekly entry, date unverified"
+    },
+    {
+      "name": "Marathi moggu",
+      "unit": "kg",
+      "price": 2000,
+      "effectiveDate": null,
+      "source": "PDF weekly budget",
+      "basis": "Budget-derived reference",
+      "page": 71,
+      "note": "PDF p. 71; first usable weekly entry, date unverified"
+    },
+    {
+      "name": "Knol khol",
+      "unit": "kg",
+      "price": 65,
+      "effectiveDate": null,
+      "source": "PDF weekly budget",
+      "basis": "Budget-derived reference",
+      "page": 71,
+      "note": "PDF p. 71; first usable weekly entry, date unverified"
+    },
+    {
+      "name": "Brown sugar",
+      "unit": "kg",
+      "price": 75,
+      "effectiveDate": null,
+      "source": "PDF weekly budget",
+      "basis": "Budget-derived reference",
+      "page": 72,
+      "note": "PDF p. 72; first usable weekly entry, date unverified"
+    },
+    {
+      "name": "Cloves",
+      "unit": "kg",
+      "price": 1600,
+      "effectiveDate": null,
+      "source": "PDF weekly budget",
+      "basis": "Budget-derived reference",
+      "page": 72,
+      "note": "PDF p. 72; first usable weekly entry, date unverified"
+    },
+    {
+      "name": "Black cardamom",
+      "unit": "kg",
+      "price": 4000,
+      "effectiveDate": null,
+      "source": "PDF weekly budget",
+      "basis": "Budget-derived reference",
+      "page": 72,
+      "note": "PDF p. 72; first usable weekly entry, date unverified"
+    },
+    {
+      "name": "Moringa leaves",
+      "unit": "bunch",
+      "price": 30,
+      "effectiveDate": null,
+      "source": "PDF weekly budget",
+      "basis": "Budget-derived reference",
+      "page": 72,
+      "note": "PDF p. 72; first usable weekly entry, date unverified"
+    },
+    {
+      "name": "Robusta banana",
+      "unit": "kg",
+      "price": 40,
+      "effectiveDate": null,
+      "source": "PDF weekly budget",
+      "basis": "Budget-derived reference",
+      "page": 74,
+      "note": "PDF p. 74; first usable weekly entry, date unverified"
+    },
+    {
+      "name": "Papaya",
+      "unit": "kg",
+      "price": 60,
+      "effectiveDate": null,
+      "source": "PDF weekly budget",
+      "basis": "Budget-derived reference",
+      "page": 74,
+      "note": "PDF p. 74; first usable weekly entry, date unverified"
+    },
+    {
+      "name": "Sweet potato",
+      "unit": "kg",
+      "price": 80,
+      "effectiveDate": null,
+      "source": "PDF weekly budget",
+      "basis": "Budget-derived reference",
+      "page": 77,
+      "note": "PDF p. 77; first usable weekly entry, date unverified"
+    },
+    {
+      "name": "Broken rice",
+      "unit": "kg",
+      "price": 38.6667,
+      "effectiveDate": null,
+      "source": "PDF weekly budget",
+      "basis": "Budget-derived reference",
+      "page": 77,
+      "note": "PDF p. 77; first usable weekly entry, date unverified"
+    },
+    {
+      "name": "Banana stem",
+      "unit": "piece",
+      "price": 20,
+      "effectiveDate": null,
+      "source": "PDF weekly budget",
+      "basis": "Budget-derived reference",
+      "page": 79,
+      "note": "PDF p. 79; first usable weekly entry, date unverified"
+    },
+    {
+      "name": "Raw rice (unspecified)",
+      "unit": "kg",
+      "price": 54,
+      "effectiveDate": null,
+      "source": "PDF weekly budget",
+      "basis": "Budget-derived reference",
+      "page": 82,
+      "note": "PDF p. 82; first usable weekly entry, date unverified"
+    },
+    {
+      "name": "Rice flour",
+      "unit": "kg",
+      "price": 60,
+      "effectiveDate": null,
+      "source": "PDF weekly budget",
+      "basis": "Budget-derived reference",
+      "page": 84,
+      "note": "PDF p. 84; first usable weekly entry, date unverified"
+    },
+    {
+      "name": "Chaat masala",
+      "unit": "kg",
+      "price": 710,
+      "effectiveDate": null,
+      "source": "PDF weekly budget",
+      "basis": "Budget-derived reference",
+      "page": 85,
+      "note": "PDF p. 85; first usable weekly entry, date unverified"
+    },
+    {
+      "name": "Banana",
+      "unit": "kg",
+      "price": 40,
+      "effectiveDate": null,
+      "source": "PDF weekly budget",
+      "basis": "Budget-derived reference",
+      "page": 86,
+      "note": "PDF p. 86; first usable weekly entry, date unverified"
+    },
+    {
+      "name": "Dill leaves",
+      "unit": "bunch",
+      "price": 25,
+      "effectiveDate": null,
+      "source": "PDF weekly budget",
+      "basis": "Budget-derived reference",
+      "page": 90,
+      "note": "PDF p. 90; first usable weekly entry, date unverified"
+    },
+    {
+      "name": "Green gram dal",
+      "unit": "kg",
+      "price": 120,
+      "effectiveDate": null,
+      "source": "PDF weekly budget",
+      "basis": "Budget-derived reference",
+      "page": 90,
+      "note": "PDF p. 90; first usable weekly entry, date unverified"
+    },
+    {
+      "name": "Puffed rice",
+      "unit": "kg",
+      "price": 100,
+      "effectiveDate": null,
+      "source": "PDF weekly budget",
+      "basis": "Budget-derived reference",
+      "page": 90,
+      "note": "PDF p. 90; puffed rice in pori undai ingredient row; date unverified"
+    }
+  ]
+}

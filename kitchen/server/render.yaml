@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: kitchen-ledger-search
+    runtime: node
+    plan: free
+    branch: feat/bangalore-kitchen-budget
+    buildCommand: echo 'No dependencies required'
+    startCommand: node kitchen/server/index.mjs
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_VERSION
+        value: 22
+      - key: ALLOWED_ORIGINS
+        value: https://sathishkumarkandappan.github.io

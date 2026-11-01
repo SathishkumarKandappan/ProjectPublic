@@ -1,3 +1,4 @@
+import {searchEndpoint} from './search-config.js';
 import {defaults} from './seed.js';
 import {supplierSeed} from './supplier-seed.js';
 import {pdfRates} from './pdf-rates.js';
@@ -12,7 +13,8 @@ const dateLabel=date=>new Date(date+'T12:00:00Z').toLocaleDateString('en-IN',{da
 let selectedDate=todayIST(),dishType='Curry',requestId=0;
 let records=defaults.filter(x=>x.price!==null).map(x=>({...x,source:x.source||'Reference snapshot'}));
 let saved={items:[],quotes:[]};try{saved=JSON.parse(localStorage.getItem('kitchen-ledger-v2'))||saved;}catch{}
-const supplierQuotes=[...supplierSeed,...pdfRates];
+let supplierQuotes=[...supplierSeed,...pdfRates];
+let refreshController;
 const localQuotes=(saved.quotes||[]).filter(q=>Number.isFinite(q.price)&&q.price>=0&&q.date);
 const catalog=new Map(defaults.map(x=>[x.name,{name:x.name,unit:x.unit}]));
 for(const q of supplierQuotes)if(!catalog.has(q.name))catalog.set(q.name,{name:q.name,unit:q.unit});
@@ -64,7 +66,66 @@ function renderMealPackages(){
  }));
 }
 function render(){renderPrices();renderDishes();if(!$('#mealList').hidden)renderMealPackages();}
-async function refreshPrices(){const request=++requestId;$('#priceDate').setAttribute('aria-busy','true');try{const response=await fetch('https://raw.githubusercontent.com/SathishkumarKandappan/ProjectPublic/gh-pages/kitchen/market.json?t='+Date.now(),{cache:'no-store'});if(!response.ok)throw Error('Feed unavailable');const feed=await response.json();if(!Array.isArray(feed.records))throw Error('Invalid feed');if(request!==requestId)return;records=feed.records.filter(r=>typeof r.name==='string'&&typeof r.unit==='string'&&Number.isFinite(r.price)&&r.price>=0&&/^\d{4}-\d{2}-\d{2}$/.test(r.date)&&r.date<=todayIST());for(const r of records)if(!catalog.has(r.name))catalog.set(r.name,{name:r.name,unit:r.unit});$('#error').hidden=true;}catch{if(request!==requestId)return;$('#error').textContent='Could not refresh. Showing saved prices with their recorded dates.';$('#error').hidden=false;}finally{if(request===requestId){$('#priceDate').removeAttribute('aria-busy');render();}}}
+async function refreshPrices(){
+ const request=++requestId,date=selectedDate;
+ refreshController?.abort();const controller=new AbortController();refreshController=controller;
+ const status=$('#refreshStatus');status.textContent='Refreshing prices…';
+ $('#priceDate').setAttribute('aria-busy','true');
+ const timeout=setTimeout(()=>controller.abort(),20000);
+ const root='https://raw.githubusercontent.com/SathishkumarKandappan/ProjectPublic/gh-pages/kitchen/';
+ const validQuote=r=>r&&typeof r.name==='string'&&typeof r.unit==='string'&&Number.isFinite(r.price)&&r.price>=0;
+ const validDate=d=>typeof d==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(d)&&!Number.isNaN(Date.parse(d+'T12:00:00Z'))&&d<=todayIST();
+ const read=async(file,field,validate)=>{
+  const response=await fetch(root+file+'?date='+encodeURIComponent(date)+'&t='+Date.now(),{cache:'no-store',signal:controller.signal});
+  if(!response.ok)throw Error('Feed unavailable');const feed=await response.json();
+  if(!Array.isArray(feed[field])||!feed[field].length||!feed[field].every(validate))throw Error('Invalid price feed');
+  return feed[field];
+ };
+ try{
+  const results=await Promise.allSettled([
+   read('market.json','records',r=>validQuote(r)&&validDate(r.date)),
+   read('supplier.json','quotes',r=>validQuote(r)&&(!r.effectiveDate||validDate(r.effectiveDate))),
+   read('retailer-prices.json','quotes',r=>validQuote(r)&&validDate(r.observed)&&typeof r.retailer==='string'&&typeof r.url==='string'&&r.url.startsWith('https://'))
+  ]);
+  if(request!==requestId)return;
+  if(results[0].status==='fulfilled')records=results[0].value;
+  if(results[1].status==='fulfilled')supplierQuotes=results[1].value;
+  if(results[2].status==='fulfilled')retailerPrices.splice(0,retailerPrices.length,...results[2].value);
+  for(const q of [...records,...supplierQuotes,...retailerPrices])if(!catalog.has(q.name))catalog.set(q.name,{name:q.name,unit:q.unit});
+  const failed=results.map((r,i)=>r.status==='rejected'?['Market','Supplier','Online'][i]:null).filter(Boolean);
+  $('#error').hidden=!failed.length;
+  $('#error').textContent=failed.length?failed.join(', ')+' refresh failed. Keeping previously loaded prices for these sources.':'';
+  const time=new Date().toLocaleTimeString('en-IN',{timeZone:'Asia/Kolkata',hour:'2-digit',minute:'2-digit'});
+  status.textContent=(failed.length===3?'Refresh failed':failed.length?'Partly refreshed':'Prices reloaded')+' · '+time+' IST · quote dates shown below';
+  clearTimeout(timeout);
+  if(searchEndpoint)await searchPricesForDate({date,request,signal:controller.signal});
+  else status.textContent='Internet search not connected · showing recorded prices';
+ }finally{
+  clearTimeout(timeout);
+  if(request===requestId){$('#priceDate').removeAttribute('aria-busy');render();}
+ }
+}
+async function searchPricesForDate({date,request,signal}){
+ const endpoint=new URL(searchEndpoint);if(endpoint.protocol!=='https:')throw Error('Search requires HTTPS');
+ const jobs=[...catalog.keys()].flatMap(name=>['Blinkit','BigBasket','Instamart','Other'].map(provider=>({name,provider})));
+ let cursor=0,done=0,found=0,errors=0;
+ const worker=async()=>{while(cursor<jobs.length&&!signal.aborted){
+  const job=jobs[cursor++],url=new URL(endpoint);url.searchParams.set('date',date);url.searchParams.set('name',job.name);url.searchParams.set('provider',job.provider);
+  try{
+   const response=await fetch(url,{cache:'no-store',signal});if(!response.ok)throw Error('Search failed');
+   const result=await response.json();if(!result.searched||!Array.isArray(result.quotes))throw Error('Invalid search response');
+   if(request!==requestId)return;
+   const quotes=result.quotes.filter(q=>q.name===job.name&&q.observed===date&&q.observed===todayIST()&&Number.isFinite(q.price)&&q.price>0&&typeof q.unit==='string'&&typeof q.url==='string'&&q.url.startsWith('https://')&&typeof q.product==='string');
+   for(const q of quotes){const existing=retailerPrices.findIndex(r=>r.name===q.name&&r.retailer===q.retailer&&r.unit===q.unit&&r.url===q.url&&r.observed===q.observed);if(existing>=0)retailerPrices[existing]=q;else retailerPrices.push(q);}
+   found+=quotes.length;
+  }catch{if(signal.aborted)return;errors++;}
+  done++;if(request!==requestId)return;
+  $('#refreshStatus').textContent='Searching internet · '+done+'/'+jobs.length+' · '+found+' prices found';
+  if(done%4===0)render();
+ }};
+ await Promise.all(Array.from({length:4},worker));if(request!==requestId)return;
+ $('#refreshStatus').textContent='Search finished · '+found+' verified prices'+(errors?' · '+errors+' searches failed':'')+' · older quotes keep their dates';
+}
 $('#priceDate').max=todayIST();$('#priceDate').value=selectedDate;$('#priceDate').addEventListener('change',()=>{const input=$('#priceDate');if(!input.value||!input.validity.valid){input.reportValidity();return;}selectedDate=input.value;render();refreshPrices();});
 const tabs=[...document.querySelectorAll('[data-type]')];
 function selectTab(button){const type=button.dataset.type,isPrice=type==='Price',isMeal=type==='Meal';if(!isPrice&&!isMeal)dishType=type;$('#pricePanel').hidden=!isPrice;$('#dishList').hidden=isPrice||isMeal;$('#mealList').hidden=!isMeal;for(const tab of tabs){const active=tab===button;tab.classList.toggle('active',active);tab.setAttribute('aria-selected',String(active));tab.tabIndex=active?0:-1;}if(isMeal)renderMealPackages();else if(!isPrice){$('#dishList').setAttribute('aria-labelledby',button.id);renderDishes();}}

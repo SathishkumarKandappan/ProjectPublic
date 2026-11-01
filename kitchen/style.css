@@ -4,3 +4,5 @@
 #mealList{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px;align-items:start}.meal-card>summary{min-height:105px}.meal-menu{padding:8px 0 12px}.meal-slot{padding:14px 0;border-bottom:1px solid #edf1e5}.meal-slot>small{font-size:9px;text-transform:uppercase;letter-spacing:1px;color:#a18e65}.meal-slot>p{font-size:12px;line-height:1.8;color:#496344;margin:7px 0}.meal-slot>span{font-size:11px;color:#879b72}.package-ingredients{margin:17px 0;color:#6d845d;font-size:11px}.package-ingredients>summary{cursor:pointer;margin-bottom:10px}.package-ingredients .ingredient-row{font-size:11px}.meal-card .dish-content>.cost-note{margin-top:17px}@media(max-width:600px){#mealList{grid-template-columns:minmax(0,1fr)}}
 
 .meal-card-head{padding:22px 20px;display:flex;align-items:center;justify-content:space-between;gap:14px}.meal-card .dish-content{padding-top:0}.meal-card .package-ingredients .cost-note{margin-top:15px}@media(max-width:600px){.meal-card-head{padding:20px 19px}.meal-card .dish-name{font-size:20px}}
+
+#refreshStatus{display:block;font-size:10px;color:#879776;margin:-15px 0 20px;min-height:14px}.date:has([aria-busy="true"]){opacity:.65}

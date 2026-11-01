@@ -1,0 +1,1 @@
+{"name":"kitchen-ledger-search","private":true,"type":"module","scripts":{"start":"node index.mjs"},"engines":{"node":">=22"}}

@@ -1,0 +1,14 @@
+import assert from 'node:assert/strict';
+import {allowed,packAmount,extractOffers,searchItem,today} from '../server/search-prices.mjs';
+assert.equal(allowed('https://www.bigbasket.com/pd/1','BigBasket'),true);
+for(const url of ['http://bigbasket.com/p','https://bigbasket.com.evil.example/p','https://localhost/','https://bigbasket.com:8080/','https://a:b@bigbasket.com/'])assert.equal(allowed(url,'BigBasket'),false);
+assert.deepEqual(packAmount('Ragi flour 500 g'),{quantity:.5,unit:'kg',pack:'500 g'});assert.equal(packAmount('flour 500 g x 2'),null);
+const html='<script type="application/ld+json">'+JSON.stringify({'@type':'Product',name:'Ragi flour 500 g',offers:{'@type':'Offer',priceCurrency:'INR',price:'40'}})+'</script>';
+const input={name:'Ragi flour',provider:'BigBasket',url:'https://www.bigbasket.com/pd/1',date:today()};
+assert.equal(extractOffers(html,input)[0].price,80);
+assert.equal(extractOffers(html,{...input,date:'2020-01-01'}).length,0);
+assert.equal(extractOffers(html.replace('Ragi flour','Ragi biscuit'),input).length,0);
+assert.equal(extractOffers(html.replace('INR','USD'),input).length,0);
+const calls=[];const result=await searchItem(input,async url=>{calls.push(url);return new Response(url.includes('bing.com')?'<rss><item><link>https://www.bigbasket.com/pd/1</link></item><item><link>https://localhost/private</link></item></rss>':html);});
+assert.equal(calls.length,2);assert.equal(result.quotes[0].price,80);assert.equal(result.searched,true);
+console.log('PASS: search discovery, primary-domain restriction, unit extraction, currency and date guards');

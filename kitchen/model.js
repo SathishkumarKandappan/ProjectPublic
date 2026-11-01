@@ -21,3 +21,7 @@ export function forecast(item,records,quotes,day,today){
 }
 export function priceOn(item,records,quotes,day,today){if(day>today)return forecast(item,records,quotes,day,today);const r=observations(item,records,quotes).find(r=>r.date===day);return r?{...r,projection:false}:null;}
 export function priceTone(price,target){if(price==null||target==null||target<=0)return 'neutral';return price<target?'cheap':price>target?'expensive':'neutral';}
+export function comparePrices(market,supplier,unit){
+ if(!market||!supplier||supplier.unit!==unit)return {comparable:false,reason:!supplier?'No supplier quote':!market?'No market price':'Different units'};
+ const delta=supplier.price-market.price;return {comparable:true,delta,percent:market.price>0?delta/market.price*100:null,supplierTone:priceTone(supplier.price,market.price),marketTone:priceTone(market.price,supplier.price)};
+}

@@ -1,0 +1,534 @@
+{
+  "checkedAt": "2026-11-01T02:09:50.049474+00:00",
+  "errors": [],
+  "records": [
+    {
+      "name": "Sona Masuri rice (raw)",
+      "unit": "kg",
+      "price": 60,
+      "date": "2026-10-17",
+      "source": "Rice reference",
+      "basis": "Reference snapshot"
+    },
+    {
+      "name": "Red rice",
+      "unit": "kg",
+      "price": 80,
+      "date": "2026-10-17",
+      "source": "Rice reference",
+      "basis": "Reference snapshot"
+    },
+    {
+      "name": "Sona Masuri rice (steamed)",
+      "unit": "kg",
+      "price": 50,
+      "date": "2026-10-17",
+      "source": "Rice reference",
+      "basis": "Reference snapshot"
+    },
+    {
+      "name": "Idli rice",
+      "unit": "kg",
+      "price": 40,
+      "date": "2026-10-17",
+      "source": "Rice reference",
+      "basis": "Reference snapshot"
+    },
+    {
+      "name": "Ponni rice (boiled)",
+      "unit": "kg",
+      "price": 55,
+      "date": "2026-10-17",
+      "source": "Rice reference",
+      "basis": "Reference snapshot"
+    },
+    {
+      "name": "Tomato",
+      "unit": "kg",
+      "price": 49,
+      "date": "2026-10-29",
+      "source": "Retail midpoint \u00b7 date uncertain",
+      "basis": "Reference snapshot"
+    },
+    {
+      "name": "Potato",
+      "unit": "kg",
+      "price": 39.5,
+      "date": "2026-10-29",
+      "source": "Retail midpoint \u00b7 date uncertain",
+      "basis": "Reference snapshot"
+    },
+    {
+      "name": "Onion (big)",
+      "unit": "kg",
+      "price": 78.5,
+      "date": "2026-10-29",
+      "source": "Retail midpoint \u00b7 date uncertain",
+      "basis": "Reference snapshot"
+    },
+    {
+      "name": "Carrot",
+      "unit": "kg",
+      "price": 52.5,
+      "date": "2026-10-29",
+      "source": "Retail midpoint \u00b7 date uncertain",
+      "basis": "Reference snapshot"
+    },
+    {
+      "name": "Beetroot",
+      "unit": "kg",
+      "price": 49,
+      "date": "2026-10-29",
+      "source": "Retail midpoint \u00b7 date uncertain",
+      "basis": "Reference snapshot"
+    },
+    {
+      "name": "French beans",
+      "unit": "kg",
+      "price": 81.5,
+      "date": "2026-10-29",
+      "source": "Retail midpoint \u00b7 date uncertain",
+      "basis": "Reference snapshot"
+    },
+    {
+      "name": "Cabbage",
+      "unit": "kg",
+      "price": 45.5,
+      "date": "2026-10-29",
+      "source": "Retail midpoint \u00b7 date uncertain",
+      "basis": "Reference snapshot"
+    },
+    {
+      "name": "Cauliflower",
+      "unit": "kg",
+      "price": 49,
+      "date": "2026-10-29",
+      "source": "Retail midpoint \u00b7 date uncertain",
+      "basis": "Reference snapshot"
+    },
+    {
+      "name": "Brinjal",
+      "unit": "kg",
+      "price": 49,
+      "date": "2026-10-29",
+      "source": "Retail midpoint \u00b7 date uncertain",
+      "basis": "Reference snapshot"
+    },
+    {
+      "name": "Okra",
+      "unit": "kg",
+      "price": 45.5,
+      "date": "2026-10-29",
+      "source": "Retail midpoint \u00b7 date uncertain",
+      "basis": "Reference snapshot"
+    },
+    {
+      "name": "Pumpkin",
+      "unit": "kg",
+      "price": 26.5,
+      "date": "2026-10-29",
+      "source": "Retail midpoint \u00b7 date uncertain",
+      "basis": "Reference snapshot"
+    },
+    {
+      "name": "Ash gourd",
+      "unit": "kg",
+      "price": 24,
+      "date": "2026-10-29",
+      "source": "Retail midpoint \u00b7 date uncertain",
+      "basis": "Reference snapshot"
+    },
+    {
+      "name": "Bottle gourd",
+      "unit": "kg",
+      "price": 40.5,
+      "date": "2026-10-29",
+      "source": "Retail midpoint \u00b7 date uncertain",
+      "basis": "Reference snapshot"
+    },
+    {
+      "name": "Cucumber",
+      "unit": "kg",
+      "price": 37,
+      "date": "2026-10-29",
+      "source": "Retail midpoint \u00b7 date uncertain",
+      "basis": "Reference snapshot"
+    },
+    {
+      "name": "Spinach",
+      "unit": "kg",
+      "price": 18.5,
+      "date": "2026-10-29",
+      "source": "Retail midpoint \u00b7 date uncertain",
+      "basis": "Reference snapshot"
+    },
+    {
+      "name": "Green chilli",
+      "unit": "kg",
+      "price": 86.5,
+      "date": "2026-10-29",
+      "source": "Retail midpoint \u00b7 date uncertain",
+      "basis": "Reference snapshot"
+    },
+    {
+      "name": "Garlic",
+      "unit": "kg",
+      "price": 213.5,
+      "date": "2026-10-29",
+      "source": "Retail midpoint \u00b7 date uncertain",
+      "basis": "Reference snapshot"
+    },
+    {
+      "name": "Ginger",
+      "unit": "kg",
+      "price": 212.5,
+      "date": "2026-10-29",
+      "source": "Retail midpoint \u00b7 date uncertain",
+      "basis": "Reference snapshot"
+    },
+    {
+      "name": "Coriander leaves",
+      "unit": "kg",
+      "price": 14.5,
+      "date": "2026-10-29",
+      "source": "Retail midpoint \u00b7 date uncertain",
+      "basis": "Reference snapshot"
+    },
+    {
+      "name": "Curry leaves",
+      "unit": "kg",
+      "price": 50.5,
+      "date": "2026-10-29",
+      "source": "Retail midpoint \u00b7 date uncertain",
+      "basis": "Reference snapshot"
+    },
+    {
+      "name": "Radish",
+      "unit": "kg",
+      "price": 45.5,
+      "date": "2026-10-29",
+      "source": "Retail midpoint \u00b7 date uncertain",
+      "basis": "Reference snapshot"
+    },
+    {
+      "name": "Ridge gourd",
+      "unit": "kg",
+      "price": 56.5,
+      "date": "2026-10-29",
+      "source": "Retail midpoint \u00b7 date uncertain",
+      "basis": "Reference snapshot"
+    },
+    {
+      "name": "Bitter gourd",
+      "unit": "kg",
+      "price": 57.5,
+      "date": "2026-10-29",
+      "source": "Retail midpoint \u00b7 date uncertain",
+      "basis": "Reference snapshot"
+    },
+    {
+      "name": "Green peas",
+      "unit": "kg",
+      "price": 85,
+      "date": "2026-10-29",
+      "source": "Retail midpoint \u00b7 date uncertain",
+      "basis": "Reference snapshot"
+    },
+    {
+      "name": "Drumstick",
+      "unit": "kg",
+      "price": 84,
+      "date": "2026-10-29",
+      "source": "Retail midpoint \u00b7 date uncertain",
+      "basis": "Reference snapshot"
+    },
+    {
+      "name": "Sona Masuri rice (raw)",
+      "unit": "kg",
+      "price": 60,
+      "date": "2026-11-01",
+      "source": "India Prices",
+      "basis": "Listed rice retail price",
+      "url": "https://www.indiaprices.co.in/rice/bengaluru-rice-price/"
+    },
+    {
+      "name": "Red rice",
+      "unit": "kg",
+      "price": 80,
+      "date": "2026-11-01",
+      "source": "India Prices",
+      "basis": "Listed rice retail price",
+      "url": "https://www.indiaprices.co.in/rice/bengaluru-rice-price/"
+    },
+    {
+      "name": "Sona Masuri rice (steamed)",
+      "unit": "kg",
+      "price": 50,
+      "date": "2026-11-01",
+      "source": "India Prices",
+      "basis": "Listed rice retail price",
+      "url": "https://www.indiaprices.co.in/rice/bengaluru-rice-price/"
+    },
+    {
+      "name": "Idli rice",
+      "unit": "kg",
+      "price": 40,
+      "date": "2026-11-01",
+      "source": "India Prices",
+      "basis": "Listed rice retail price",
+      "url": "https://www.indiaprices.co.in/rice/bengaluru-rice-price/"
+    },
+    {
+      "name": "Ponni rice (boiled)",
+      "unit": "kg",
+      "price": 55,
+      "date": "2026-11-01",
+      "source": "India Prices",
+      "basis": "Listed rice retail price",
+      "url": "https://www.indiaprices.co.in/rice/bengaluru-rice-price/"
+    },
+    {
+      "name": "Tomato",
+      "unit": "kg",
+      "price": 49,
+      "date": "2026-10-30",
+      "source": "Vegetable Market Price",
+      "basis": "Retail range midpoint",
+      "url": "https://www.vegetablemarketprice.com/market/bangalore/today"
+    },
+    {
+      "name": "Potato",
+      "unit": "kg",
+      "price": 39.5,
+      "date": "2026-10-30",
+      "source": "Vegetable Market Price",
+      "basis": "Retail range midpoint",
+      "url": "https://www.vegetablemarketprice.com/market/bangalore/today"
+    },
+    {
+      "name": "Onion (big)",
+      "unit": "kg",
+      "price": 78.5,
+      "date": "2026-10-30",
+      "source": "Vegetable Market Price",
+      "basis": "Retail range midpoint",
+      "url": "https://www.vegetablemarketprice.com/market/bangalore/today"
+    },
+    {
+      "name": "Carrot",
+      "unit": "kg",
+      "price": 52.5,
+      "date": "2026-10-30",
+      "source": "Vegetable Market Price",
+      "basis": "Retail range midpoint",
+      "url": "https://www.vegetablemarketprice.com/market/bangalore/today"
+    },
+    {
+      "name": "Beetroot",
+      "unit": "kg",
+      "price": 49,
+      "date": "2026-10-30",
+      "source": "Vegetable Market Price",
+      "basis": "Retail range midpoint",
+      "url": "https://www.vegetablemarketprice.com/market/bangalore/today"
+    },
+    {
+      "name": "French beans",
+      "unit": "kg",
+      "price": 81.5,
+      "date": "2026-10-30",
+      "source": "Vegetable Market Price",
+      "basis": "Retail range midpoint",
+      "url": "https://www.vegetablemarketprice.com/market/bangalore/today"
+    },
+    {
+      "name": "Cabbage",
+      "unit": "kg",
+      "price": 45.5,
+      "date": "2026-10-30",
+      "source": "Vegetable Market Price",
+      "basis": "Retail range midpoint",
+      "url": "https://www.vegetablemarketprice.com/market/bangalore/today"
+    },
+    {
+      "name": "Cauliflower",
+      "unit": "kg",
+      "price": 49,
+      "date": "2026-10-30",
+      "source": "Vegetable Market Price",
+      "basis": "Retail range midpoint",
+      "url": "https://www.vegetablemarketprice.com/market/bangalore/today"
+    },
+    {
+      "name": "Brinjal",
+      "unit": "kg",
+      "price": 49,
+      "date": "2026-10-30",
+      "source": "Vegetable Market Price",
+      "basis": "Retail range midpoint",
+      "url": "https://www.vegetablemarketprice.com/market/bangalore/today"
+    },
+    {
+      "name": "Okra",
+      "unit": "kg",
+      "price": 45.5,
+      "date": "2026-10-30",
+      "source": "Vegetable Market Price",
+      "basis": "Retail range midpoint",
+      "url": "https://www.vegetablemarketprice.com/market/bangalore/today"
+    },
+    {
+      "name": "Pumpkin",
+      "unit": "kg",
+      "price": 26.5,
+      "date": "2026-10-30",
+      "source": "Vegetable Market Price",
+      "basis": "Retail range midpoint",
+      "url": "https://www.vegetablemarketprice.com/market/bangalore/today"
+    },
+    {
+      "name": "Ash gourd",
+      "unit": "kg",
+      "price": 24,
+      "date": "2026-10-30",
+      "source": "Vegetable Market Price",
+      "basis": "Retail range midpoint",
+      "url": "https://www.vegetablemarketprice.com/market/bangalore/today"
+    },
+    {
+      "name": "Bottle gourd",
+      "unit": "kg",
+      "price": 40.5,
+      "date": "2026-10-30",
+      "source": "Vegetable Market Price",
+      "basis": "Retail range midpoint",
+      "url": "https://www.vegetablemarketprice.com/market/bangalore/today"
+    },
+    {
+      "name": "Cucumber",
+      "unit": "kg",
+      "price": 37,
+      "date": "2026-10-30",
+      "source": "Vegetable Market Price",
+      "basis": "Retail range midpoint",
+      "url": "https://www.vegetablemarketprice.com/market/bangalore/today"
+    },
+    {
+      "name": "Spinach",
+      "unit": "kg",
+      "price": 18.5,
+      "date": "2026-10-30",
+      "source": "Vegetable Market Price",
+      "basis": "Retail range midpoint",
+      "url": "https://www.vegetablemarketprice.com/market/bangalore/today"
+    },
+    {
+      "name": "Green chilli",
+      "unit": "kg",
+      "price": 86.5,
+      "date": "2026-10-30",
+      "source": "Vegetable Market Price",
+      "basis": "Retail range midpoint",
+      "url": "https://www.vegetablemarketprice.com/market/bangalore/today"
+    },
+    {
+      "name": "Garlic",
+      "unit": "kg",
+      "price": 213.5,
+      "date": "2026-10-30",
+      "source": "Vegetable Market Price",
+      "basis": "Retail range midpoint",
+      "url": "https://www.vegetablemarketprice.com/market/bangalore/today"
+    },
+    {
+      "name": "Ginger",
+      "unit": "kg",
+      "price": 212.5,
+      "date": "2026-10-30",
+      "source": "Vegetable Market Price",
+      "basis": "Retail range midpoint",
+      "url": "https://www.vegetablemarketprice.com/market/bangalore/today"
+    },
+    {
+      "name": "Coriander leaves",
+      "unit": "kg",
+      "price": 14.5,
+      "date": "2026-10-30",
+      "source": "Vegetable Market Price",
+      "basis": "Retail range midpoint",
+      "url": "https://www.vegetablemarketprice.com/market/bangalore/today"
+    },
+    {
+      "name": "Curry leaves",
+      "unit": "kg",
+      "price": 50.5,
+      "date": "2026-10-30",
+      "source": "Vegetable Market Price",
+      "basis": "Retail range midpoint",
+      "url": "https://www.vegetablemarketprice.com/market/bangalore/today"
+    },
+    {
+      "name": "Radish",
+      "unit": "kg",
+      "price": 45.5,
+      "date": "2026-10-30",
+      "source": "Vegetable Market Price",
+      "basis": "Retail range midpoint",
+      "url": "https://www.vegetablemarketprice.com/market/bangalore/today"
+    },
+    {
+      "name": "Ridge gourd",
+      "unit": "kg",
+      "price": 56.5,
+      "date": "2026-10-30",
+      "source": "Vegetable Market Price",
+      "basis": "Retail range midpoint",
+      "url": "https://www.vegetablemarketprice.com/market/bangalore/today"
+    },
+    {
+      "name": "Bitter gourd",
+      "unit": "kg",
+      "price": 57.5,
+      "date": "2026-10-30",
+      "source": "Vegetable Market Price",
+      "basis": "Retail range midpoint",
+      "url": "https://www.vegetablemarketprice.com/market/bangalore/today"
+    },
+    {
+      "name": "Green peas",
+      "unit": "kg",
+      "price": 85,
+      "date": "2026-10-30",
+      "source": "Vegetable Market Price",
+      "basis": "Retail range midpoint",
+      "url": "https://www.vegetablemarketprice.com/market/bangalore/today"
+    },
+    {
+      "name": "Drumstick",
+      "unit": "kg",
+      "price": 84,
+      "date": "2026-10-30",
+      "source": "Vegetable Market Price",
+      "basis": "Retail range midpoint",
+      "url": "https://www.vegetablemarketprice.com/market/bangalore/today"
+    },
+    {
+      "name": "Toor dal",
+      "unit": "kg",
+      "price": 110,
+      "date": "2026-04-23",
+      "source": "India Prices",
+      "basis": "Listed dal retail price",
+      "url": "https://www.indiaprices.co.in/dal/bengaluru-dal-price/"
+    },
+    {
+      "name": "Chana dal",
+      "unit": "kg",
+      "price": 80,
+      "date": "2026-04-23",
+      "source": "India Prices",
+      "basis": "Listed dal retail price",
+      "url": "https://www.indiaprices.co.in/dal/bengaluru-dal-price/"
+    }
+  ]
+}

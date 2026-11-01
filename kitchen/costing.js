@@ -4,6 +4,7 @@ const flours=new Set(['Besan','Wheat flour','Rice flour','Ragi flour','All-purpo
 const grains=new Set(['Idli rice','Sona Masuri rice (raw)','Red rice','Poha','Rava','Sabudana']);
 const spices=new Set(['Cumin seeds','Mustard seeds','Carom seeds','Turmeric powder','Pepper','Khar']);
 export function sampleQuantity(name,type,base=false){
+ if(name==='Taro leaves')return {quantity:10,unit:'piece'};
  if(name==='Coconut')return {quantity:.5,unit:'piece'};
  if(name==='Curd'||name==='Coconut milk')return {quantity:.4,unit:'litre'};
  if(name==='Cooking oil (unspecified)'||name==='Mustard oil')return {quantity:.05,unit:'litre'};

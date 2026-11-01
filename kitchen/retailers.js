@@ -1,10 +1,12 @@
+import {scrapedPrices} from './retailer-data.js';
+import {extraPrices} from './extra-prices.js';
 // Public catalogue observations. Reference product prices, not checkout quotes.
 const observed='2026-11-01';
 const row=(retailer,name,price,pack,packQuantity,url,product)=>({retailer,name,price,unit:'kg',pack,packQuantity,url,product,observed,source:retailer+' public listing'});
 const bb='https://www.bigbasket.com/pb/bb-super-saver/';
 const im='https://instamart.in/p/supreme-harvest-masoor-dal-split-XPX3OOZX2U';
 const im2='https://instamart.in/p/tata-sampann-unpolished-kali-masoor-dal-YB3813GC48';
-export const retailerPrices=[
+const originalPrices=[
  row('BigBasket','Sona Masuri rice (raw)',1690/26,'26 kg',1690,bb,'bb SUPER SAVER Sona Masoori Raw Rice'),
  row('BigBasket','Sona Masuri rice (steamed)',1430/26,'26 kg',1430,bb,'bb SUPER SAVER Sona Masoori Steam Rice'),
  row('BigBasket','Toor dal',144,'1 kg',144,bb,'bb SUPER SAVER Toor/Arhar Dal'),
@@ -53,5 +55,11 @@ export const retailerPrices=[
  row('Instamart','Chana dal',134,'500 g',67,im2,'Tata Sampann Chana Dal'),
  row('Instamart','Peanuts',214,'500 g',107,im2,'Supreme Harvest Raw Peanuts')
 ];
+const collected=[...originalPrices,...scrapedPrices.filter(q=>!(/chewy|chewable|tablet/i.test(q.product))),...extraPrices];
+// Named representative variants for unspecified PDF ingredient names.
+const aliases={'Ripe banana':'Robusta banana','Cooking oil (unspecified)':'Sunflower oil','White rice (unspecified)':'Sona Masuri rice (raw)','Raw rice (unspecified)':'Sona Masuri rice (raw)','Sona Masuri rice (unspecified)':'Sona Masuri rice (raw)','Green gram dal':'Moong dal'};
+export const retailerPrices=[...collected,...Object.entries(aliases).flatMap(([name,variant])=>collected.filter(q=>q.name===variant).map(q=>({...q,name,product:q.product+' · reference variant: '+variant,source:q.source+' · '+variant+' reference'})))];
 // Exactly one item per retailer / ingredient; preserve named variants and pack evidence.
 export function retailerQuote(retailer,name,unit,date){return retailerPrices.filter(r=>r.retailer===retailer&&r.name===name&&r.unit===unit&&r.observed<=date).sort((a,b)=>b.observed.localeCompare(a.observed)||a.price-b.price)[0]||null;}
+
+export function otherQuote(name,unit,date){return retailerPrices.filter(r=>r.name===name&&(!unit||r.unit===unit)&&r.observed<=date).sort((a,b)=>b.observed.localeCompare(a.observed)||a.price-b.price)[0]||null;}

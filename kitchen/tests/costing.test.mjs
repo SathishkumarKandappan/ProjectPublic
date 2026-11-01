@@ -1,0 +1,12 @@
+import assert from 'node:assert/strict';
+import {sampleQuantity,estimateDish} from '../costing.js';
+const dish={name:'Potato palya',base:'Potato',type:'Palya',ingredients:['Potato']};
+const prices={Potato:25,'Cooking oil (unspecified)':187,Salt:30};
+const cost=estimateDish(dish,(name,unit)=>({price:prices[name],unit}));
+assert.equal(cost.portions,10);assert.equal(cost.missing,0);assert.equal(cost.basePriced,true);
+assert.ok(Math.abs(cost.subtotal-34.95)<.000001);assert.ok(Math.abs(cost.perPortion-3.495)<.000001);
+const missing=estimateDish(dish,(name,unit)=>name==='Potato'?null:{price:prices[name],unit});assert.equal(missing.basePriced,false);assert.equal(missing.missing,1);
+const partial=estimateDish({...dish,ingredients:['Potato','Peanuts']},(name,unit)=>name==='Peanuts'?null:{price:prices[name],unit});assert.equal(partial.basePriced,true);assert.equal(partial.missing,1);
+assert.deepEqual(sampleQuantity('Curd','Curry'),{quantity:.4,unit:'litre'});assert.deepEqual(sampleQuantity('Coconut','Palya'),{quantity:.5,unit:'piece'});
+const none=estimateDish(dish,()=>null);assert.equal(none.basePriced,false);assert.equal(none.missing,3);assert.equal(none.subtotal,0);
+console.log('PASS: quantity/unit assumptions, per-portion calculation, main-ingredient availability and partial estimates');

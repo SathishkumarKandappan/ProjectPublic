@@ -4,6 +4,7 @@ import assert from 'node:assert/strict';
 import * as model from '../model.js';
 import {defaults} from '../seed.js';
 import {supplierSeed} from '../supplier-seed.js';
+import {recommendRecipes} from '../recipes.js';
 const today=model.todayIST();
 const sample={name:'Tomato',unit:'kg'};
 const records=[0,1,2].map((n)=>({...sample,date:model.addDays(today,n-2),price:40+n,source:'Test market',basis:'Retail'}));
@@ -16,7 +17,7 @@ assert.equal(model.latest(sample,records,[{...records[2],price:39,source:'Suppli
 assert.equal(model.priceTone(39,40),'cheap');assert.equal(model.priceTone(41,40),'expensive');assert.equal(model.priceTone(40,40),'neutral');assert.equal(model.priceTone(null,40),'neutral');
 const dom=new JSDOM(readFileSync('kitchen/index.html','utf8'),{url:'https://example.org',runScripts:'outside-only'});
 const w=dom.window;
-w.defaults=defaults;w.supplierSeed=supplierSeed;Object.assign(w,model);w.setInterval=()=>0;
+w.recommendRecipes=recommendRecipes;w.defaults=defaults;w.supplierSeed=supplierSeed;Object.assign(w,model);w.setInterval=()=>0;
 const feed=JSON.parse(readFileSync('kitchen/prices.json','utf8'));
 w.fetch=async()=>({ok:true,json:async()=>feed});
 const app=readFileSync('kitchen/app.js','utf8').replace(/^import .*;\n/gm,'');
@@ -35,4 +36,8 @@ $('#chart .day-card').click();assert.ok($('#viewLabel').textContent.startsWith('
 assert.equal(JSON.parse(w.localStorage.getItem('kitchen-ledger-v2')).items[0].qty,100);
 assert.equal(model.comparePrices({price:80},{price:55,unit:'kg'},'kg').percent,-31.25);
 assert.equal(model.comparePrices({price:40},{price:50,unit:'piece'},'kg').comparable,false);
+assert.equal(w.document.querySelectorAll('.recipe-card').length,15);
+assert.match($('#recipeCards').textContent,/Simple potato palya/);
+$('#recipeType').value='Palya';$('#recipeType').dispatchEvent(new w.Event('change'));assert.equal(w.document.querySelectorAll('.recipe-card').length,5);
+$('#recipeExclude').value='coconut';$('#recipeExclude').dispatchEvent(new w.Event('input'));assert.equal(w.document.querySelectorAll('.recipe-card').length,1);
 console.log('PASS: history, 7-day trend, flat fallback, quote priority, colours, date filtering, budgeting, persistence, future quote protection');

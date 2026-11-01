@@ -1,0 +1,12 @@
+import assert from 'node:assert/strict';
+import {recommendRecipes} from '../recipes.js';
+const prices={Potato:25,Tomato:49,Cabbage:40,Carrot:52.5,Beetroot:49,'French beans':81.5,Coconut:40};
+const quote=i=>prices[i.name]!=null?{price:prices[i.name],source:'Test',date:'2026-11-01'}:null;
+const ten=recommendRecipes(quote,{type:'Palya',portions:10});
+assert.equal(ten[0].id,'potato-palya');assert.equal(ten[0].subtotal,30);assert.equal(ten[0].perPortion,3);assert.equal(ten[0].tone,'cheap');assert.equal(ten.at(-1).tone,'expensive');
+const hundred=recommendRecipes(quote,{type:'Palya',portions:100});assert.equal(hundred[0].subtotal,300);assert.equal(hundred[0].perPortion,3);
+const missing=recommendRecipes(i=>i.name==='Potato'?null:quote(i),{type:'Palya'});assert.ok(missing.at(-1).missing>0);assert.equal(missing.at(-1).tone,'neutral');
+const excludes=recommendRecipes(quote,{type:'Palya',exclude:'coconut'});assert.equal(excludes.length,1);assert.equal(excludes[0].id,'potato-palya');
+const noMilk=recommendRecipes(quote,{exclude:'milk'});assert.ok(noMilk.every(r=>!r.tags.includes('Milk')));
+const noQuotes=recommendRecipes(()=>null);assert.ok(noQuotes.every(r=>r.missing===r.ingredients.length&&r.tone==='neutral'));
+console.log('PASS: recipe ranking, scaling, missing-price ordering, ingredient/tag exclusions and absent quotes');

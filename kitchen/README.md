@@ -23,3 +23,9 @@ Unit prices are calculated as pack cost / pack quantity. Grams are converted to 
 Green marks the lower price in each matching market/supplier pair; red the higher one; grey the same price or no comparison. Difference = supplier − market. Percentage = difference / market × 100; zero market price has no percentage. The comparison is indicative: an undated supplier quote is not a historical supplier price and an old market listing is not today's live price.
 
 Budget basis can be supplier with market fallback, or market only. Supplier prices with mismatched units are excluded from the supplier budget and market price is used instead. Historical budgets do not use undated supplier quotes. Weekly difference includes only comparable items and the entered weekly quantities. Missing prices are excluded; tax, delivery, fuel and wastage remain excluded. CSV export includes both unit prices, source dates, differences and all seven days of projections. Export regularly.
+
+## Low-cost menu suggestions
+
+Fifteen illustrative curry, palya and snack ideas are ranked within dish type by main-ingredient cost per sample portion. The default selects the lower matching-unit supplier/market quote; users can choose their existing budget basis instead. Date selection, projected market prices, missing quotes, undated supplier prices and older observations are reflected and disclosed. Ten-portion sample quantities can be scaled; ingredient/tag exclusions are a text filter, not an allergy certification. Salt, oil, spices, tempering, fuel and labour are excluded. These estimates are not complete recipes, complete meal costs or prescribed school portions. Review quantities, yield, nutrition and dietary requirements before planning a menu.
+
+Tests: `node --test kitchen/tests/*.test.mjs`.

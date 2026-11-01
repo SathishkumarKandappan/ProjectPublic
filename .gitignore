@@ -1,7 +1,0 @@
-node_modules/
-.env
-*.log
-
-.wrangler/
-public/vendor/
-.dev.vars

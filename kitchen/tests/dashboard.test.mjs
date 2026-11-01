@@ -1,0 +1,15 @@
+import {JSDOM} from 'jsdom';
+import {readFileSync} from 'node:fs';
+import assert from 'node:assert/strict';
+const dom=new JSDOM(readFileSync('kitchen/index.html','utf8'),{url:'https://example.org',runScripts:'outside-only'});
+const w=dom.window;w.eval(readFileSync('kitchen/app.js','utf8'));
+assert.equal(w.document.querySelectorAll('#rows tr').length,46);
+const q=w.document.querySelector('[aria-label="Sona Masuri rice (raw) weekly quantity in kg"]');q.value=100;q.dispatchEvent(new w.Event('change'));
+assert.equal(w.document.querySelector('#total').textContent,'₹6,000');
+assert.equal(w.document.querySelector('#allowance').textContent,'₹6,600');
+assert.equal(w.document.querySelector('#meal').textContent,'₹2');
+const growth=w.document.querySelector('#growth');growth.value=10;growth.dispatchEvent(new w.Event('change'));assert.equal(w.document.querySelector('#chart b').textContent,'₹6,600');
+const search=w.document.querySelector('#search');search.value='salem';search.dispatchEvent(new w.Event('input'));assert.equal(w.document.querySelectorAll('#rows tr').length,1);
+assert.equal(w.document.querySelector('#rows input').value,'');
+assert.equal(JSON.parse(w.localStorage.getItem('kitchen-ledger-v1')).items[0].qty,100);
+console.log('PASS: inventory, missing quotes, basket total, contingency, per-meal cost, scenarios, search and persistence');

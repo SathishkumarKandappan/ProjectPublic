@@ -1,5 +1,5 @@
 {
-  "checkedAt": "2026-11-01T04:37:56.414065+00:00",
+  "checkedAt": "2026-11-01T10:15:30.691746+00:00",
   "errors": [],
   "records": [
     {
@@ -65,7 +65,7 @@
       "unit": "kg",
       "price": 24,
       "date": "2026-10-29",
-      "source": "Retail midpoint \u00b7 date uncertain",
+      "source": "Retail midpoint · date uncertain",
       "basis": "Reference snapshot"
     },
     {
@@ -73,7 +73,7 @@
       "unit": "kg",
       "price": 49,
       "date": "2026-10-29",
-      "source": "Retail midpoint \u00b7 date uncertain",
+      "source": "Retail midpoint · date uncertain",
       "basis": "Reference snapshot"
     },
     {
@@ -81,7 +81,7 @@
       "unit": "kg",
       "price": 57.5,
       "date": "2026-10-29",
-      "source": "Retail midpoint \u00b7 date uncertain",
+      "source": "Retail midpoint · date uncertain",
       "basis": "Reference snapshot"
     },
     {
@@ -89,7 +89,7 @@
       "unit": "kg",
       "price": 40.5,
       "date": "2026-10-29",
-      "source": "Retail midpoint \u00b7 date uncertain",
+      "source": "Retail midpoint · date uncertain",
       "basis": "Reference snapshot"
     },
     {
@@ -97,7 +97,7 @@
       "unit": "kg",
       "price": 49,
       "date": "2026-10-29",
-      "source": "Retail midpoint \u00b7 date uncertain",
+      "source": "Retail midpoint · date uncertain",
       "basis": "Reference snapshot"
     },
     {
@@ -105,7 +105,7 @@
       "unit": "kg",
       "price": 45.5,
       "date": "2026-10-29",
-      "source": "Retail midpoint \u00b7 date uncertain",
+      "source": "Retail midpoint · date uncertain",
       "basis": "Reference snapshot"
     },
     {
@@ -113,7 +113,7 @@
       "unit": "kg",
       "price": 52.5,
       "date": "2026-10-29",
-      "source": "Retail midpoint \u00b7 date uncertain",
+      "source": "Retail midpoint · date uncertain",
       "basis": "Reference snapshot"
     },
     {
@@ -121,7 +121,7 @@
       "unit": "kg",
       "price": 49,
       "date": "2026-10-29",
-      "source": "Retail midpoint \u00b7 date uncertain",
+      "source": "Retail midpoint · date uncertain",
       "basis": "Reference snapshot"
     },
     {
@@ -129,7 +129,7 @@
       "unit": "kg",
       "price": 14.5,
       "date": "2026-10-29",
-      "source": "Retail midpoint \u00b7 date uncertain",
+      "source": "Retail midpoint · date uncertain",
       "basis": "Reference snapshot"
     },
     {
@@ -137,7 +137,7 @@
       "unit": "kg",
       "price": 37,
       "date": "2026-10-29",
-      "source": "Retail midpoint \u00b7 date uncertain",
+      "source": "Retail midpoint · date uncertain",
       "basis": "Reference snapshot"
     },
     {
@@ -145,7 +145,7 @@
       "unit": "kg",
       "price": 50.5,
       "date": "2026-10-29",
-      "source": "Retail midpoint \u00b7 date uncertain",
+      "source": "Retail midpoint · date uncertain",
       "basis": "Reference snapshot"
     },
     {
@@ -153,7 +153,7 @@
       "unit": "kg",
       "price": 84,
       "date": "2026-10-29",
-      "source": "Retail midpoint \u00b7 date uncertain",
+      "source": "Retail midpoint · date uncertain",
       "basis": "Reference snapshot"
     },
     {
@@ -161,7 +161,7 @@
       "unit": "kg",
       "price": 81.5,
       "date": "2026-10-29",
-      "source": "Retail midpoint \u00b7 date uncertain",
+      "source": "Retail midpoint · date uncertain",
       "basis": "Reference snapshot"
     },
     {
@@ -169,7 +169,7 @@
       "unit": "kg",
       "price": 213.5,
       "date": "2026-10-29",
-      "source": "Retail midpoint \u00b7 date uncertain",
+      "source": "Retail midpoint · date uncertain",
       "basis": "Reference snapshot"
     },
     {
@@ -177,7 +177,7 @@
       "unit": "kg",
       "price": 212.5,
       "date": "2026-10-29",
-      "source": "Retail midpoint \u00b7 date uncertain",
+      "source": "Retail midpoint · date uncertain",
       "basis": "Reference snapshot"
     },
     {
@@ -185,7 +185,7 @@
       "unit": "kg",
       "price": 86.5,
       "date": "2026-10-29",
-      "source": "Retail midpoint \u00b7 date uncertain",
+      "source": "Retail midpoint · date uncertain",
       "basis": "Reference snapshot"
     },
     {
@@ -193,7 +193,7 @@
       "unit": "kg",
       "price": 85,
       "date": "2026-10-29",
-      "source": "Retail midpoint \u00b7 date uncertain",
+      "source": "Retail midpoint · date uncertain",
       "basis": "Reference snapshot"
     },
     {
@@ -201,7 +201,7 @@
       "unit": "kg",
       "price": 45.5,
       "date": "2026-10-29",
-      "source": "Retail midpoint \u00b7 date uncertain",
+      "source": "Retail midpoint · date uncertain",
       "basis": "Reference snapshot"
     },
     {
@@ -209,7 +209,7 @@
       "unit": "kg",
       "price": 78.5,
       "date": "2026-10-29",
-      "source": "Retail midpoint \u00b7 date uncertain",
+      "source": "Retail midpoint · date uncertain",
       "basis": "Reference snapshot"
     },
     {
@@ -217,7 +217,7 @@
       "unit": "kg",
       "price": 39.5,
       "date": "2026-10-29",
-      "source": "Retail midpoint \u00b7 date uncertain",
+      "source": "Retail midpoint · date uncertain",
       "basis": "Reference snapshot"
     },
     {
@@ -225,7 +225,7 @@
       "unit": "kg",
       "price": 26.5,
       "date": "2026-10-29",
-      "source": "Retail midpoint \u00b7 date uncertain",
+      "source": "Retail midpoint · date uncertain",
       "basis": "Reference snapshot"
     },
     {
@@ -233,7 +233,7 @@
       "unit": "kg",
       "price": 45.5,
       "date": "2026-10-29",
-      "source": "Retail midpoint \u00b7 date uncertain",
+      "source": "Retail midpoint · date uncertain",
       "basis": "Reference snapshot"
     },
     {
@@ -241,7 +241,7 @@
       "unit": "kg",
       "price": 56.5,
       "date": "2026-10-29",
-      "source": "Retail midpoint \u00b7 date uncertain",
+      "source": "Retail midpoint · date uncertain",
       "basis": "Reference snapshot"
     },
     {
@@ -249,7 +249,7 @@
       "unit": "kg",
       "price": 18.5,
       "date": "2026-10-29",
-      "source": "Retail midpoint \u00b7 date uncertain",
+      "source": "Retail midpoint · date uncertain",
       "basis": "Reference snapshot"
     },
     {
@@ -257,7 +257,7 @@
       "unit": "kg",
       "price": 49,
       "date": "2026-10-29",
-      "source": "Retail midpoint \u00b7 date uncertain",
+      "source": "Retail midpoint · date uncertain",
       "basis": "Reference snapshot"
     },
     {
@@ -488,7 +488,7 @@
     {
       "name": "Ash gourd",
       "unit": "kg",
-      "price": 24.0,
+      "price": 24,
       "date": "2026-11-01",
       "source": "Vegetable Market Price",
       "basis": "Retail range midpoint",
@@ -497,7 +497,7 @@
     {
       "name": "Beetroot",
       "unit": "kg",
-      "price": 49.0,
+      "price": 49,
       "date": "2026-11-01",
       "source": "Vegetable Market Price",
       "basis": "Retail range midpoint",
@@ -524,7 +524,7 @@
     {
       "name": "Brinjal",
       "unit": "kg",
-      "price": 49.0,
+      "price": 49,
       "date": "2026-11-01",
       "source": "Vegetable Market Price",
       "basis": "Retail range midpoint",
@@ -551,7 +551,7 @@
     {
       "name": "Cauliflower",
       "unit": "kg",
-      "price": 49.0,
+      "price": 49,
       "date": "2026-11-01",
       "source": "Vegetable Market Price",
       "basis": "Retail range midpoint",
@@ -560,7 +560,7 @@
     {
       "name": "Chana dal",
       "unit": "kg",
-      "price": 80.0,
+      "price": 80,
       "date": "2026-11-01",
       "source": "India Prices",
       "basis": "Listed dal retail price",
@@ -578,7 +578,7 @@
     {
       "name": "Cucumber",
       "unit": "kg",
-      "price": 37.0,
+      "price": 37,
       "date": "2026-11-01",
       "source": "Vegetable Market Price",
       "basis": "Retail range midpoint",
@@ -596,7 +596,7 @@
     {
       "name": "Drumstick",
       "unit": "kg",
-      "price": 84.0,
+      "price": 84,
       "date": "2026-11-01",
       "source": "Vegetable Market Price",
       "basis": "Retail range midpoint",
@@ -641,7 +641,7 @@
     {
       "name": "Green peas",
       "unit": "kg",
-      "price": 85.0,
+      "price": 85,
       "date": "2026-11-01",
       "source": "Vegetable Market Price",
       "basis": "Retail range midpoint",
@@ -650,7 +650,7 @@
     {
       "name": "Idli rice",
       "unit": "kg",
-      "price": 40.0,
+      "price": 40,
       "date": "2026-11-01",
       "source": "India Prices",
       "basis": "Listed rice retail price",
@@ -677,7 +677,7 @@
     {
       "name": "Ponni rice (boiled)",
       "unit": "kg",
-      "price": 55.0,
+      "price": 55,
       "date": "2026-11-01",
       "source": "India Prices",
       "basis": "Listed rice retail price",
@@ -713,7 +713,7 @@
     {
       "name": "Red rice",
       "unit": "kg",
-      "price": 80.0,
+      "price": 80,
       "date": "2026-11-01",
       "source": "India Prices",
       "basis": "Listed rice retail price",
@@ -731,7 +731,7 @@
     {
       "name": "Sona Masuri rice (raw)",
       "unit": "kg",
-      "price": 60.0,
+      "price": 60,
       "date": "2026-11-01",
       "source": "India Prices",
       "basis": "Listed rice retail price",
@@ -740,7 +740,7 @@
     {
       "name": "Sona Masuri rice (steamed)",
       "unit": "kg",
-      "price": 50.0,
+      "price": 50,
       "date": "2026-11-01",
       "source": "India Prices",
       "basis": "Listed rice retail price",
@@ -758,7 +758,7 @@
     {
       "name": "Tomato",
       "unit": "kg",
-      "price": 49.0,
+      "price": 49,
       "date": "2026-11-01",
       "source": "Vegetable Market Price",
       "basis": "Retail range midpoint",
@@ -767,7 +767,7 @@
     {
       "name": "Toor dal",
       "unit": "kg",
-      "price": 110.0,
+      "price": 110,
       "date": "2026-11-01",
       "source": "India Prices",
       "basis": "Listed dal retail price",

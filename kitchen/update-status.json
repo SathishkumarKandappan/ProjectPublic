@@ -37,5 +37,39 @@
       }
     }
   },
-  "marketErrors": []
+  "marketErrors": [],
+  "extraSources": {
+    "checkedAt": "2026-11-01T10:15:34.444Z",
+    "government": [
+      {
+        "provider": "data.gov.in",
+        "status": "key_required",
+        "secret": "DATA_GOV_IN_API_KEY"
+      },
+      {
+        "provider": "AGMARKNET public report",
+        "status": "request_failed",
+        "message": "Public report unavailable or schema not verified; previous prices retained."
+      }
+    ],
+    "apis": [
+      {
+        "provider": "Rewalto",
+        "status": "key_required",
+        "secret": "REWALTO_API_KEY"
+      },
+      {
+        "provider": "QuickCommerceAPI",
+        "status": "key_required",
+        "secret": "QUICKCOMMERCE_API_KEY"
+      },
+      {
+        "provider": "SerpApi",
+        "status": "key_required",
+        "secret": "SERPAPI_API_KEY"
+      }
+    ],
+    "governmentRecords": 0,
+    "apiQuotes": 0
+  }
 }

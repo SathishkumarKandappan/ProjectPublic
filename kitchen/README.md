@@ -4,7 +4,7 @@ Static school kitchen budgeting dashboard. Serve the repository and open `/kitch
 
 ## Prices and dates
 
-“Today / latest” shows the latest available record per ingredient, with its actual publication date. Choosing a past date shows only records from that exact date. Missing history stays blank. Choosing a date in the next seven days shows estimates. Saved supplier quotes override public prices on the same date and unit. Targets and quantities migrate from the original dashboard; changes remain browser-local.
+“Today / latest” shows the latest available record per ingredient, with its actual publication date. Choosing a past date shows only records from that exact date. Missing history stays blank. Choosing a date in the next seven days shows estimates. Supplier prices are displayed separately; manual dated supplier quotes override the imported undated supplier list. Saved quantities migrate from the original dashboard; changes remain browser-local.
 
 Public feed: `prices.json` retains dated observations. A GitHub Actions workflow on the repository default branch fetches public rice and vegetable listings daily at 07:00 Asia/Kolkata (01:30 UTC), using the updater on `feat/bangalore-kitchen-budget`, and commits the feed to `gh-pages`. GitHub schedules may be delayed. The browser checks the published feed on load, on Refresh, and every 15 minutes. Source failures preserve old observations and are surfaced. Source publication dates are never replaced with fetch dates. This is daily published market data, not a real-time trade feed. The bootstrap feed was checked against public listings on 1 November 2026. Rice sources can be older than today. Salem rice and unlisted rations need supplier quotes.
 
@@ -14,4 +14,12 @@ Sources: https://www.indiaprices.co.in/rice/bengaluru-rice-price/ and https://ww
 
 Seven-day projections use a linear trend only with three or more distinct daily observations spanning at least two days, within 30 days of the latest observation, from the same source and basis. Movement is capped at 3% of the last price per day. Otherwise a labelled flat estimate carries the last available price forward. Baselines older than two days are flagged. These estimates have not been statistically validated and have no calibrated confidence interval.
 
-Green = below that ingredient's editable target; red = above it; grey = at target or no comparison. Initial targets are the original reference prices. No cross-ingredient price comparison is implied. Missing prices are excluded from totals; delivery, tax, fuel and wastage are excluded. Contingency is shown separately. CSV export includes selected-date prices, source dates, targets and all seven days of projections. Export regularly.
+## Supplier comparison
+
+36 price-list rows were imported from the provided supplier sheet, tab `Price List - RamLal`, B4:E39. No menu, contact or school planning data is published. The sheet contains no effective date; quotes remain explicitly undated. A daily updater attempts anonymous CSV access without changing the sheet's permissions; if it is private or unreadable the imported snapshot is retained and the feed flags the failure.
+
+Unit prices are calculated as pack cost / pack quantity. Grams are converted to kilograms: hing at ₹85 / 50g is ₹1,700/kg. Packet, piece, bunch and litre units remain distinct. Bottle gourd / cauliflower per piece and curry leaves per bunch are not compared with market prices per kg. White rice is unspecified and is not mapped to Salem or Sona Masuri. Generic cooking oil is not assumed to be sunflower oil. Moong/urad varieties are not guessed from market lists containing multiple grades.
+
+Green marks the lower price in each matching market/supplier pair; red the higher one; grey the same price or no comparison. Difference = supplier − market. Percentage = difference / market × 100; zero market price has no percentage. The comparison is indicative: an undated supplier quote is not a historical supplier price and an old market listing is not today's live price.
+
+Budget basis can be supplier with market fallback, or market only. Supplier prices with mismatched units are excluded from the supplier budget and market price is used instead. Historical budgets do not use undated supplier quotes. Weekly difference includes only comparable items and the entered weekly quantities. Missing prices are excluded; tax, delivery, fuel and wastage remain excluded. CSV export includes both unit prices, source dates, differences and all seven days of projections. Export regularly.

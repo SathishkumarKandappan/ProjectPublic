@@ -1,0 +1,54 @@
+name: Daily kitchen prices
+on:
+  schedule:
+    - cron: '30 22 * * *'
+  workflow_dispatch:
+  push:
+    branches: [ReadReseachPaper]
+    paths: [.github/workflows/kitchen-daily-prices.yml]
+permissions:
+  contents: write
+  pages: write
+concurrency:
+  group: kitchen-daily-prices
+  cancel-in-progress: false
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Check out kitchen source
+        uses: actions/checkout@v4
+        with:
+          ref: feat/bangalore-kitchen-budget
+          path: source
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Check out published site and history
+        uses: actions/checkout@v4
+        with:
+          ref: gh-pages
+          path: published
+      - name: Refresh dated market prices
+        run: python source/kitchen/scripts/update_prices.py published/kitchen/market.json
+      - name: Search retailer prices and retain history
+        run: node source/kitchen/scripts/daily-retailer-prices.mjs published/kitchen
+      - name: Publish public price files
+        working-directory: published
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add kitchen/market.json kitchen/retailer-prices.json kitchen/supplier.json kitchen/update-status.json
+          if ! git diff --cached --quiet; then
+            git commit -m 'Refresh dated kitchen price observations'
+            git push origin HEAD:gh-pages
+          fi
+      - name: Rebuild GitHub Pages
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api --method POST repos/${{ github.repository }}/pages/builds

@@ -1,94 +1,86 @@
 import {defaults} from './seed.js';
-import {recommendRecipes} from './recipes.js';
 import {supplierSeed} from './supplier-seed.js';
-import {todayIST,addDays,dayDiff,latest,forecast,priceOn,priceTone,comparePrices} from './model.js';
-const $=s=>document.querySelector(s);
+import {todayIST,dayDiff,marketAsOf,comparePrices} from './model.js';
+import {dishes,dailyIdeas} from './dishes.js';
+const $=selector=>document.querySelector(selector);
 const money=n=>n==null?'—':new Intl.NumberFormat('en-IN',{style:'currency',currency:'INR',minimumFractionDigits:0,maximumFractionDigits:2}).format(n);
-const dateLabel=d=>new Date(d+'T12:00:00Z').toLocaleDateString('en-IN',{day:'numeric',month:'short'});
-let state={items:defaults.map(x=>({...x,target:x.price})),quotes:[],meals:500,days:6,buffer:10};
-try{const saved=JSON.parse(localStorage.getItem('kitchen-ledger-v2'));if(saved?.items?.length)state={...state,...saved};else{const old=JSON.parse(localStorage.getItem('kitchen-ledger-v1'));if(old?.items?.length){state.items=old.items.map(x=>({...x,target:defaults.find(d=>d.name===x.name)?.price??null}));state.meals=old.meals;state.days=old.days;state.buffer=old.buffer;state.quotes=old.items.filter(x=>x.source==='Supplier quote'&&x.date&&x.price!==null).map(x=>({name:x.name,unit:x.unit,date:x.date,price:x.price,source:'Supplier quote',basis:'Supplier quote'}));}}}catch{}
-let records=defaults.filter(x=>x.price!==null).map(x=>({name:x.name,unit:x.unit,price:x.price,date:x.date,source:x.source,basis:'Reference snapshot'}));
-let supplierQuotes=supplierSeed;
-let category='All',selectedDate=todayIST(),exact=false;
-state.budgetBasis=state.budgetBasis||'supplier';
-function addSupplierItems(){for(const q of supplierQuotes)if(!state.items.some(x=>x.name===q.name))state.items.push({name:q.name,unit:q.unit,cat:['Lemon','Coconut'].includes(q.name)?'Vegetables':q.name.includes('rice')?'Rice':'Rations',qty:0,target:null});}
-addSupplierItems();
-function supplierFor(item,asOf=selectedDate){const dated=state.quotes.filter(q=>q.name===item.name&&q.unit===item.unit&&q.date<=asOf).sort((a,b)=>a.date.localeCompare(b.date)).at(-1);return dated?{...dated,effectiveDate:dated.date}:supplierQuotes.find(q=>q.name===item.name)||null;}
-function budgetPrice(x,r){const q=supplierFor(x);return state.budgetBasis==='supplier'&&q?.unit===x.unit&&!(selectedDate<todayIST()&&!q.effectiveDate)?q.price:r?.price??null;}
-const save=()=>{try{localStorage.setItem('kitchen-ledger-v2',JSON.stringify(state));}catch{}};
-function valueFor(x){return exact||selectedDate>todayIST()?priceOn(x,records,[],selectedDate,todayIST()):latest(x,records,[],selectedDate);}
-function toneLabel(price,target){const tone=priceTone(price,target);return {tone,label:tone==='cheap'?'Below target':tone==='expensive'?'Above target':target>0?'At target':'Set target'};}
-function refreshItemOptions(){const old=$('#focusItem').value;$('#focusItem').replaceChildren(...state.items.map(x=>{const o=document.createElement('option');o.value=x.name;o.textContent=x.name;return o}));$('#focusItem').value=state.items.some(x=>x.name===old)?old:'Sona Masuri rice (raw)';}
-function metrics(){const today=todayIST();let base=0,missing=0,current=0,cheaper=0,higher=0,matchedDelta=0;state.items.forEach(x=>{const r=valueFor(x),q=supplierFor(x),price=budgetPrice(x,r),c=comparePrices(r,q,x.unit);if(price==null)missing++;else base+=price*x.qty;const l=latest(x,records,[],today);if(l?.date===today)current++;if(c.comparable){if(c.delta<0)cheaper++;if(c.delta>0)higher++;matchedDelta+=c.delta*x.qty;}});$('#cheaperCount').textContent=cheaper;$('#higherCount').textContent=higher;$('#basketDifference').textContent=(matchedDelta>0?'+':'')+money(matchedDelta);$('#basketDifference').className=matchedDelta<0?'cheap':matchedDelta>0?'expensive':'neutral';$('#total').textContent=money(base);$('#allowance').textContent=money(base*(1+state.buffer/100));$('#meal').textContent=money(base/(state.meals*state.days));$('#missing').textContent=missing;$('#coverage').textContent=`${current} of ${state.items.length} ingredients have a price dated today`;$('#viewLabel').textContent=selectedDate>today?'Projected prices for '+dateLabel(selectedDate):exact?'Recorded prices on '+dateLabel(selectedDate):'Latest available prices as of '+dateLabel(selectedDate);renderForecast();renderRecipes();}
-function renderForecast(){
- const today=todayIST();const item=state.items.find(x=>x.name===$('#focusItem').value)||state.items[0];
- const current=latest(item,records,[],today),supplier=supplierFor(item,today);
- const benchmark=supplier?.unit===item.unit?supplier.price:null;const tone=toneLabel(current?.price,benchmark);
- $('#currentPrice').textContent=money(current?.price)+(current?' / '+item.unit:'');$('#currentPrice').className=tone.tone;
- $('#currentBasis').textContent=current?`${current.date===today?'Today’s published market price':'Last available market price'} · ${current.date} · ${current.source}`:'No general market price available';
- $('#currentStatus').textContent=current?(benchmark==null?'No matching supplier unit':tone.tone==='cheap'?'Market cheaper':tone.tone==='expensive'?'Market higher':'Same price'):'Market quote needed';$('#currentStatus').className='price-badge '+tone.tone;
- $('#supplierCurrentPrice').textContent=money(supplier?.price)+(supplier?' / '+supplier.unit:'');$('#supplierCurrentPrice').className=benchmark!=null?priceTone(benchmark,current?.price):'neutral';
- $('#supplierCurrentBasis').textContent=supplier?`${supplier.source||'Supplier list'} · ${supplier.effectiveDate||'quote date not supplied'}${supplier.unit!==item.unit?' · units differ; no comparison':''}`:'No supplier quote for this ingredient';
- $('#chart').replaceChildren(...Array.from({length:7},(_,i)=>{
-   const date=addDays(today,i+1),r=forecast(item,records,[],date,today),t=toneLabel(r?.price,benchmark);
-   const button=document.createElement('button');button.className='day-card';button.setAttribute('aria-label',`View projected prices for ${date}`);
-   const label=document.createElement('span');label.className='day-date';label.textContent=dateLabel(date);
-   const marketLabel=document.createElement('small');marketLabel.textContent='Market estimate';
-   const marketPrice=document.createElement('strong');marketPrice.textContent=money(r?.price);marketPrice.className=t.tone;
-   const marketUnit=document.createElement('small');marketUnit.textContent='per '+item.unit;
-   const supplierLabel=document.createElement('small');supplierLabel.className='supplier-day-label';supplierLabel.textContent='Supplier plan';
-   const supplierPrice=document.createElement('strong');supplierPrice.textContent=money(supplier?.price);supplierPrice.className=benchmark!=null?priceTone(benchmark,r?.price):'neutral';
-   const supplierUnit=document.createElement('small');supplierUnit.textContent=supplier?'per '+supplier.unit:'Quote needed';
-   button.append(label,marketLabel,marketPrice,marketUnit,supplierLabel,supplierPrice,supplierUnit);
-   button.onclick=()=>{selectedDate=date;exact=true;$('#priceDate').value=date;render()};return button;
- }));
- const f=forecast(item,records,[],addDays(today,1),today);
- $('#forecastMethod').textContent=(f?`${f.method}. ${f.stale?'Market baseline is more than two days old. ':''}`:'No market estimate. ')+(supplier?'Supplier plan repeats the last available quote for all seven days; it is not a confirmed future supplier price. ':'Add a supplier quote to show a supplier plan. ')+'Contingency is separate.';
+const dateLabel=date=>new Date(date+'T12:00:00Z').toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'});
+let selectedDate=todayIST(),view='prices',dishType='Curry',showAll=false,requestId=0;
+let records=defaults.filter(x=>x.price!==null).map(x=>({...x,source:x.source||'Reference snapshot'}));
+let cachedPlan={items:[],quotes:[]};
+try{cachedPlan=JSON.parse(localStorage.getItem('kitchen-ledger-v2'))||cachedPlan;}catch{}
+const localQuotes=(cachedPlan.quotes||[]).filter(q=>Number.isFinite(q.price)&&q.price>=0&&q.date);
+const catalog=new Map(defaults.map(x=>[x.name,{name:x.name,unit:x.unit,cat:x.cat}]));
+for(const q of supplierSeed)if(!catalog.has(q.name))catalog.set(q.name,{name:q.name,unit:q.unit,cat:['Lemon','Coconut'].includes(q.name)?'Vegetables':q.name.includes('rice')?'Rice':'Rations'});
+for(const x of cachedPlan.items||[])if(!catalog.has(x.name)&&x.name&&x.unit)catalog.set(x.name,{name:x.name,unit:x.unit,cat:x.cat||'Rations'});
+function supplierFor(name,unit){
+ const dated=localQuotes.filter(q=>q.name===name&&q.unit===unit&&q.date<=selectedDate).sort((a,b)=>a.date.localeCompare(b.date)).at(-1);
+ return dated?{...dated,effectiveDate:dated.date}:supplierSeed.find(q=>q.name===name)||null;
 }
-function recipePrice(ingredient){
- const item=state.items.find(x=>x.name===ingredient.name&&x.unit===ingredient.unit)||{name:ingredient.name,unit:ingredient.unit};
- const market=valueFor(item);const supplier=supplierFor(item);
- const choices=[];
- if(market)choices.push({price:market.price,source:market.source,date:market.date,projection:!!market.projection,old:dayDiff(todayIST(),market.date)>2});
- if(supplier?.unit===ingredient.unit&&!(selectedDate<todayIST()&&!supplier.effectiveDate))choices.push({price:supplier.price,source:supplier.source||'Supplier list',date:supplier.effectiveDate||null,projection:false,old:supplier.effectiveDate?dayDiff(todayIST(),supplier.effectiveDate)>2:false});
- if($('#recipeBasis').value==='budget'){
-   if(state.budgetBasis==='supplier')return choices.find(q=>q.source==='Supplier quote'||q.source==='Supplier price list')||choices[0]||null;
-   return choices.find(q=>q===choices[0]&&market)||null;
- }
+function quoteForDish(name,unit){
+ const market=marketAsOf(records,name,unit,selectedDate),supplier=supplierFor(name,unit),choices=[];
+ if(market)choices.push({...market,unit,kind:'Market'});
+ if(supplier?.unit===unit&&(supplier.effectiveDate||selectedDate===todayIST()))choices.push({...supplier,unit,date:supplier.effectiveDate||null,kind:'Supplier'});
  return choices.sort((a,b)=>a.price-b.price)[0]||null;
 }
-function renderRecipes(){
- const portions=Number($('#recipePortions').value)||10;
- const results=recommendRecipes(recipePrice,{portions,type:$('#recipeType').value,exclude:$('#recipeExclude').value});
- $('#recipeDate').textContent=`For ${dateLabel(selectedDate)} · ${$('#recipeBasis').value==='lowest'?'lowest available matching unit price':'your chosen budget price basis'}`;
- $('#recipeCards').replaceChildren(...results.map(r=>{
-   const card=document.createElement('article');card.className='recipe-card';
-   const top=document.createElement('div');top.className='recipe-top';const category=document.createElement('span');category.textContent=r.type;const rank=document.createElement('span');rank.className='price-badge '+r.tone;rank.textContent=r.missing?'Quote needed':r.rank===1?'Lowest priced '+r.type.toLowerCase()+' idea':`#${r.rank} of ${r.groupSize} ${r.type.toLowerCase()} ideas`;top.append(category,rank);
-   const title=document.createElement('h3');title.textContent=r.name;
-   const price=document.createElement('strong');price.className='recipe-price '+r.tone;price.textContent=r.ingredients.every(i=>!i.quote)?'Price needed':(r.missing?'From ':'')+money(r.perPortion)+' / portion';
-   const subtotal=document.createElement('p');subtotal.textContent=`${money(r.subtotal)} for ${portions} sample portions · ${r.missing?'partial subtotal':'main ingredients only'}`;
-   const method=document.createElement('p');method.textContent=r.method;
-   const details=document.createElement('details');const summary=document.createElement('summary');summary.textContent='Ingredients & price evidence';const list=document.createElement('ul');
-   r.ingredients.forEach(i=>{const li=document.createElement('li');li.textContent=`${i.name}: ${Number(i.quantity.toFixed(3))} ${i.unit} × ${money(i.quote?.price)}/${i.unit}`;const basis=document.createElement('small');basis.textContent=i.quote?`${i.quote.source} · ${i.quote.date||'undated quote'}${i.quote.projection?' · projected market price':''} → ${money(i.cost)}`:'Missing matching-unit quote; excluded from subtotal';li.append(basis);list.append(li)});details.append(summary,list);
-   const notes=document.createElement('p');notes.className='recipe-notes';notes.textContent=[r.missing?`${r.missing} main ingredient price(s) missing.`:'',r.undated?'Uses undated supplier quote(s).':'',r.old?'Includes older market/quote prices.':'',r.projected?'Uses projected market price(s).':'',r.tags.length?'Contains: '+r.tags.join(', ')+'.':''].filter(Boolean).join(' ');
-   card.append(top,title,price,subtotal,method,details,notes);return card;
- }));$('#recipeEmpty').hidden=results.length>0;
+function renderPrices(){
+ const category=$('#category').value,query=$('#priceSearch').value.trim().toLowerCase();let cheaper=0,higher=0;
+ const all=[...catalog.values()];
+ for(const item of all){const c=comparePrices(marketAsOf(records,item.name,item.unit,selectedDate),supplierFor(item.name,item.unit),item.unit);if(c.comparable&&c.delta<0)cheaper++;if(c.comparable&&c.delta>0)higher++;}
+ $('#comparisonSummary').textContent=`As of ${dateLabel(selectedDate)} · ${cheaper} supplier prices lower · ${higher} higher`;
+ const shown=all.filter(x=>(category==='All'||x.cat===category)&&x.name.toLowerCase().includes(query));
+ $('#priceRows').replaceChildren(...shown.map(item=>{
+   const market=marketAsOf(records,item.name,item.unit,selectedDate),supplier=supplierFor(item.name,item.unit),comparison=comparePrices(market,supplier,item.unit);
+   const row=document.createElement('tr'),name=document.createElement('td');name.textContent=item.name;const category=document.createElement('small');category.textContent=item.cat;name.append(category);
+   const supplierCell=priceCell(supplier?.price,supplier?.unit,comparison.supplierTone,supplier?(supplier.effectiveDate?dateLabel(supplier.effectiveDate):'Undated supplier list'):'Quote needed');
+   const marketCell=priceCell(market?.price,item.unit,comparison.marketTone,market?dateLabel(market.date)+(dayDiff(selectedDate,market.date)>0?' · last recorded':''):'No record by this date');
+   if(market){marketCell.title=`${market.source} · ${market.basis||'reference price'}`;}
+   const difference=document.createElement('td');difference.className=comparison.supplierTone||'neutral';
+   difference.textContent=comparison.comparable?(comparison.delta>0?'+':'')+money(comparison.delta):comparison.reason;
+   if(comparison.comparable){const percent=document.createElement('small');percent.textContent=comparison.percent==null?'No percentage comparison':`${comparison.percent>0?'+':''}${comparison.percent.toFixed(1)}%`;difference.append(percent);}
+   row.append(name,supplierCell,marketCell,difference);return row;
+ }));$('#priceEmpty').hidden=shown.length>0;
 }
-function numberInput(value,label,onChange){const input=document.createElement('input');input.type='number';input.min='0';input.max='1000000';input.step='0.01';input.value=value??'';input.placeholder='—';input.setAttribute('aria-label',label);input.addEventListener('change',()=>{if(!input.validity.valid){input.reportValidity();return}onChange(input.value===''?null:Number(input.value));save();render()});return input;}
-function render(){const today=todayIST();$('#priceDate').max=addDays(today,7);const items=state.items.filter(x=>(category==='All'||x.cat===category)&&x.name.toLowerCase().includes($('#search').value.toLowerCase()));$('#rows').replaceChildren(...items.map(x=>{const tr=document.createElement('tr');const r=valueFor(x),sq=supplierFor(x),comparison=comparePrices(r,sq,x.unit);const name=document.createElement('td');name.textContent=x.name;const sub=document.createElement('small');sub.textContent=x.cat+' · budget quantity in '+x.unit;name.append(sub);
- const price=document.createElement('td');const value=document.createElement('b');value.textContent=money(r?.price)+(r?' / '+x.unit:'');value.className='price-value '+(comparison.marketTone||'neutral');const status=document.createElement('small');status.textContent=r?`${r.projection?'Estimate · baseline ':''}${r.date}`:'No market record';price.append(value,status);
- const supplier=document.createElement('td');const sv=document.createElement('b');sv.textContent=money(sq?.price)+(sq?' / '+sq.unit:'');sv.className='price-value '+(comparison.supplierTone||'neutral');const sn=document.createElement('small');sn.textContent=sq?(sq.effectiveDate?'Quote date: '+sq.effectiveDate:'Undated supplier list'):'No supplier quote';supplier.append(sv,sn);if(sq?.note){const note=document.createElement('small');note.textContent=sq.note;supplier.append(note)}
- const difference=document.createElement('td');difference.className=comparison.supplierTone||'neutral';difference.textContent=comparison.comparable?(comparison.delta>0?'+':'')+money(comparison.delta):comparison.reason;const percent=document.createElement('small');percent.textContent=comparison.comparable?(comparison.percent===null?'Market price is zero':`${comparison.percent>0?'+':''}${comparison.percent.toFixed(1)}% · supplier ${comparison.delta<0?'cheaper':comparison.delta>0?'higher':'same price'}`):sq&&r?'Compare matching units & grade':'';difference.append(percent);
- const qty=document.createElement('td');qty.append(numberInput(x.qty,x.name+' weekly quantity in '+x.unit,n=>x.qty=n??0));const cost=document.createElement('td');const bp=budgetPrice(x,r);cost.textContent=bp==null?'—':money(bp*x.qty);const costBasis=document.createElement('small');costBasis.textContent=state.budgetBasis==='supplier'&&sq?.unit===x.unit&&!(selectedDate<today&&!sq.effectiveDate)?'Supplier basis':'Market basis';cost.append(costBasis);
- const basis=document.createElement('td');basis.textContent=r?r.source:'No market source';const date=document.createElement('small');date.textContent=r?`${r.projection?'Baseline: ':''}${r.date}${dayDiff(today,r.date)>2?' · Older price':''}`:'No historical value invented';basis.append(date);
- const quote=document.createElement('td');const existing=state.quotes.find(q=>q.name===x.name&&q.unit===x.unit&&q.date===selectedDate);const q=numberInput(existing?.price,x.name+' supplier quote for '+selectedDate,n=>{state.quotes=state.quotes.filter(q=>!(q.name===x.name&&q.unit===x.unit&&q.date===selectedDate));if(n!==null)state.quotes.push({name:x.name,unit:x.unit,date:selectedDate,price:n,source:'Supplier quote',basis:'Supplier quote'})});q.disabled=selectedDate>today;q.title=selectedDate>today?'Choose today or a past date to record an actual quote':'Record a supplier quote per '+x.unit+' for '+selectedDate;quote.append(q);tr.append(name,price,supplier,difference,qty,cost,basis,quote);return tr}));$('#empty').hidden=items.length>0;metrics();}
-for(const key of ['meals','days','buffer']){const el=$('#'+key);el.value=state[key];el.addEventListener('change',()=>{if(!el.validity.valid||el.value===''){el.value=state[key];return}state[key]=Number(el.value);save();metrics()})}
-$('#budgetBasis').value=state.budgetBasis;$('#budgetBasis').onchange=()=>{state.budgetBasis=$('#budgetBasis').value;save();render()};
-$('#priceDate').value=selectedDate;$('#priceDate').onchange=()=>{if(!$('#priceDate').value||!$('#priceDate').validity.valid)return;selectedDate=$('#priceDate').value;exact=true;render()};$('#today').onclick=()=>{selectedDate=todayIST();exact=false;$('#priceDate').value=selectedDate;render()};$('#focusItem').onchange=renderForecast;
-$('#tabs').addEventListener('click',e=>{if(!e.target.dataset.cat)return;category=e.target.dataset.cat;document.querySelectorAll('#tabs button').forEach(b=>b.classList.toggle('selected',b===e.target));render()});$('#search').addEventListener('input',render);
-$('#add').onclick=()=>$('#addDialog').showModal();$('#addDialog form').addEventListener('submit',e=>{if(e.submitter?.value!=='save')return;const name=$('#newName').value.trim();if(!name||state.items.some(x=>x.name===name)){e.preventDefault();$('#newName').setCustomValidity('Enter a unique ingredient name');$('#newName').reportValidity();return}state.items.push({name,cat:$('#newCat').value,unit:$('#newUnit').value,qty:0,target:null});save();category='All';$('#search').value='';document.querySelectorAll('#tabs button').forEach(b=>b.classList.toggle('selected',b.dataset.cat==='All'));refreshItemOptions();render();$('#newName').value=''});$('#newName').oninput=()=>$('#newName').setCustomValidity('');
-$('#export').onclick=()=>{const esc=v=>'"'+String(typeof v==='string'&&/^[=+@\-]/.test(v)?"'"+v:v??'').replaceAll('"','""')+'"';const rows=[['Selected date',selectedDate],['Budget basis',state.budgetBasis],['Supplier list','Undated quote; not proof of current price'],['Meals per day',state.meals],['Cooking days per week',state.days],['Contingency %',state.buffer],[],['Ingredient','Market unit','Market price INR','Market source date','Supplier price INR','Supplier unit','Supplier effective date','Difference INR','Difference %','Weekly quantity','Weekly cost INR','Market source'],...state.items.map(x=>{const r=valueFor(x),q=supplierFor(x),c=comparePrices(r,q,x.unit),bp=budgetPrice(x,r);return[x.name,x.unit,r?.price,r?.date,q?.price,q?.unit,q?.effectiveDate||'Undated',c.delta,c.percent,x.qty,bp==null?'':bp*x.qty,r?.source]}),[],['Ingredient','Projection date','Projected market price INR','Market unit','Market method','Supplier planning price INR','Supplier unit','Supplier quote date','Supplier planning basis'],...state.items.flatMap(x=>Array.from({length:7},(_,i)=>{const d=addDays(todayIST(),i+1),r=forecast(x,records,[],d,todayIST());const q=supplierFor(x,todayIST());return[x.name,d,r?.price,x.unit,r?.method,q?.price,q?.unit,q?.effectiveDate||'Undated','Last quote carried forward; not confirmed future price']}))];const blob=new Blob(['\ufeff'+rows.map(r=>r.map(esc).join(',')).join('\r\n')],{type:'text/csv;charset=utf-8'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='kitchen-comparison-'+selectedDate+'.csv';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)};
-async function refreshFeed(){const button=$('#refresh');button.disabled=true;try{const res=await fetch('https://raw.githubusercontent.com/SathishkumarKandappan/ProjectPublic/gh-pages/kitchen/market.json?t='+Date.now(),{cache:'no-store'});if(!res.ok)throw Error('Feed unavailable');const data=await res.json();if(!Array.isArray(data.records))throw Error('Invalid feed');if(data.supplier?.quotes?.length){supplierQuotes=data.supplier.quotes;addSupplierItems();refreshItemOptions();}
-records=data.records.filter(r=>typeof r.name==='string'&&Number.isFinite(r.price)&&r.price>=0&&/^\d{4}-\d{2}-\d{2}$/.test(r.date)&&r.date<=todayIST());$('#feedStatus').textContent=`Feed checked: ${data.checkedAt?new Date(data.checkedAt).toLocaleString('en-IN',{timeZone:'Asia/Kolkata'}):'unknown'} IST. ${data.errors?.length?'Some sources could not update. ':''}Prices follow source publication dates; this is not a real-time exchange feed.`;render();}catch{$('#feedStatus').textContent='Cannot refresh the published feed. Showing cached references and your saved supplier quotes; check each price date.';}finally{button.disabled=false}}
-for(const id of ['recipeType','recipeBasis','recipePortions','recipeExclude'])$('#'+id).addEventListener(id==='recipeExclude'?'input':'change',()=>{const input=$('#recipePortions');if(!input.validity.valid||!input.value){input.reportValidity();return;}renderRecipes()});
-$('#refresh').onclick=refreshFeed;refreshItemOptions();render();refreshFeed();setInterval(refreshFeed,15*60*1000);
+function priceCell(price,unit,tone,note){const cell=document.createElement('td'),value=document.createElement('b');value.textContent=money(price);value.className=tone||'neutral';cell.append(value);if(price!=null){const suffix=document.createElement('span');suffix.className='price-unit';suffix.textContent=' / '+unit;cell.append(suffix)}const caption=document.createElement('small');caption.textContent=note;cell.append(caption);return cell;}
+function renderDishes(){
+ const state=$('#stateFilter').value,query=$('#dishSearch').value.trim();
+ const matches=dishes.filter(d=>d.type===dishType&&(!state||d.state===state)&&(!query||[d.name,d.state,...d.ingredients].join(' ').toLowerCase().includes(query.toLowerCase())));
+ const ideas=dailyIdeas(quoteForDish,{date:selectedDate,type:dishType,state,query,all:showAll});
+ $('#ideaContext').textContent=`${showAll?'Browse the collection':'A fresh selection'} · ${dateLabel(selectedDate)}`;
+ $('#dishCards').replaceChildren(...ideas.map(d=>{
+   const card=document.createElement('article');card.className='dish-card';
+   const state=document.createElement('span');state.className='dish-state';state.textContent=d.state;
+   const title=document.createElement('h3');title.textContent=d.name;const description=document.createElement('p');description.textContent=d.description;
+   const price=document.createElement('div');price.className='dish-price';price.textContent=d.quote?`${d.base} · ${money(d.quote.price)}/${d.quote.unit}`:`${d.base} · quote needed`;
+   const evidence=document.createElement('small');evidence.textContent=d.quote?`${d.quote.kind} · ${d.quote.date?dateLabel(d.quote.date):'undated quote'}`:'Main ingredient price unavailable; not ranked as cheap';price.append(evidence);
+   const details=document.createElement('details'),summary=document.createElement('summary');summary.textContent='Main ingredients';const list=document.createElement('div');list.textContent=d.ingredients.join(' · ');details.append(summary,list);
+   card.append(state,title,description,price,details);return card;
+ }));$('#dishEmpty').hidden=ideas.length>0;
+ $('#dishCount').textContent=`${ideas.length} of ${matches.length} ${dishType==='Snack'?'snack':dishType.toLowerCase()} ideas${!showAll&&matches.length>8?' · date-based picks':''}`;
+ $('#browseAll').hidden=matches.length<=8;
+ $('#browseAll').textContent=showAll?'Back to date-based picks':`Browse all ${matches.length} dishes`;
+}
+function render(){renderPrices();renderDishes();}
+async function refreshPrices(){
+ const currentRequest=++requestId;$('#refresh').disabled=true;$('#refresh').textContent='Refreshing…';$('#status').textContent=`Refreshing prices as of ${dateLabel(selectedDate)}…`;
+ try{
+   const response=await fetch('https://raw.githubusercontent.com/SathishkumarKandappan/ProjectPublic/gh-pages/kitchen/market.json?t='+Date.now(),{cache:'no-store'});
+   if(!response.ok)throw Error('Feed unavailable');const feed=await response.json();if(!Array.isArray(feed.records))throw Error('Invalid feed');
+   if(currentRequest!==requestId)return;
+   records=feed.records.filter(r=>typeof r.name==='string'&&typeof r.unit==='string'&&Number.isFinite(r.price)&&r.price>=0&&/^\d{4}-\d{2}-\d{2}$/.test(r.date)&&r.date<=todayIST());
+   for(const r of records)if(!catalog.has(r.name))catalog.set(r.name,{name:r.name,unit:r.unit,cat:'Rations'});
+   const checked=feed.checkedAt?new Date(feed.checkedAt).toLocaleDateString('en-IN',{timeZone:'Asia/Kolkata',day:'numeric',month:'short',year:'numeric'}):'unknown';
+   $('#status').textContent=`Showing records on or before ${dateLabel(selectedDate)}. Feed checked ${checked}; actual price dates are shown below.${feed.errors?.length?' Some source updates were unavailable.':''}`;
+ }catch{if(currentRequest!==requestId)return;$('#status').textContent=`Could not reload the feed. Showing available reference records as of ${dateLabel(selectedDate)}; check each price date.`;}
+ finally{if(currentRequest===requestId){$('#refresh').disabled=false;$('#refresh').textContent='↻ Refresh prices';render();}}
+}
+$('#priceDate').max=todayIST();$('#priceDate').value=selectedDate;
+$('#priceDate').addEventListener('change',()=>{const input=$('#priceDate');if(!input.value||!input.validity.valid){input.reportValidity();return;}selectedDate=input.value;showAll=false;render();refreshPrices();});
+$('#refresh').addEventListener('click',refreshPrices);
+for(const id of ['priceSearch','category'])$('#'+id).addEventListener(id==='priceSearch'?'input':'change',renderPrices);
+for(const state of [...new Set(dishes.map(d=>d.state))].sort()){const option=document.createElement('option');option.value=state;option.textContent=state;$('#stateFilter').append(option);}
+for(const id of ['stateFilter','dishSearch'])$('#'+id).addEventListener(id==='dishSearch'?'input':'change',()=>{showAll=false;renderDishes();});
+for(const button of document.querySelectorAll('[data-view]'))button.addEventListener('click',()=>{view=button.dataset.view;for(const b of document.querySelectorAll('[data-view]')){const active=b===button;b.classList.toggle('active',active);b.setAttribute('aria-pressed',String(active));}$('#pricesView').hidden=view!=='prices';$('#ideasView').hidden=view!=='ideas';});
+for(const button of document.querySelectorAll('[data-type]'))button.addEventListener('click',()=>{dishType=button.dataset.type;showAll=false;for(const b of document.querySelectorAll('[data-type]')){const active=b===button;b.classList.toggle('active',active);b.setAttribute('aria-selected',String(active));}renderDishes();});
+$('#browseAll').addEventListener('click',()=>{showAll=!showAll;renderDishes();});
+render();refreshPrices();

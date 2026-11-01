@@ -20,7 +20,7 @@ assert.equal(w.document.querySelectorAll('#dishList .dish').length,50);assert.ok
 assert.equal($('#pricePanel').hidden,false);assert.equal($('#dishList').hidden,true);
 $('[data-type="Snack"]').click();assert.equal($('#pricePanel').hidden,true);assert.equal($('#dishList').hidden,false);assert.equal(w.document.querySelectorAll('#dishList .dish').length,50);assert.match($('#dishList').textContent,/Dhokla/);
 const previous=$('#dishList').textContent;$('#priceDate').value='2026-10-30';$('#priceDate').dispatchEvent(new w.Event('change'));await new Promise(r=>setTimeout(r,0));assert.equal(fetches,8);assert.notEqual($('#dishList').textContent,previous);
-$('#priceDate').value='2020-01-01';$('#priceDate').dispatchEvent(new w.Event('change'));await new Promise(r=>setTimeout(r,0));assert.ok([...w.document.querySelectorAll('#priceRows tr')].every(r=>r.children[1].textContent==='—'));
+$('#priceDate').value='2020-01-01';$('#priceDate').dispatchEvent(new w.Event('change'));await new Promise(r=>setTimeout(r,0));assert.ok([...w.document.querySelectorAll('#priceRows tr')].every(r=>r.children[1].textContent==='No dated quote'));
 $('[data-type="Curry"]').dispatchEvent(new w.KeyboardEvent('keydown',{key:'ArrowRight'}));assert.equal($('[data-type="Palya"]').getAttribute('aria-selected'),'true');
 const card=w.document.querySelector('.dish');assert.equal(card.open,false);card.querySelector('summary').click();assert.equal(card.open,true);assert.match(card.textContent,/10 PORTIONS/);assert.ok(card.querySelectorAll('.ingredient-row').length>=3);assert.ok(card.querySelector('.dish-cost strong').textContent.length>0);
 $('#priceDate').value=model.todayIST();$('#priceDate').dispatchEvent(new w.Event('change'));await new Promise(r=>setTimeout(r,0));
@@ -29,3 +29,8 @@ const masoor=[...w.document.querySelectorAll('#priceRows tr')].find(r=>r.firstCh
 $('[data-type="Meal"]').click();assert.equal($('#mealList').hidden,false);assert.equal($('#dishList').hidden,true);assert.equal(w.document.querySelectorAll('#mealList .meal-card').length,40);assert.ok([...w.document.querySelectorAll('.meal-menu')].every(menu=>menu.textContent.includes('Red rice')));
 assert.equal($('#error').hidden,true);
 console.log('PASS: date-only control, three-column prices, four tabs, state labels, automatic date refresh, rotating dishes and missing history');
+
+assert.ok([...w.document.querySelectorAll('#priceRows td')].every(c=>c.textContent.trim().length>0));
+
+for(const row of w.document.querySelectorAll('#priceRows tr'))for(const i of [1,3,4,5,6])assert.match(row.children[i].textContent,/₹/,row.firstChild.textContent+' price column '+i);
+const salem=[...w.document.querySelectorAll('#priceRows tr')].find(r=>r.firstChild.textContent==='Salem rice');assert.match(salem.children[3].textContent,/Blinkit quote not verified/);assert.match(salem.children[3].textContent,/Organic Grocer reference/);

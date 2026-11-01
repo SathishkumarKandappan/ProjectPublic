@@ -4,7 +4,15 @@ export const today=()=>new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Kolkata',
 const decode=s=>s.replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&quot;/g,'"').replace(/&#39;|&apos;/g,"'");
 const words=s=>s.toLowerCase().replace(/[^a-z0-9]+/g,' ').split(' ').filter(Boolean);
 const names={'Onion (big)':['onion'],'Cooking oil (unspecified)':['sunflower oil'],'Sona Masuri rice (raw)':['sona masoori raw rice','sona masuri raw rice'],'Sona Masuri rice (steamed)':['sona masoori steam rice'],'Ragi flour':['ragi flour','nachni flour'],'Masoor dal':['masoor dal','masoor split'],'Taro leaves':['colocasia leaf','taro leaves'],'Hyacinth beans':['avarekai','hyacinth beans']};
-export function matches(name,title){return (names[name]||[name]).some(n=>words(n).every(w=>words(title).includes(w)));}
+export function matches(name,title){
+ const text=title.toLowerCase();
+ if(name==='Milk'&&/coconut|almond|oat |soy|powder|chocolate|shake/.test(text))return false;
+ if(name==='Curd'&&/chilli|dried|chili/.test(text))return false;
+ if(name==='Salt'&&/rock|black|sendha|kala/.test(text))return false;
+ if(/rice|flour|rava|dal/i.test(name)&&/biscuit|cookie|noodle|ready.to.eat|instant mix/.test(text))return false;
+ if(/rice/i.test(name)&&!/flour/i.test(name)&&/flour/.test(text))return false;
+ if(/oil/i.test(name)&&/hair|body|massage/.test(text))return false;
+ return (names[name]||[name]).some(n=>words(n).every(w=>words(title).includes(w)));}
 export function allowed(url,provider){try{const u=new URL(url);return u.protocol==='https:'&&!u.username&&!u.password&&(!u.port||u.port==='443')&&providers[provider]?.some(h=>u.hostname===h||u.hostname.endsWith('.'+h));}catch{return false;}}
 export function packAmount(text){
  const match=text.match(/(?:^|\s|\()(\d+(?:\.\d+)?)\s*(kg|g|gm|ml|litres?|liters?|ltr|l|pcs?|pieces?)\b/i);if(!match)return null;

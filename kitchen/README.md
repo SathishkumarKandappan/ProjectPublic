@@ -30,3 +30,5 @@ Date refresh reloads market, supplier and retailer feeds independently with cach
 
 
 Daily automation: `.github/workflows/kitchen-daily-prices.yml` runs from the default branch. It checks out the kitchen source branch, retains existing gh-pages price history, refreshes public market sources, searches primary retailer sources (including explicitly labelled search-indexed references when direct product pages are blocked), then commits only three public price/status JSON files to gh-pages and explicitly requests a Pages rebuild. GitHub tokens stay inside Actions. Supplier rates are retained; web searches never replace supplier quotes. Failed searches retain old prices with their original dates. The job summary records verified offers, search failures and incomplete coverage. A manual Run workflow trigger is also available.
+
+Missing current market/retailer cells use a clearly labelled online reference from another actual seller when available. This is not a verified quote from the column retailer. Historical gaps say No dated quote; absent supplier rows say Not in supplier list. No unknown price is invented.

@@ -12,7 +12,7 @@ export function mergeQuotes(previous,incoming){
  for(const q of incoming){if(!Number.isFinite(q.price)||q.price<=0||q.observed!==today()||!q.name||!q.unit||!q.url?.startsWith('https://'))continue;rows.set([q.retailer,q.name,q.unit,q.observed,q.url].join('|'),q);}
  return [...rows.values()].sort((a,b)=>a.observed.localeCompare(b.observed)||a.name.localeCompare(b.name)||a.retailer.localeCompare(b.retailer));
 }
-export async function collect({previous,items,search=searchItem,fetcher=fetch,concurrency=6,onProgress=()=>{},budgetMs=600000}){
+export async function collect({previous,items,search=searchItem,fetcher=fetch,concurrency=8,onProgress=()=>{},budgetMs=1080000}){
  const names=[...new Set(items)],jobs=names.flatMap(name=>providers.map(provider=>({name,date:today(),provider})));
  const started=Date.now(),fresh=[],stats=Object.fromEntries(providers.map(p=>[p,{searched:0,verified:0,failed:0,noQuote:0,blocked:0}]));let cursor=0,completed=0;
  const worker=async()=>{while(cursor<jobs.length&&Date.now()-started<budgetMs){

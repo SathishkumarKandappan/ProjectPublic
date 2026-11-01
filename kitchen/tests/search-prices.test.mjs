@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import {allowed,packAmount,extractOffers,searchItem,today,indexedQuote,duckResults,rssResults} from '../server/search-prices.mjs';
+import {allowed,packAmount,extractOffers,searchItem,today,matches,indexedQuote,duckResults,rssResults} from '../server/search-prices.mjs';
 assert.equal(allowed('https://www.bigbasket.com/pd/1','BigBasket'),true);
 for(const url of ['http://bigbasket.com/p','https://bigbasket.com.evil.example/p','https://localhost/','https://bigbasket.com:8080/','https://a:b@bigbasket.com/'])assert.equal(allowed(url,'BigBasket'),false);
 assert.deepEqual(packAmount('Ragi flour 500 g'),{quantity:.5,unit:'kg',pack:'500 g'});assert.equal(packAmount('flour 500 g x 2'),null);
@@ -17,3 +17,5 @@ const indexed=indexedQuote({...input,title:'Buy Ragi flour 500 g Online at Best 
 assert.equal(indexedQuote({...input,title:'Buy Ragi biscuit 500 g at Price Rs 87',snippet:''}),null);
 assert.equal(indexedQuote({...input,title:'Ragi flour 500 g',snippet:'MRP ₹87'}),null);
 const duck=duckResults('<a class="result__a" href="//duckduckgo.com/l/?uddg=https%3A%2F%2Fwww.bigbasket.com%2Fpd%2F1">Buy Ragi flour 500 g Online at Best Price of Rs 87</a><a class="result__snippet">Price: ₹87</a>');assert.equal(duck[0].url,input.url);assert.equal(duck[0].snippet,'Price: ₹87');
+
+assert.equal(matches('Milk','Coconut milk 400 ml'),false);assert.equal(matches('Red rice','Red rice flour 1 kg'),false);assert.equal(matches('Salt','Black salt 1 kg'),false);

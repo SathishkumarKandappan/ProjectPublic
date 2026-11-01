@@ -1,7 +1,4 @@
 """Fetch dated public listings, retain actual observations, and never restamp old prices."""
-import csv
-import io
-from supplier import normalize
 import datetime as dt
 import json
 import re
@@ -82,17 +79,7 @@ def main(path):
         except Exception as error:
             errors.append(f'{kind}: {type(error).__name__}: {error}')
             print(errors[-1])
-    supplier=data.get('supplier')
-    try:
-        csv_text=fetch('https://docs.google.com/spreadsheets/d/11qP9GH8DDjuy99mfjI9rbI29X2UZj3WErXDW26aW-ZU/gviz/tq?tqx=out:csv&gid=1093728917&range=B1:E120')
-        quotes=normalize(list(csv.reader(io.StringIO(csv_text))))
-        if len(quotes)<20: raise ValueError('Supplier sheet not publicly readable or format changed')
-        supplier={'importedAt':dt.datetime.now(dt.timezone.utc).isoformat(),'effectiveDate':None,'quotes':quotes}
-        print(f'Supplier: {len(quotes)} quotes; effective date not provided')
-    except Exception as error:
-        errors.append(f'supplier: {type(error).__name__}: {error}; retaining imported snapshot')
-        print(errors[-1])
-    data={'checkedAt':dt.datetime.now(dt.timezone.utc).isoformat(),'errors':errors,'supplier':supplier,'records':sorted(merged.values(),key=lambda r:(r['date'],r['name']))}
+    data={'checkedAt':dt.datetime.now(dt.timezone.utc).isoformat(),'errors':errors,'records':sorted(merged.values(),key=lambda r:(r['date'],r['name']))}
     target.parent.mkdir(parents=True,exist_ok=True);target.write_text(json.dumps(data,indent=2)+'\n')
 
 if __name__=='__main__': main(sys.argv[1])

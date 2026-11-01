@@ -6,3 +6,5 @@
 .meal-card-head{padding:22px 20px;display:flex;align-items:center;justify-content:space-between;gap:14px}.meal-card .dish-content{padding-top:0}.meal-card .package-ingredients .cost-note{margin-top:15px}@media(max-width:600px){.meal-card-head{padding:20px 19px}.meal-card .dish-name{font-size:20px}}
 
 #refreshStatus{display:block;font-size:10px;color:#879776;margin:-15px 0 20px;min-height:14px}.date:has([aria-busy="true"]){opacity:.65}
+
+.reference-label{display:block;font-size:9px!important;color:#9a783d!important;line-height:1.5;margin-bottom:6px}

@@ -40,7 +40,8 @@ async function main(){
  writeFileSync(path,JSON.stringify(result,null,2)+'\n');
  // Supplier rates are managed only from a new user-provided list. Never write supplier.json here.
  const market=JSON.parse(readFileSync(join(dir,'market.json'),'utf8'));
- const status={checkedAt:result.checkedAt,retailers:result.collection,marketErrors:market.errors||[]};
+ let extraSources=null;try{extraSources=JSON.parse(readFileSync(join(dir,'api-status.json'),'utf8'));}catch{}
+ const status={checkedAt:result.checkedAt,retailers:result.collection,marketErrors:market.errors||[],extraSources};
  writeFileSync(join(dir,'update-status.json'),JSON.stringify(status,null,2)+'\n');
  console.log(JSON.stringify(status));
  if(!result.collection.verified)console.log('::warning::No newly verified retailer prices. Retailer quotes retain their previous observation dates.');

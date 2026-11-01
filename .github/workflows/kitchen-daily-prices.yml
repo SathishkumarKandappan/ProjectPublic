@@ -41,6 +41,27 @@ jobs:
         run: node source/kitchen/scripts/check-price-sources.mjs
       - name: Refresh dated market prices
         run: python source/kitchen/scripts/update_prices.py published/kitchen/market.json
+      - name: Add government benchmarks and configured free APIs
+        env:
+          DATA_GOV_IN_API_KEY: ${{ secrets.DATA_GOV_IN_API_KEY }}
+          REWALTO_API_KEY: ${{ secrets.REWALTO_API_KEY }}
+          QUICKCOMMERCE_API_KEY: ${{ secrets.QUICKCOMMERCE_API_KEY }}
+          SERPAPI_API_KEY: ${{ secrets.SERPAPI_API_KEY }}
+        run: node source/kitchen/scripts/update-api-prices.mjs published/kitchen
+      - name: Publish market and API updates before the longer retailer search
+        working-directory: published
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add kitchen/market.json kitchen/retailer-prices.json kitchen/update-status.json kitchen/api-status.json kitchen/api-usage.json
+          if ! git diff --cached --quiet; then
+            git commit -m 'Refresh government and configured API price sources'
+            git push origin HEAD:gh-pages
+          fi
+      - name: Rebuild Pages with market and API updates
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api --method POST repos/${{ github.repository }}/pages/builds
       - name: Search retailer prices and retain history
         run: node source/kitchen/scripts/daily-retailer-prices.mjs published/kitchen
       - name: Publish public price files
@@ -48,7 +69,7 @@ jobs:
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add kitchen/market.json kitchen/retailer-prices.json kitchen/update-status.json
+          git add kitchen/market.json kitchen/retailer-prices.json kitchen/update-status.json kitchen/api-status.json kitchen/api-usage.json
           if ! git diff --cached --quiet; then
             git commit -m 'Refresh dated kitchen price observations'
             git push origin HEAD:gh-pages

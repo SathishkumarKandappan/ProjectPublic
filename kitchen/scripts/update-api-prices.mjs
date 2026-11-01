@@ -1,0 +1,21 @@
+import {readFileSync,writeFileSync,mkdirSync} from 'node:fs';
+import {join} from 'node:path';
+import {defaults} from '../seed.js';import {supplierSeed} from '../supplier-seed.js';import {pdfRates} from '../pdf-rates.js';import {retailerPrices} from '../retailers.js';
+import {today} from '../server/search-prices.mjs';
+import {collectGovernment} from './providers/government.mjs';
+import {collectFreeAPIs} from './providers/free-apis.mjs';
+const dir=process.argv[2]||'kitchen';mkdirSync(dir,{recursive:true});
+const read=(file,fallback)=>{try{return JSON.parse(readFileSync(join(dir,file),'utf8'));}catch{return fallback;}};
+const write=(file,data)=>writeFileSync(join(dir,file),JSON.stringify(data,null,2)+'\n');
+const government=await collectGovernment({today:today()});
+const market=read('market.json',{records:[]});const merged=new Map(market.records.map(r=>[[r.name,r.unit,r.date,r.source,r.market||''].join('|'),r]));
+for(const r of government.records)merged.set([r.name,r.unit,r.date,r.source,r.market||''].join('|'),r);
+market.records=[...merged.values()].sort((a,b)=>a.date.localeCompare(b.date)||a.name.localeCompare(b.name));write('market.json',market);
+const items=[...defaults,...supplierSeed,...pdfRates,...retailerPrices].map(q=>q.name);
+const apis=await collectFreeAPIs({items,ledger:read('api-usage.json',{}),saveLedger:ledger=>write('api-usage.json',ledger)});
+const retailer=read('retailer-prices.json',{quotes:retailerPrices});const quotes=new Map(retailer.quotes.map(q=>[[q.name,q.unit,q.retailer,q.observed,q.url].join('|'),q]));
+for(const q of apis.quotes)quotes.set([q.name,q.unit,q.retailer,q.observed,q.url].join('|'),q);
+retailer.quotes=[...quotes.values()];write('retailer-prices.json',retailer);write('api-usage.json',apis.ledger);
+const status={checkedAt:new Date().toISOString(),government:government.sources,apis:apis.sources,governmentRecords:government.records.length,apiQuotes:apis.quotes.length};
+write('api-status.json',status);const previousStatus=read('update-status.json',{});write('update-status.json',{...previousStatus,extraSources:status});console.log(JSON.stringify(status));
+if(process.env.GITHUB_STEP_SUMMARY){const rows=[...status.government,...status.apis].map(p=>`| ${p.provider} | ${p.status} | ${p.records??p.quotes??0} |`).join('\n');writeFileSync(process.env.GITHUB_STEP_SUMMARY,'\n## Government and free API sources\n\n| Source | Result | Prices |\n| --- | --- | --- |\n'+rows+'\n\nKeys remain in GitHub Secrets. Supplier rates are never modified.\n',{flag:'a'});}

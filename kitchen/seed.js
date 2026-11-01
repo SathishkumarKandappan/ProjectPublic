@@ -1,0 +1,6 @@
+const rice=[['Sona Masuri rice (raw)',60],['Salem rice',null],['Red rice',80],['Sona Masuri rice (steamed)',50],['Idli rice',40],['Ponni rice (boiled)',55]];
+const veg=[['Tomato',49],['Potato',39.5],['Onion (big)',78.5],['Carrot',52.5],['Beetroot',49],['French beans',81.5],['Cabbage',45.5],['Cauliflower',49],['Brinjal',49],['Okra',45.5],['Pumpkin',26.5],['Ash gourd',24],['Bottle gourd',40.5],['Cucumber',37],['Spinach',18.5],['Green chilli',86.5],['Garlic',213.5],['Ginger',212.5],['Coriander leaves',14.5],['Curry leaves',50.5],['Radish',45.5],['Ridge gourd',56.5],['Bitter gourd',57.5],['Green peas',85],['Drumstick',84]];
+const ration=['Toor dal','Moong dal','Chana dal','Urad dal','Masoor dal','Wheat flour','Ragi flour','Sugar','Salt','Sunflower oil','Tamarind','Turmeric powder','Chilli powder','Cumin seeds','Mustard seeds'];
+const defaults=[...rice.map(([name,price])=>({name,price,cat:'Rice',date:'2026-10-17',source:price===null?'Quote needed':'Rice reference',unit:'kg',qty:0})),...veg.map(([name,price])=>({name,price,cat:'Vegetables',date:'2026-10-29',source:'Retail midpoint · date uncertain',unit:'kg',qty:0})),...ration.map(name=>({name,price:null,cat:'Rations',date:'',source:'Quote needed',unit:name.includes('oil')?'litre':'kg',qty:0}))];
+
+export { defaults };

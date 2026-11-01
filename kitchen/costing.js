@@ -25,8 +25,8 @@ export function sampleQuantity(name,type,base=false){
  return {quantity:base?1:.3,unit:'kg'};
 }
 export function estimateDish(dish,getQuote){
- const names=[...new Set([...dish.ingredients,...(dish.ingredients.includes('Mustard oil')?[]:['Cooking oil (unspecified)']),'Salt'])];
- const ingredients=names.map(name=>{const amount=sampleQuantity(name,dish.type,name===dish.base);const quote=getQuote(name,amount.unit);return {name,...amount,quote,cost:quote?quote.price*amount.quantity:null};});
+ const names=[...new Set([...dish.ingredients,...(dish.noOil||dish.ingredients.includes('Mustard oil')?[]:['Cooking oil (unspecified)']),...(dish.noSalt?[]:['Salt'])])];
+ const ingredients=names.map(name=>{const amount=dish.quantities?.[name]||sampleQuantity(name,dish.type,name===dish.base);const quote=getQuote(name,amount.unit);return {name,...amount,quote,cost:quote?quote.price*amount.quantity:null};});
  const missing=ingredients.filter(i=>i.cost===null).length;
  const subtotal=ingredients.reduce((sum,i)=>sum+(i.cost??0),0);
  return {ingredients,missing,subtotal,perPortion:subtotal/10,portions:10,basePriced:ingredients.some(i=>i.name===dish.base&&i.cost!==null)};

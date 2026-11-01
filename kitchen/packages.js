@@ -2,11 +2,11 @@ import {dishes} from './dishes.js';
 import {estimateDish} from './costing.js';
 const quantity=(quantity,unit='kg')=>({quantity,unit});
 export const mornings=[
- {id:'morning-sweet',name:'Sweet ragi ganji',base:'Ragi flour',type:'Snack',ingredients:['Ragi flour','Jaggery'],noOil:true,noSalt:true,quantities:{'Ragi flour':quantity(.25),Jaggery:quantity(.12)}},
- {id:'morning-curd',name:'Curd ragi ganji',base:'Ragi flour',type:'Snack',ingredients:['Ragi flour','Curd','Salt'],noOil:true,quantities:{'Ragi flour':quantity(.25),Curd:quantity(.5,'litre'),Salt:quantity(.01)}},
- {id:'morning-pori',name:'Pori undai',base:'Puffed rice',type:'Snack',ingredients:['Puffed rice','Jaggery'],noOil:true,noSalt:true,quantities:{'Puffed rice':quantity(.25),Jaggery:quantity(.15)}},
- {id:'morning-salted',name:'Salted ragi ganji',base:'Ragi flour',type:'Snack',ingredients:['Ragi flour','Salt'],noOil:true,quantities:{'Ragi flour':quantity(.25),Salt:quantity(.01)}},
- {id:'morning-milk',name:'Milk & jaggery ragi ganji',base:'Ragi flour',type:'Snack',ingredients:['Ragi flour','Milk','Jaggery'],noOil:true,noSalt:true,quantities:{'Ragi flour':quantity(.25),Milk:quantity(.5,'litre'),Jaggery:quantity(.08)}}
+ {id:'morning-sweet',name:'Sweet ragi ganji',state:'Karnataka',base:'Ragi flour',type:'Snack',ingredients:['Ragi flour','Jaggery'],noOil:true,noSalt:true,quantities:{'Ragi flour':quantity(.25),Jaggery:quantity(.12)}},
+ {id:'morning-curd',name:'Curd ragi ganji',state:'Karnataka',base:'Ragi flour',type:'Snack',ingredients:['Ragi flour','Curd','Salt'],noOil:true,quantities:{'Ragi flour':quantity(.25),Curd:quantity(.5,'litre'),Salt:quantity(.01)}},
+ {id:'morning-pori',name:'Pori undai',state:'Tamil Nadu',base:'Puffed rice',type:'Snack',ingredients:['Puffed rice','Jaggery'],noOil:true,noSalt:true,quantities:{'Puffed rice':quantity(.25),Jaggery:quantity(.15)}},
+ {id:'morning-salted',name:'Salted ragi ganji',state:'Karnataka',base:'Ragi flour',type:'Snack',ingredients:['Ragi flour','Salt'],noOil:true,quantities:{'Ragi flour':quantity(.25),Salt:quantity(.01)}},
+ {id:'morning-milk',name:'Milk & jaggery ragi ganji',state:'Karnataka',base:'Ragi flour',type:'Snack',ingredients:['Ragi flour','Milk','Jaggery'],noOil:true,noSalt:true,quantities:{'Ragi flour':quantity(.25),Milk:quantity(.5,'litre'),Jaggery:quantity(.08)}}
 ];
 export const lunchRice={id:'red-rice-lunch',name:'Red rice',base:'Red rice',type:'Curry',ingredients:['Red rice'],noOil:true,noSalt:true,quantities:{'Red rice':quantity(.75)}};
 export function buildMealPackages(getQuote,date){

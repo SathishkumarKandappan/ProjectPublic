@@ -16,6 +16,8 @@ jobs:
   refresh:
     runs-on: ubuntu-latest
     timeout-minutes: 25
+    env:
+      TZ: Asia/Kolkata
     steps:
       - name: Check out kitchen source
         uses: actions/checkout@v4

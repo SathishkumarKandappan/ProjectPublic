@@ -34,6 +34,9 @@ jobs:
         with:
           ref: gh-pages
           path: published
+      - name: Check public source response formats
+        if: github.event_name != 'schedule'
+        run: node source/kitchen/scripts/check-price-sources.mjs
       - name: Refresh dated market prices
         run: python source/kitchen/scripts/update_prices.py published/kitchen/market.json
       - name: Search retailer prices and retain history

@@ -1,7 +1,10 @@
 name: Daily kitchen prices
 on:
   schedule:
-    - cron: '30 22 * * *'
+    - cron: '30 22 * * *' # 04:00 IST
+    - cron: '50 22 * * *' # 04:20 IST backup
+    - cron: '20 23 * * *' # 04:50 IST backup
+    - cron: '17 * * * *' # Hourly catch-up if the daily run was missed
   workflow_dispatch:
   push:
     branches: [ReadReseachPaper]
@@ -13,7 +16,39 @@ concurrency:
   group: kitchen-daily-prices
   cancel-in-progress: false
 jobs:
+  due:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    outputs:
+      refresh: ${{ steps.check.outputs.refresh }}
+    steps:
+      - name: Check whether today's update is due
+        id: check
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+        run: |
+          node --input-type=module <<'JS'
+          import fs from 'node:fs';
+          const fmt = new Intl.DateTimeFormat('en-CA', {timeZone:'Asia/Kolkata', year:'numeric',month:'2-digit',day:'2-digit'});
+          const day = fmt.format(new Date());
+          const hour = Number(new Intl.DateTimeFormat('en-GB', {timeZone:'Asia/Kolkata',hour:'2-digit',hourCycle:'h23'}).format(new Date()));
+          let due = process.env.EVENT_NAME !== 'schedule';
+          if (process.env.EVENT_NAME === 'schedule' && hour >= 4) {
+            try {
+              const response = await fetch('https://raw.githubusercontent.com/SathishkumarKandappan/ProjectPublic/gh-pages/kitchen/update-status.json?t=' + Date.now(), {signal:AbortSignal.timeout(15000)});
+              if (!response.ok) throw Error('Status unavailable');
+              const status = await response.json();
+              const checked = new Date(status.checkedAt);
+              due = Number.isNaN(checked.getTime()) || fmt.format(checked) !== day || status.retailers?.unattempted > 0 || (status.marketErrors || []).length > 0;
+            } catch { due = true; }
+          }
+          fs.appendFileSync(process.env.GITHUB_OUTPUT, 'refresh=' + due + '\n');
+          console.log(due ? 'Daily update due: starting collection.' : 'Already checked today, or before 04:00 IST: no duplicate collection.');
+          JS
   refresh:
+    needs: due
+    if: needs.due.outputs.refresh == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 25
     env:

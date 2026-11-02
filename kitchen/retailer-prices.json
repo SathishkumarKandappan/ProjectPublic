@@ -6000,22 +6000,35 @@
       "product": "Washed yellow moong dal for easy digestion",
       "observed": "2026-11-01",
       "source": "Instamart public listing"
+    },
+    {
+      "retailer": "BigBasket",
+      "name": "Ragi flour",
+      "unit": "kg",
+      "price": 87,
+      "pack": "1 kg",
+      "packQuantity": 87,
+      "product": "Buy Vijay Gold Ragi Flour Online at Best Price of Rs 87 - bigbasket",
+      "url": "https://www.bigbasket.com/pd/40216188/vijay-ragi-flour-1-kg/",
+      "observed": "2026-11-02",
+      "basis": "Search-indexed reference",
+      "source": "BigBasket search-indexed price reference"
     }
   ],
-  "checkedAt": "2026-11-01T10:24:43.825Z",
+  "checkedAt": "2026-11-02T01:39:27.282Z",
   "collection": {
-    "date": "2026-11-01",
+    "date": "2026-11-02",
     "total": 636,
     "completed": 636,
     "unattempted": 0,
-    "verified": 0,
+    "verified": 1,
     "providers": {
       "BigBasket": {
         "searched": 159,
-        "verified": 0,
+        "verified": 1,
         "failed": 0,
-        "noQuote": 159,
-        "blocked": 50
+        "noQuote": 158,
+        "blocked": 49
       },
       "Blinkit": {
         "searched": 159,

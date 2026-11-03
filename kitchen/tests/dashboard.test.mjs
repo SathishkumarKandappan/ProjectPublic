@@ -15,7 +15,7 @@ const feed=JSON.parse(readFileSync('kitchen/market.json','utf8'));w.fetch=async 
 w.eval(readFileSync('kitchen/app.js','utf8').replace(/^import .*;\n/gm,''));await new Promise(r=>setTimeout(r,0));
 const $=s=>w.document.querySelector(s);
 assert.equal(w.document.querySelectorAll('input').length,1);assert.equal(w.document.querySelectorAll('button').length,5);assert.equal(w.document.querySelectorAll('th').length,7);assert.equal(w.document.querySelectorAll('header,footer,nav,select,h1,h2').length,0);
-const red=[...w.document.querySelectorAll('#priceRows tr')].find(r=>r.firstChild.textContent==='Red rice');assert.match(red.children[1].textContent,/₹80/);assert.match(red.children[2].textContent,/₹55/);assert.ok(red.children[2].querySelector('b').classList.contains('cheap'));
+const red=[...w.document.querySelectorAll('#priceRows tr')].find(r=>r.firstChild.textContent==='Red rice');assert.match(red.children[1].textContent,/₹80/);assert.match(red.children[2].textContent,/₹55/);assert.ok(red.children[1].classList.contains('stale-price'));assert.equal(red.children[2].classList.contains('stale-price'),false);
 assert.equal(w.document.querySelectorAll('#dishList .dish').length,50);assert.ok([...w.document.querySelectorAll('#dishList small')].every(e=>e.textContent.length>2));
 assert.equal($('#pricePanel').hidden,false);assert.equal($('#dishList').hidden,true);
 $('[data-type="Snack"]').click();assert.equal($('#pricePanel').hidden,true);assert.equal($('#dishList').hidden,false);assert.equal(w.document.querySelectorAll('#dishList .dish').length,50);assert.match($('#dishList').textContent,/Dhokla/);
@@ -34,3 +34,11 @@ assert.ok([...w.document.querySelectorAll('#priceRows td')].every(c=>c.textConte
 
 for(const row of w.document.querySelectorAll('#priceRows tr'))for(const i of [1,3,4,5,6])assert.match(row.children[i].textContent,/₹/,row.firstChild.textContent+' price column '+i);
 const salem=[...w.document.querySelectorAll('#priceRows tr')].find(r=>r.firstChild.textContent==='Salem rice');assert.match(salem.children[3].textContent,/Blinkit quote not verified/);assert.match(salem.children[3].textContent,/Organic Grocer reference/);
+
+// A refresh on a later day must never present an older retailer quote as that day's price.
+$('#priceDate').value='2026-11-02';$('#priceDate').dispatchEvent(new w.Event('change'));await new Promise(r=>setTimeout(r,0));
+const oldRagi=[...w.document.querySelectorAll('#priceRows tr')].find(r=>r.firstChild.textContent==='Ragi flour');
+assert.ok(oldRagi.children[3].classList.contains('stale-price'));assert.match(oldRagi.children[3].textContent,/Not verified for 2 Nov 2026/);assert.match(oldRagi.children[3].textContent,/last recorded 1 Nov 2026/);assert.ok(oldRagi.children[3].querySelector('b').classList.contains('neutral'));
+assert.equal(oldRagi.children[2].classList.contains('stale-price'),false);
+$('#priceDate').value='2026-11-01';$('#priceDate').dispatchEvent(new w.Event('change'));await new Promise(r=>setTimeout(r,0));
+const historicalRagi=[...w.document.querySelectorAll('#priceRows tr')].find(r=>r.firstChild.textContent==='Ragi flour');assert.equal(historicalRagi.children[3].classList.contains('stale-price'),false);

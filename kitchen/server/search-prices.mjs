@@ -4,20 +4,45 @@ export const today=()=>new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Kolkata',
 const decode=s=>s.replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&quot;/g,'"').replace(/&#39;|&apos;/g,"'");
 const words=s=>s.toLowerCase().replace(/[^a-z0-9]+/g,' ').split(' ').filter(Boolean);
 const names={'Onion (big)':['onion'],'Cooking oil (unspecified)':['sunflower oil'],'Sona Masuri rice (raw)':['sona masoori raw rice','sona masuri raw rice'],'Sona Masuri rice (steamed)':['sona masoori steam rice'],'Ragi flour':['ragi flour','nachni flour'],'Masoor dal':['masoor dal','masoor split'],'Taro leaves':['colocasia leaf','taro leaves'],'Hyacinth beans':['avarekai','hyacinth beans']};
-export function matches(name,title){
+export function foodVariantAllowed(name,title){
  const text=title.toLowerCase();
+ if(/capsules|tablet|chewy|candy|planting|microgreens|gardening|epsom|chewing|\bgum\b|smint|chicken|shrimp|fish|juice|ready.to.eat/.test(text))return false;
+ if(name==='Mint'&&!/leav|pudina/.test(text))return false;
+ if(name==='Mustard greens'&&!/leav|saag/.test(text))return false;
+ if(name==='Drumstick'&&/leav|powder/.test(text))return false;
+ if(name==='Dried yellow peas'&&/pigeon|toor|arhar/.test(text))return false;
+ if(name==='Cinnamon'&&/powder/.test(text))return false;
+ if(name==='Kala jeera'&&/bori/.test(text))return false;
+ if(name==='Malabar spinach'&&/flower/.test(text))return false;
+ if(name==='Spinach'&&/malabar|mangalore/.test(text))return false;
+ if(name==='Coconut'&&/tender/.test(text))return false;
+ if(name==='Rava'&&/dalia|lapsi/.test(text))return false;
+ if(name==='Cloves'&&/garlic/.test(text))return false;
+ if(name==='Wheat flour'&&/refined|maida/.test(text))return false;
+ if(name==='Khar'&&!/kola khar|alkali/.test(text))return false;
+ if(name==='Bhajani flour'&&/upwas/.test(text))return false;
+ if(name==='Fenugreek leaves'&&/kasuri|kasoori|dried/.test(text))return false;
+ if(name==='Moringa leaves'&&/powder|dried/.test(text))return false;
+ if(name==='Green cardamom'&&/black/.test(text))return false;
+ if(name==='Coconut'&&/milk|oil|water|powder|desiccated|dry/.test(text))return false;
+ if(name==='Sugar'&&/brown|icing|sugar.free|powdered/.test(text))return false;
+ if(name==='Peanuts'&&/roasted|salted|honey/.test(text))return false;
+ if(['Cumin seeds','Coriander seeds','Mustard seeds','Fennel seeds','Pepper'].includes(name)&&/powder|paste/.test(text))return false;
+ if(['Banana','Robusta banana','Ripe banana','Ripe plantain'].includes(name)&&/stem|flower|raw|chips|flour/.test(text))return false;
+ if(['Cluster beans','French beans','Green peas','Tomato','Onion (big)','Potato','Brinjal','Carrot','Beetroot','Spinach','Fenugreek leaves','Mint','Coriander leaves','Curry leaves'].includes(name)&&/vathal|dried|powder|pickle|chips|sauce|frozen/.test(text))return false;
  if(name==='Milk'&&/coconut|almond|oat |soy|powder|chocolate|shake/.test(text))return false;
  if(name==='Curd'&&/chilli|dried|chili/.test(text))return false;
- if(name==='Salt'&&/rock|black|sendha|kala/.test(text))return false;
+ if(name==='Salt'&&/rock|black|sendha|kala|pink/.test(text))return false;
  if(/rice|flour|rava|dal/i.test(name)&&/biscuit|cookie|noodle|ready.to.eat|instant mix/.test(text))return false;
  if(/rice/i.test(name)&&!/flour/i.test(name)&&/flour/.test(text))return false;
  if(/oil/i.test(name)&&/hair|body|massage/.test(text))return false;
- return (names[name]||[name]).some(n=>words(n).every(w=>words(title).includes(w)));}
+ return true;}
+export function matches(name,title){return foodVariantAllowed(name,title)&&(names[name]||[name]).some(n=>words(n).every(w=>words(title).includes(w)));}
 export function allowed(url,provider){try{const u=new URL(url);return u.protocol==='https:'&&!u.username&&!u.password&&(!u.port||u.port==='443')&&providers[provider]?.some(h=>u.hostname===h||u.hostname.endsWith('.'+h));}catch{return false;}}
 export function packAmount(text){
- const match=text.match(/(?:^|\s|\()(\d+(?:\.\d+)?)\s*(kg|g|gm|ml|litres?|liters?|ltr|l|pcs?|pieces?)\b/i);if(!match)return null;
+ const match=text.match(/(?:^|\s|\()(\d+(?:\.\d+)?)\s*(kg|g|gm|ml|litres?|liters?|ltr|l|pcs?|pieces?|bunch(?:es)?)\b/i);if(!match)return null;
  let quantity=Number(match[1]),unit=match[2].toLowerCase();if(!(quantity>0))return null;
- if(['g','gm','ml'].includes(unit)){quantity/=1000;unit=unit==='ml'?'litre':'kg';}else unit=unit==='kg'?'kg':unit.startsWith('l')?'litre':'piece';
+ if(['g','gm','ml'].includes(unit)){quantity/=1000;unit=unit==='ml'?'litre':'kg';}else unit=unit==='kg'?'kg':unit.startsWith('l')?'litre':unit.startsWith('bunch')?'bunch':'piece';
  // Ambiguous multi-packs and weight ranges must be reviewed rather than guessed.
  if(/\d\s*(?:-|–)\s*\d|\bpack of\s*[2-9]|\bx\s*\d/i.test(text))return null;
  return {quantity,unit,pack:match[0].trim()};

@@ -1,3 +1,4 @@
+import {manualPrices,rejectedPairs} from './manual-prices.js';
 import {scrapedPrices} from './retailer-data.js';
 import {extraPrices} from './extra-prices.js';
 // Public catalogue observations. Reference product prices, not checkout quotes.
@@ -55,11 +56,14 @@ const originalPrices=[
  row('Instamart','Chana dal',134,'500 g',67,im2,'Tata Sampann Chana Dal'),
  row('Instamart','Peanuts',214,'500 g',107,im2,'Supreme Harvest Raw Peanuts')
 ];
-const collected=[...originalPrices,...scrapedPrices.filter(q=>!(/chewy|chewable|tablet/i.test(q.product))),...extraPrices];
+const rejected=new Set(rejectedPairs);
+const collected=[...manualPrices,...originalPrices,...scrapedPrices.filter(q=>!(/chewy|chewable|tablet/i.test(q.product))),...extraPrices].filter(q=>!rejected.has(q.name+'|'+q.url));
 // Named representative variants for unspecified PDF ingredient names.
 const aliases={'Ripe banana':'Robusta banana','Cooking oil (unspecified)':'Sunflower oil','White rice (unspecified)':'Sona Masuri rice (raw)','Raw rice (unspecified)':'Sona Masuri rice (raw)','Sona Masuri rice (unspecified)':'Sona Masuri rice (raw)','Green gram dal':'Moong dal'};
 export const retailerPrices=[...collected,...Object.entries(aliases).flatMap(([name,variant])=>collected.filter(q=>q.name===variant).map(q=>({...q,name,product:q.product+' · reference variant: '+variant,source:q.source+' · '+variant+' reference'})))];
 // Exactly one item per retailer / ingredient; preserve named variants and pack evidence.
-export function retailerQuote(retailer,name,unit,date){return retailerPrices.filter(r=>r.retailer===retailer&&r.name===name&&r.unit===unit&&r.observed<=date).sort((a,b)=>b.observed.localeCompare(a.observed)||a.price-b.price)[0]||null;}
+export function retailerQuote(retailer,name,unit,date){return retailerPrices.filter(r=>r.retailer===retailer&&r.name===name&&r.unit===unit&&r.observed<=date).sort((a,b)=>b.observed.localeCompare(a.observed)||verificationRank(b)-verificationRank(a)||a.price-b.price)[0]||null;}
 
-export function otherQuote(name,unit,date){return retailerPrices.filter(r=>r.name===name&&(!unit||r.unit===unit)&&r.observed<=date).sort((a,b)=>b.observed.localeCompare(a.observed)||a.price-b.price)[0]||null;}
+export function otherQuote(name,unit,date){return retailerPrices.filter(r=>r.name===name&&(!unit||r.unit===unit)&&r.observed<=date).sort((a,b)=>b.observed.localeCompare(a.observed)||verificationRank(b)-verificationRank(a)||a.price-b.price)[0]||null;}
+
+function verificationRank(q){return q.verification==='manual_product_page'?2:q.verification==='manual_search_result'?1:0;}

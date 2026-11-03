@@ -8,6 +8,8 @@ import {estimateDish} from './costing.js';
 import {buildMealPackages} from './packages.js';
 const $=selector=>document.querySelector(selector);
 const money=n=>n==null?'—':new Intl.NumberFormat('en-IN',{style:'currency',currency:'INR',minimumFractionDigits:0,maximumFractionDigits:2}).format(n);
+const quoteDate=q=>q?.date||q?.observed||q?.effectiveDate||null;
+const isSelectedDate=q=>quoteDate(q)===selectedDate;
 const dateLabel=date=>new Date(date+'T12:00:00Z').toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'});
 let selectedDate=todayIST(),dishType='Curry',requestId=0;
 let records=defaults.filter(x=>x.price!==null).map(x=>({...x,source:x.source||'Reference snapshot'}));
@@ -20,19 +22,19 @@ for(const q of supplierQuotes)if(!catalog.has(q.name))catalog.set(q.name,{name:q
 for(const q of retailerPrices)if(!catalog.has(q.name))catalog.set(q.name,{name:q.name,unit:q.unit});
 for(const x of saved.items||[])if(!catalog.has(x.name)&&x.name&&x.unit)catalog.set(x.name,{name:x.name,unit:x.unit});
 function supplierFor(name,unit){const dated=localQuotes.filter(q=>q.name===name&&q.unit===unit&&q.date<=selectedDate).sort((a,b)=>a.date.localeCompare(b.date)).at(-1);return dated?{...dated,effectiveDate:dated.date}:supplierQuotes.find(q=>q.name===name&&q.unit===unit)||supplierQuotes.find(q=>q.name===name)||null;}
-function quoteForDish(name,unit){const market=marketAsOf(records,name,unit,selectedDate),supplier=supplierFor(name,unit),choices=[];if(market&&!/wholesale/i.test(market.basis||''))choices.push({...market,unit});if(supplier?.unit===unit&&(supplier.effectiveDate||selectedDate===todayIST()))choices.push({...supplier,unit});for(const retailer of ['Blinkit','BigBasket','Instamart']){const r=retailerQuote(retailer,name,unit,selectedDate);if(r)choices.push({...r,date:r.observed});}const extra=otherQuote(name,unit,selectedDate);if(extra)choices.push({...extra,date:extra.observed});return choices.sort((a,b)=>a.price-b.price)[0]||null;}
-function priceCell(quote,unit,tone,date){const cell=document.createElement('td'),price=document.createElement('b');price.textContent=quote?money(quote.price):'No dated quote';price.className=tone||'neutral';cell.append(price);if(quote){const suffix=document.createElement('span');suffix.className='unit';suffix.textContent=' / '+unit;const stamp=document.createElement('small');stamp.textContent=date;cell.append(suffix,stamp);cell.title=quote.source||'';}return cell;}
+function quoteForDish(name,unit){const market=marketAsOf(records,name,unit,selectedDate),supplier=supplierFor(name,unit),choices=[];if(market&&isSelectedDate(market)&&!/wholesale/i.test(market.basis||''))choices.push({...market,unit});if(supplier?.unit===unit&&(supplier.effectiveDate||selectedDate===todayIST()))choices.push({...supplier,unit});for(const retailer of ['Blinkit','BigBasket','Instamart']){const r=retailerQuote(retailer,name,unit,selectedDate);if(r&&isSelectedDate(r))choices.push({...r,date:r.observed});}const extra=otherQuote(name,unit,selectedDate);if(extra&&isSelectedDate(extra))choices.push({...extra,date:extra.observed});return choices.sort((a,b)=>a.price-b.price)[0]||null;}
+function priceCell(quote,unit,tone,date,ongoingSupplier=false){const cell=document.createElement('td'),price=document.createElement('b');price.textContent=quote?money(quote.price):'No dated quote';price.className=tone||'neutral';cell.append(price);if(quote){const suffix=document.createElement('span');suffix.className='unit';suffix.textContent=' / '+unit;const stamp=document.createElement('small');stamp.textContent=date;cell.append(suffix,stamp);cell.title=quote.source||'';if(!ongoingSupplier&&quoteDate(quote)&&!isSelectedDate(quote)){cell.classList.add('stale-price');const badge=document.createElement('small');badge.className='reference-label';badge.textContent='Not verified for '+dateLabel(selectedDate)+' · last recorded '+dateLabel(quoteDate(quote));cell.prepend(badge);price.className='neutral';}}return cell;}
 function retailerCell(quote,tone,requested){if(!quote)return priceCell(null,'kg','neutral','');const cell=priceCell(quote,quote.unit,tone,(quote.basis==='Search-indexed reference'?'Search reference checked ':'Listed ')+dateLabel(quote.observed));const value=cell.querySelector('b');const link=document.createElement('a');link.href=quote.url;link.target='_blank';link.rel='noopener';link.title=`${quote.product} · ${quote.pack} for ${money(quote.packQuantity)} · public listed reference`;value.replaceWith(link);link.append(value);const product=document.createElement('small');product.textContent=quote.retailer+' · '+quote.product+(quote.location?' · '+quote.location:'');cell.append(product);if(requested&&quote.retailer!==requested){const reference=document.createElement('small');reference.className='reference-label';reference.textContent=requested+' quote not verified · '+quote.retailer+' reference';cell.prepend(reference);}return cell;}
 function renderPrices(){$('#priceRows').replaceChildren(...[...catalog.values()].map(item=>{
  const marketRecord=marketAsOf(records,item.name,item.unit,selectedDate),reference=otherQuote(item.name,item.unit,selectedDate)||otherQuote(item.name,null,selectedDate),market=marketRecord||reference,supplier=supplierFor(item.name,item.unit),retailers=['Blinkit','BigBasket','Instamart'].map(r=>retailerQuote(r,item.name,item.unit,selectedDate)||retailerPrices.find(q=>q.retailer===r&&q.name===item.name&&q.observed<=selectedDate)||reference);
- const quotes=[market,supplier,...retailers],comparable=quotes.filter(q=>q&&q.unit===item.unit).map(q=>q.price),low=Math.min(...comparable),high=Math.max(...comparable);
- const tone=q=>q&&q.unit===item.unit&&low!==high?(q.price===low?'cheap':q.price===high?'expensive':'neutral'):'neutral';
+ const quotes=[market,supplier,...retailers],comparable=quotes.filter(q=>q&&q.unit===item.unit&&(q===supplier||!quoteDate(q)||isSelectedDate(q))).map(q=>q.price),low=Math.min(...comparable),high=Math.max(...comparable);
+ const tone=q=>q&&q.unit===item.unit&&(q===supplier||!quoteDate(q)||isSelectedDate(q))&&low!==high?(q.price===low?'cheap':q.price===high?'expensive':'neutral'):'neutral';
  const row=document.createElement('tr'),name=document.createElement('td');name.textContent=item.name;
  const supplierDate=supplier?.effectiveDate?dateLabel(supplier.effectiveDate):supplier?.basis==='Budget-derived reference'?`PDF budget · p. ${supplier.page} · undated`:'Undated';
  const marketCell=priceCell(market,market?.unit||item.unit,tone(market),marketRecord?(/wholesale/i.test(marketRecord.basis||'')?'Govt wholesale · '+(marketRecord.market||'')+' · ':'')+dateLabel(marketRecord.date):reference?'Online reference · '+reference.retailer+' · '+dateLabel(reference.observed):'');
  const govt=marketAsOf(records.filter(q=>/wholesale/i.test(q.basis||'')),item.name,item.unit,selectedDate);
  if(govt&&govt!==marketRecord){const detail=document.createElement('small');const link=document.createElement('a');link.href=govt.url;link.target='_blank';link.rel='noopener';link.textContent='Govt wholesale '+money(govt.price)+'/'+govt.unit+' · '+govt.market+' · '+dateLabel(govt.date);detail.append(link);marketCell.append(detail);}
- const supplierCell=priceCell(supplier,supplier?.unit,tone(supplier),supplierDate);if(!supplier)supplierCell.querySelector('b').textContent='Not in supplier list';
+ const supplierCell=priceCell(supplier,supplier?.unit,tone(supplier),supplierDate,true);if(!supplier)supplierCell.querySelector('b').textContent='Not in supplier list';
  row.append(name,marketCell,supplierCell,...retailers.map((q,i)=>retailerCell(q,tone(q),['Blinkit','BigBasket','Instamart'][i])),retailerCell(reference,null));return row;
 }));}
 function renderDishes(){
@@ -103,8 +105,11 @@ async function refreshPrices(){
   status.textContent=(failed.length===3?'Refresh failed':failed.length?'Partly refreshed':'Prices reloaded')+' · '+time+' IST · quote dates shown below';
   clearTimeout(timeout);
   const update=results[3].status==='fulfilled'?results[3].value:null;
-  const checked=update?.checkedAt&&!Number.isNaN(Date.parse(update.checkedAt))?new Date(update.checkedAt).toLocaleString('en-IN',{timeZone:'Asia/Kolkata',day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})+' IST':null;
-  status.textContent=(failed.length?'Some sources could not reload':checked?'Daily check '+checked:'Daily price files reloaded · '+time+' IST')+(update?.retailers?.verified===0?' · no new retailer quotes; recorded prices retained':' · recorded quote dates shown below');
+  const lastCheck=[update?.checkedAt,update?.extraSources?.checkedAt].filter(d=>d&&!Number.isNaN(Date.parse(d))).sort().at(-1);
+  const checked=lastCheck?new Date(lastCheck).toLocaleString('en-IN',{timeZone:'Asia/Kolkata',day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})+' IST':null;
+  const datedMarket=new Set(records.filter(q=>q.date===date).map(q=>q.name)).size;
+  const datedOnline=new Set(retailerPrices.filter(q=>q.observed===date).map(q=>q.name)).size;
+  status.textContent=(failed.length?'Some sources could not reload · ':checked?'Checked '+checked+' · ':'')+dateLabel(date)+': '+datedMarket+' market items, '+datedOnline+' online items dated this day. Older prices are labelled as references.';
  }finally{
   clearTimeout(timeout);
   if(request===requestId){$('#priceDate').removeAttribute('aria-busy');render();}

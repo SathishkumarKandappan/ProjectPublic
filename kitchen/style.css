@@ -8,3 +8,5 @@
 #refreshStatus{display:block;font-size:10px;color:#879776;margin:-15px 0 20px;min-height:14px}.date:has([aria-busy="true"]){opacity:.65}
 
 .reference-label{display:block;font-size:9px!important;color:#9a783d!important;line-height:1.5;margin-bottom:6px}
+
+.stale-price{background:#fbf7ee}.stale-price b{color:#8b806b!important}.stale-price .reference-label{font-weight:600}

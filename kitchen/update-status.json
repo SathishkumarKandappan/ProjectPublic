@@ -1,7 +1,7 @@
 {
-  "checkedAt": "2026-11-02T01:39:27.282Z",
+  "checkedAt": "2026-11-03T03:48:02.018Z",
   "retailers": {
-    "date": "2026-11-02",
+    "date": "2026-11-03",
     "total": 636,
     "completed": 636,
     "unattempted": 0,
@@ -11,7 +11,7 @@
         "searched": 159,
         "verified": 1,
         "failed": 0,
-        "noQuote": 158,
+        "noQuote": 157,
         "blocked": 49
       },
       "Blinkit": {

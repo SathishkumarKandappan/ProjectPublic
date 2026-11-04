@@ -5896,19 +5896,6 @@
     },
     {
       "retailer": "BigBasket",
-      "name": "Sona Masuri rice (raw)",
-      "unit": "kg",
-      "price": 97,
-      "pack": "25 kg",
-      "packQuantity": 2425,
-      "product": "Buy Sree Bell Sona Masoori Raw Rice Online at Best Price of Rs 2425 ...",
-      "url": "https://www.bigbasket.com/pd/40081045/sree-bell-sona-masoori-raw-rice-25-kg/",
-      "observed": "2026-11-03",
-      "basis": "Search-indexed reference",
-      "source": "BigBasket search-indexed price reference"
-    },
-    {
-      "retailer": "BigBasket",
       "name": "All-purpose flour",
       "unit": "kg",
       "price": 60,
@@ -10279,6 +10266,19 @@
       "retailer": "BigBasket",
       "name": "Sona Masuri rice (raw)",
       "unit": "kg",
+      "price": 97,
+      "pack": "25 kg",
+      "packQuantity": 2425,
+      "product": "Buy Sree Bell Sona Masoori Raw Rice Online at Best Price of Rs 2425 ...",
+      "url": "https://www.bigbasket.com/pd/40081045/sree-bell-sona-masoori-raw-rice-25-kg/",
+      "observed": "2026-11-03",
+      "basis": "Search-indexed reference",
+      "source": "BigBasket search-indexed price reference"
+    },
+    {
+      "retailer": "BigBasket",
+      "name": "Sona Masuri rice (raw)",
+      "unit": "kg",
       "price": 80,
       "pack": "25 kg",
       "packQuantity": 2000,
@@ -11092,27 +11092,27 @@
       "verification": "manual_product_page"
     }
   ],
-  "checkedAt": "2026-11-03T03:48:02.018Z",
+  "checkedAt": "2026-11-04T00:09:27.582Z",
   "collection": {
-    "date": "2026-11-03",
+    "date": "2026-11-04",
     "total": 636,
     "completed": 636,
     "unattempted": 0,
-    "verified": 1,
+    "verified": 0,
     "providers": {
       "BigBasket": {
         "searched": 159,
-        "verified": 1,
+        "verified": 0,
         "failed": 0,
-        "noQuote": 157,
-        "blocked": 49
+        "noQuote": 159,
+        "blocked": 118
       },
       "Blinkit": {
         "searched": 159,
         "verified": 0,
         "failed": 0,
         "noQuote": 159,
-        "blocked": 60
+        "blocked": 98
       },
       "Instamart": {
         "searched": 159,
@@ -11129,11 +11129,5 @@
         "blocked": 0
       }
     }
-  },
-  "manualReview": {
-    "checkedAt": "2026-11-03",
-    "ingredients": 159,
-    "references": 324,
-    "notice": "Manually checked public listings and search results. Sellers do not supply a price-effective date. Availability and Bangalore checkout prices are unverified."
   }
 }

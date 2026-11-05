@@ -1,18 +1,18 @@
 {
-  "checkedAt": "2026-11-04T00:09:27.582Z",
+  "checkedAt": "2026-11-05T02:40:23.968Z",
   "retailers": {
-    "date": "2026-11-04",
+    "date": "2026-11-05",
     "total": 636,
     "completed": 636,
     "unattempted": 0,
-    "verified": 0,
+    "verified": 1,
     "providers": {
       "BigBasket": {
         "searched": 159,
-        "verified": 0,
+        "verified": 1,
         "failed": 0,
-        "noQuote": 159,
-        "blocked": 118
+        "noQuote": 158,
+        "blocked": 116
       },
       "Blinkit": {
         "searched": 159,
@@ -37,7 +37,10 @@
       }
     }
   },
-  "marketErrors": [],
+  "marketErrors": [
+    "rice: ValueError: No unambiguous source date found",
+    "dal: ValueError: No unambiguous source date found"
+  ],
   "extraSources": {
     "checkedAt": "2026-11-05T02:31:06.267Z",
     "government": [

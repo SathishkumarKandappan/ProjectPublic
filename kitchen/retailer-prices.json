@@ -11090,22 +11090,35 @@
       "manualCheckedAt": "2026-11-03",
       "sourcePriceDate": null,
       "verification": "manual_product_page"
+    },
+    {
+      "retailer": "BigBasket",
+      "name": "Sona Masuri rice (raw)",
+      "unit": "kg",
+      "price": 97,
+      "pack": "25 kg",
+      "packQuantity": 2425,
+      "product": "Buy Sree Bell Sona Masoori Raw Rice Online at Best Price of Rs 2425 ...",
+      "url": "https://www.bigbasket.com/pd/40081045/sree-bell-sona-masoori-raw-rice-25-kg/",
+      "observed": "2026-11-05",
+      "basis": "Search-indexed reference",
+      "source": "BigBasket search-indexed price reference"
     }
   ],
-  "checkedAt": "2026-11-04T00:09:27.582Z",
+  "checkedAt": "2026-11-05T02:40:23.968Z",
   "collection": {
-    "date": "2026-11-04",
+    "date": "2026-11-05",
     "total": 636,
     "completed": 636,
     "unattempted": 0,
-    "verified": 0,
+    "verified": 1,
     "providers": {
       "BigBasket": {
         "searched": 159,
-        "verified": 0,
+        "verified": 1,
         "failed": 0,
-        "noQuote": 159,
-        "blocked": 118
+        "noQuote": 158,
+        "blocked": 116
       },
       "Blinkit": {
         "searched": 159,

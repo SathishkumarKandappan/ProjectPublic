@@ -11105,7 +11105,7 @@
       "source": "BigBasket search-indexed price reference"
     }
   ],
-  "checkedAt": "2026-11-05T02:40:23.968Z",
+  "checkedAt": "2026-11-05T02:51:02.889Z",
   "collection": {
     "date": "2026-11-05",
     "total": 636,
@@ -11117,7 +11117,7 @@
         "searched": 159,
         "verified": 1,
         "failed": 0,
-        "noQuote": 158,
+        "noQuote": 157,
         "blocked": 116
       },
       "Blinkit": {

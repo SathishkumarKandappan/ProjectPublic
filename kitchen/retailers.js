@@ -1,4 +1,4 @@
-import {manualPrices,rejectedPairs} from './manual-prices.js';
+import {manualPrices,rejectedPairs} from './manual-prices.js?v=23';
 import {scrapedPrices} from './retailer-data.js';
 import {extraPrices} from './extra-prices.js';
 // Public catalogue observations. Reference product prices, not checkout quotes.
@@ -62,8 +62,9 @@ const collected=[...manualPrices,...originalPrices,...scrapedPrices.filter(q=>!(
 const aliases={'Ripe banana':'Robusta banana','Cooking oil (unspecified)':'Sunflower oil','White rice (unspecified)':'Sona Masuri rice (raw)','Raw rice (unspecified)':'Sona Masuri rice (raw)','Sona Masuri rice (unspecified)':'Sona Masuri rice (raw)','Green gram dal':'Moong dal'};
 export const retailerPrices=[...collected,...Object.entries(aliases).flatMap(([name,variant])=>collected.filter(q=>q.name===variant).map(q=>({...q,name,product:q.product+' · reference variant: '+variant,source:q.source+' · '+variant+' reference'})))];
 // Exactly one item per retailer / ingredient; preserve named variants and pack evidence.
-export function retailerQuote(retailer,name,unit,date){return retailerPrices.filter(r=>r.retailer===retailer&&r.name===name&&r.unit===unit&&r.observed<=date).sort((a,b)=>b.observed.localeCompare(a.observed)||verificationRank(b)-verificationRank(a)||a.price-b.price)[0]||null;}
+const dairyAllowed=q=>!['Milk','Curd'].includes(q.name)||/nandini/i.test(q.product||'');
+export function retailerQuote(retailer,name,unit,date){return retailerPrices.filter(r=>dairyAllowed(r)&&r.retailer===retailer&&r.name===name&&(!unit||r.unit===unit)&&r.observed<=date).sort((a,b)=>b.observed.localeCompare(a.observed)||verificationRank(b)-verificationRank(a)||a.price-b.price)[0]||null;}
 
-export function otherQuote(name,unit,date){return retailerPrices.filter(r=>r.name===name&&(!unit||r.unit===unit)&&r.observed<=date).sort((a,b)=>b.observed.localeCompare(a.observed)||verificationRank(b)-verificationRank(a)||a.price-b.price)[0]||null;}
+export function otherQuote(name,unit,date){return retailerPrices.filter(r=>dairyAllowed(r)&&r.name===name&&(!unit||r.unit===unit)&&r.observed<=date).sort((a,b)=>b.observed.localeCompare(a.observed)||verificationRank(b)-verificationRank(a)||a.price-b.price)[0]||null;}
 
 function verificationRank(q){return q.verification==='manual_product_page'?2:q.verification==='manual_search_result'?1:0;}

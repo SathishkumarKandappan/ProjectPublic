@@ -42,7 +42,7 @@
     "dal: ValueError: No unambiguous source date found"
   ],
   "extraSources": {
-    "checkedAt": "2026-11-05T02:31:06.267Z",
+    "checkedAt": "2026-11-05T02:41:43.952Z",
     "government": [
       {
         "provider": "data.gov.in",

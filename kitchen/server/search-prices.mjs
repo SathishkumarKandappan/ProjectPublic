@@ -3,10 +3,13 @@ const providers={BigBasket:['bigbasket.com'],Blinkit:['blinkit.com'],Instamart:[
 export const today=()=>new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Kolkata',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
 const decode=s=>s.replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&quot;/g,'"').replace(/&#39;|&apos;/g,"'");
 const words=s=>s.toLowerCase().replace(/[^a-z0-9]+/g,' ').split(' ').filter(Boolean);
-const names={'Onion (big)':['onion'],'Cooking oil (unspecified)':['sunflower oil'],'Sona Masuri rice (raw)':['sona masoori raw rice','sona masuri raw rice'],'Sona Masuri rice (steamed)':['sona masoori steam rice'],'Ragi flour':['ragi flour','nachni flour'],'Masoor dal':['masoor dal','masoor split'],'Taro leaves':['colocasia leaf','taro leaves'],'Hyacinth beans':['avarekai','hyacinth beans']};
+const names={'Milk':['nandini milk'],'Curd':['nandini curd'],'Onion (big)':['onion'],'Cooking oil (unspecified)':['sunflower oil'],'Sona Masuri rice (raw)':['sona masoori raw rice','sona masuri raw rice'],'Sona Masuri rice (steamed)':['sona masoori steam rice'],'Ragi flour':['ragi flour','nachni flour'],'Masoor dal':['masoor dal','masoor split'],'Taro leaves':['colocasia leaf','taro leaves'],'Hyacinth beans':['avarekai','hyacinth beans']};
 export function foodVariantAllowed(name,title){
  const text=title.toLowerCase();
+ if(['Milk','Curd'].includes(name)&&! /nandini/.test(text))return false;
  if(/capsules|tablet|chewy|candy|planting|microgreens|gardening|epsom|chewing|\bgum\b|smint|chicken|shrimp|fish|juice|ready.to.eat/.test(text))return false;
+ if(['Whole masoor dal','Whole brown masoor dal'].includes(name)&&! /whole|sabut/i.test(text.replace(/whole farm/g,'')))return false;
+ if(['Cowpeas','White cowpeas'].includes(name)&&/beans|phali/i.test(text))return false;
  if(name==='Mint'&&!/leav|pudina/.test(text))return false;
  if(name==='Mustard greens'&&!/leav|saag/.test(text))return false;
  if(name==='Drumstick'&&/leav|powder/.test(text))return false;
@@ -44,7 +47,8 @@ export function packAmount(text){
  let quantity=Number(match[1]),unit=match[2].toLowerCase();if(!(quantity>0))return null;
  if(['g','gm','ml'].includes(unit)){quantity/=1000;unit=unit==='ml'?'litre':'kg';}else unit=unit==='kg'?'kg':unit.startsWith('l')?'litre':unit.startsWith('bunch')?'bunch':'piece';
  // Ambiguous multi-packs and weight ranges must be reviewed rather than guessed.
- if(/\d\s*(?:-|–)\s*\d|\bpack of\s*[2-9]|\bx\s*\d/i.test(text))return null;
+ if(/\bpack of\s*[2-9]|\bx\s*\d/i.test(text))return null;
+ if(unit!=='piece'&&unit!=='bunch'&&/\d+(?:\.\d+)?\s*(?:kg|gm|g|ml|l)?\s*[-–]\s*\d+(?:\.\d+)?\s*(?:kg|gm|g|ml|litres?|l)\b/i.test(text))return null;
  return {quantity,unit,pack:match[0].trim()};
 }
 export function extractOffers(html,{name,provider,url,date}){

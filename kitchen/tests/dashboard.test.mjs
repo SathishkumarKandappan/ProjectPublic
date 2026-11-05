@@ -11,7 +11,10 @@ import {retailerPrices,retailerQuote,otherQuote} from '../retailers.js';
 import {buildMealPackages} from '../packages.js';
 const dom=new JSDOM(readFileSync('kitchen/index.html','utf8'),{url:'https://example.org',runScripts:'outside-only'}),w=dom.window;
 Object.assign(w,model,dishModule,{searchEndpoint:'',defaults,supplierSeed,estimateDish,pdfRates,retailerPrices,retailerQuote,otherQuote,buildMealPackages});let fetches=0;
-const feed=JSON.parse(readFileSync('kitchen/market.json','utf8'));w.fetch=async url=>{fetches++;return{ok:true,json:async()=>url.includes('supplier.json')?{quotes:[...supplierSeed,...pdfRates]}:url.includes('retailer-prices.json')?{quotes:[...retailerPrices]}:feed}};
+const feed=JSON.parse(readFileSync('kitchen/market.json','utf8'));
+// Pin one historical market quote so freshness checks do not depend on changing live data.
+feed.records=feed.records.filter(r=>r.name!=='Red rice');feed.records.push({name:'Red rice',unit:'kg',price:80,date:'2026-11-01',source:'Historical test fixture'});
+w.fetch=async url=>{fetches++;return{ok:true,json:async()=>url.includes('supplier.json')?{quotes:[...supplierSeed,...pdfRates]}:url.includes('retailer-prices.json')?{quotes:[...retailerPrices]}:feed}};
 w.eval(readFileSync('kitchen/app.js','utf8').replace(/^import .*;\n/gm,''));await new Promise(r=>setTimeout(r,0));
 const $=s=>w.document.querySelector(s);
 assert.equal(w.document.querySelectorAll('input').length,1);assert.equal(w.document.querySelectorAll('button').length,5);assert.equal(w.document.querySelectorAll('th').length,7);assert.equal(w.document.querySelectorAll('header,footer,nav,select,h1,h2').length,0);
@@ -42,3 +45,5 @@ assert.ok(oldRagi.children[3].classList.contains('stale-price'));assert.match(ol
 assert.equal(oldRagi.children[2].classList.contains('stale-price'),false);
 $('#priceDate').value='2026-11-01';$('#priceDate').dispatchEvent(new w.Event('change'));await new Promise(r=>setTimeout(r,0));
 const historicalRagi=[...w.document.querySelectorAll('#priceRows tr')].find(r=>r.firstChild.textContent==='Ragi flour');assert.equal(historicalRagi.children[3].classList.contains('stale-price'),false);
+
+const currentMilk=retailerQuote('BigBasket','Milk','litre','2026-11-05');assert.ok(!currentMilk||/nandini/i.test(currentMilk.product));

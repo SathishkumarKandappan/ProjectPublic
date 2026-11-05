@@ -4,11 +4,13 @@ import {manualPrices} from '../manual-prices.js';
 import {retailerPrices,retailerQuote} from '../retailers.js';
 import {foodVariantAllowed,packAmount} from '../server/search-prices.mjs';
 const review=JSON.parse(fs.readFileSync('kitchen/manual-review.json'));
-assert.equal(new Set(manualPrices.map(q=>q.name)).size,159);
-assert.equal(manualPrices.length,review.references);
+assert.equal(new Set(manualPrices.map(q=>q.name)).size,review.ingredients);
+const latest=manualPrices.filter(q=>q.observed===review.checkedAt);
+assert.equal(latest.length,review.references);
+assert.equal(new Set(latest.map(q=>q.name)).size,review.ingredients);
 for(const q of manualPrices){
  assert.equal(q.sourcePriceDate,null);
- assert.equal(q.observed,'2026-11-03');
+ assert.ok(['2026-11-03',review.checkedAt].includes(q.observed));
  assert.ok(q.url.startsWith('https://'));
  assert.ok(foodVariantAllowed(q.name,q.product));
  const pack=packAmount(q.pack);assert.ok(pack,q.pack);
@@ -21,3 +23,7 @@ retailerPrices.push({...common,price:10,verification:'manual_search_result'},{..
 assert.equal(retailerQuote('BigBasket','Rank test','kg','2026-11-03').price,20);
 retailerPrices.splice(retailerPrices.findIndex(q=>q.name==='Rank test'),2);
 assert.equal(manualPrices.find(q=>q.name==='Bread rolls'&&q.unit==='piece').price,40/6);
+
+assert.ok(manualPrices.filter(q=>['Milk','Curd'].includes(q.name)).every(q=>/nandini/i.test(q.product)));
+assert.equal(retailerQuote('BigBasket','Milk','litre',review.checkedAt)?.product?.includes('Amul')||false,false);
+assert.ok(retailerQuote('Instamart','Curd','kg',review.checkedAt).product.includes('Nandini'));

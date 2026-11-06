@@ -10917,19 +10917,6 @@
     },
     {
       "retailer": "BigBasket",
-      "name": "Sona Masuri rice (raw)",
-      "unit": "kg",
-      "price": 97,
-      "pack": "25 kg",
-      "packQuantity": 2425,
-      "product": "Buy Sree Bell Sona Masoori Raw Rice Online at Best Price of Rs 2425 ...",
-      "url": "https://www.bigbasket.com/pd/40081045/sree-bell-sona-masoori-raw-rice-25-kg/",
-      "observed": "2026-11-05",
-      "basis": "Search-indexed reference",
-      "source": "BigBasket search-indexed price reference"
-    },
-    {
-      "retailer": "BigBasket",
       "name": "All-purpose flour",
       "unit": "kg",
       "price": 71.5,
@@ -11615,6 +11602,22 @@
       "basis": "Manually checked listed reference",
       "manualCheckedAt": "2026-11-05",
       "sourcePriceDate": null
+    },
+    {
+      "name": "Buttermilk",
+      "retailer": "BigBasket",
+      "product": "Nandini GoodLife Spiced Buttermilk",
+      "url": "https://www.bigbasket.com/pd/258324/nandini-butter-milk-spiced-200-ml-carton/",
+      "price": 75,
+      "unit": "litre",
+      "pack": "200 ml",
+      "packQuantity": 15,
+      "observed": "2026-11-05",
+      "manualCheckedAt": "2026-11-05",
+      "sourcePriceDate": null,
+      "verification": "manual_product_page",
+      "basis": "Manually checked listed reference",
+      "source": "BigBasket manually checked public listing"
     },
     {
       "retailer": "BigBasket",
@@ -12319,6 +12322,54 @@
       "manualCheckedAt": "2026-11-05",
       "sourcePriceDate": null,
       "verification": "manual_product_page"
+    },
+    {
+      "name": "Curd",
+      "retailer": "BigBasket",
+      "product": "Nandini Curd",
+      "url": "https://www.bigbasket.com/ss/curd/",
+      "unit": "kg",
+      "price": 68,
+      "pack": "500 g",
+      "packQuantity": 34,
+      "observed": "2026-11-05",
+      "manualCheckedAt": "2026-11-05",
+      "sourcePriceDate": null,
+      "verification": "manual_search_result",
+      "basis": "Manually checked search reference",
+      "source": "BigBasket manually checked Nandini listing"
+    },
+    {
+      "name": "Curd",
+      "retailer": "Instamart",
+      "product": "Nandini Curd",
+      "url": "https://instamart.in/p/nandini-curd-YRFFPQOT2G?locId=31322e38303831303538382c37372e363736383238303730",
+      "unit": "kg",
+      "price": 68,
+      "pack": "500 g",
+      "packQuantity": 34,
+      "observed": "2026-11-05",
+      "manualCheckedAt": "2026-11-05",
+      "sourcePriceDate": null,
+      "verification": "manual_product_page",
+      "basis": "Manually checked listed reference",
+      "source": "Instamart manually checked Nandini listing"
+    },
+    {
+      "name": "Curd",
+      "retailer": "Reported Nandini rate",
+      "product": "Nandini Curd - reported retail rate; proposed cut not confirmed",
+      "url": "https://english.publictv.in/cm-directs-cut-in-curd-price-by-rs-2-per-litre-but-milk-unions-still-undecided/",
+      "unit": "litre",
+      "price": 68,
+      "pack": "1 litre",
+      "packQuantity": 68,
+      "observed": "2026-11-05",
+      "manualCheckedAt": "2026-11-05",
+      "sourcePriceDate": null,
+      "verification": "manual_search_result",
+      "basis": "Manually checked search reference",
+      "source": "Reported Nandini rate manually checked Nandini listing"
     },
     {
       "retailer": "BigBasket",
@@ -13423,6 +13474,22 @@
       "basis": "Manually checked listed reference",
       "manualCheckedAt": "2026-11-05",
       "sourcePriceDate": null
+    },
+    {
+      "name": "Milk",
+      "retailer": "Zepto",
+      "product": "Nandini Toned Fresh Milk - Pouch",
+      "url": "https://www.zepto.com/pn/nandini-toned-fresh-milk-pouch/pvid/25eb526c-9c26-48cd-95a3-8e4058910f8a",
+      "price": 54,
+      "unit": "litre",
+      "pack": "500 ml",
+      "packQuantity": 27,
+      "observed": "2026-11-05",
+      "manualCheckedAt": "2026-11-05",
+      "sourcePriceDate": null,
+      "verification": "manual_search_result",
+      "basis": "Manually checked search reference",
+      "source": "Zepto manually checked public listing"
     },
     {
       "name": "Mint",
@@ -14900,6 +14967,19 @@
       "retailer": "BigBasket",
       "name": "Sona Masuri rice (raw)",
       "unit": "kg",
+      "price": 97,
+      "pack": "25 kg",
+      "packQuantity": 2425,
+      "product": "Buy Sree Bell Sona Masoori Raw Rice Online at Best Price of Rs 2425 ...",
+      "url": "https://www.bigbasket.com/pd/40081045/sree-bell-sona-masoori-raw-rice-25-kg/",
+      "observed": "2026-11-05",
+      "basis": "Search-indexed reference",
+      "source": "BigBasket search-indexed price reference"
+    },
+    {
+      "retailer": "BigBasket",
+      "name": "Sona Masuri rice (raw)",
+      "unit": "kg",
       "price": 80,
       "pack": "25 kg",
       "packQuantity": 2000,
@@ -15649,128 +15729,55 @@
       "sourcePriceDate": null
     },
     {
-      "name": "Milk",
-      "retailer": "Zepto",
-      "product": "Nandini Toned Fresh Milk - Pouch",
-      "url": "https://www.zepto.com/pn/nandini-toned-fresh-milk-pouch/pvid/25eb526c-9c26-48cd-95a3-8e4058910f8a",
-      "price": 54,
-      "unit": "litre",
-      "pack": "500 ml",
-      "packQuantity": 27,
-      "observed": "2026-11-05",
-      "manualCheckedAt": "2026-11-05",
-      "sourcePriceDate": null,
-      "verification": "manual_search_result",
-      "basis": "Manually checked search reference",
-      "source": "Zepto manually checked public listing"
-    },
-    {
-      "name": "Buttermilk",
       "retailer": "BigBasket",
-      "product": "Nandini GoodLife Spiced Buttermilk",
-      "url": "https://www.bigbasket.com/pd/258324/nandini-butter-milk-spiced-200-ml-carton/",
-      "price": 75,
-      "unit": "litre",
-      "pack": "200 ml",
-      "packQuantity": 15,
-      "observed": "2026-11-05",
-      "manualCheckedAt": "2026-11-05",
-      "sourcePriceDate": null,
-      "verification": "manual_product_page",
-      "basis": "Manually checked listed reference",
-      "source": "BigBasket manually checked public listing"
-    },
-    {
-      "name": "Curd",
-      "retailer": "BigBasket",
-      "product": "Nandini Curd",
-      "url": "https://www.bigbasket.com/ss/curd/",
+      "name": "Sona Masuri rice (raw)",
       "unit": "kg",
-      "price": 68,
-      "pack": "500 g",
-      "packQuantity": 34,
-      "observed": "2026-11-05",
-      "manualCheckedAt": "2026-11-05",
-      "sourcePriceDate": null,
-      "verification": "manual_search_result",
-      "basis": "Manually checked search reference",
-      "source": "BigBasket manually checked Nandini listing"
-    },
-    {
-      "name": "Curd",
-      "retailer": "Instamart",
-      "product": "Nandini Curd",
-      "url": "https://instamart.in/p/nandini-curd-YRFFPQOT2G?locId=31322e38303831303538382c37372e363736383238303730",
-      "unit": "kg",
-      "price": 68,
-      "pack": "500 g",
-      "packQuantity": 34,
-      "observed": "2026-11-05",
-      "manualCheckedAt": "2026-11-05",
-      "sourcePriceDate": null,
-      "verification": "manual_product_page",
-      "basis": "Manually checked listed reference",
-      "source": "Instamart manually checked Nandini listing"
-    },
-    {
-      "name": "Curd",
-      "retailer": "Reported Nandini rate",
-      "product": "Nandini Curd - reported retail rate; proposed cut not confirmed",
-      "url": "https://english.publictv.in/cm-directs-cut-in-curd-price-by-rs-2-per-litre-but-milk-unions-still-undecided/",
-      "unit": "litre",
-      "price": 68,
-      "pack": "1 litre",
-      "packQuantity": 68,
-      "observed": "2026-11-05",
-      "manualCheckedAt": "2026-11-05",
-      "sourcePriceDate": null,
-      "verification": "manual_search_result",
-      "basis": "Manually checked search reference",
-      "source": "Reported Nandini rate manually checked Nandini listing"
+      "price": 97,
+      "pack": "25 kg",
+      "packQuantity": 2425,
+      "product": "Buy Sree Bell Sona Masoori Raw Rice Online at Best Price of Rs 2425 ...",
+      "url": "https://www.bigbasket.com/pd/40081045/sree-bell-sona-masoori-raw-rice-25-kg/",
+      "observed": "2026-11-06",
+      "basis": "Search-indexed reference",
+      "source": "BigBasket search-indexed price reference"
     }
   ],
-  "checkedAt": "2026-11-05T03:00:50.344Z",
+  "checkedAt": "2026-11-06T00:28:28.320Z",
   "collection": {
-    "date": "2026-11-05",
-    "total": 636,
-    "completed": 636,
+    "date": "2026-11-06",
+    "total": 640,
+    "completed": 640,
     "unattempted": 0,
-    "verified": 0,
+    "verified": 1,
     "providers": {
       "BigBasket": {
-        "searched": 159,
-        "verified": 0,
+        "searched": 160,
+        "verified": 1,
         "failed": 0,
         "noQuote": 159,
-        "blocked": 118
+        "blocked": 117
       },
       "Blinkit": {
-        "searched": 159,
+        "searched": 160,
         "verified": 0,
         "failed": 0,
-        "noQuote": 159,
-        "blocked": 98
+        "noQuote": 160,
+        "blocked": 105
       },
       "Instamart": {
-        "searched": 159,
+        "searched": 160,
         "verified": 0,
         "failed": 0,
-        "noQuote": 159,
+        "noQuote": 160,
         "blocked": 0
       },
       "Other": {
-        "searched": 159,
+        "searched": 160,
         "verified": 0,
         "failed": 0,
-        "noQuote": 159,
+        "noQuote": 160,
         "blocked": 0
       }
     }
-  },
-  "manualReview": {
-    "checkedAt": "2026-11-05",
-    "ingredients": 160,
-    "references": 300,
-    "notice": "Manually checked public listings and search results. Sellers do not supply a price-effective date. Availability and Bangalore checkout prices are unverified."
   }
 }

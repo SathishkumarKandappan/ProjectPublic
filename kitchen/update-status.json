@@ -1,38 +1,38 @@
 {
-  "checkedAt": "2026-11-05T03:00:50.344Z",
+  "checkedAt": "2026-11-06T00:28:28.320Z",
   "retailers": {
-    "date": "2026-11-05",
-    "total": 636,
-    "completed": 636,
+    "date": "2026-11-06",
+    "total": 640,
+    "completed": 640,
     "unattempted": 0,
-    "verified": 0,
+    "verified": 1,
     "providers": {
       "BigBasket": {
-        "searched": 159,
-        "verified": 0,
+        "searched": 160,
+        "verified": 1,
         "failed": 0,
         "noQuote": 159,
-        "blocked": 118
+        "blocked": 117
       },
       "Blinkit": {
-        "searched": 159,
+        "searched": 160,
         "verified": 0,
         "failed": 0,
-        "noQuote": 159,
-        "blocked": 98
+        "noQuote": 160,
+        "blocked": 105
       },
       "Instamart": {
-        "searched": 159,
+        "searched": 160,
         "verified": 0,
         "failed": 0,
-        "noQuote": 159,
+        "noQuote": 160,
         "blocked": 0
       },
       "Other": {
-        "searched": 159,
+        "searched": 160,
         "verified": 0,
         "failed": 0,
-        "noQuote": 159,
+        "noQuote": 160,
         "blocked": 0
       }
     }

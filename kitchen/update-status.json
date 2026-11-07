@@ -1,18 +1,18 @@
 {
-  "checkedAt": "2026-11-06T00:28:28.320Z",
+  "checkedAt": "2026-11-07T02:07:23.719Z",
   "retailers": {
-    "date": "2026-11-06",
+    "date": "2026-11-07",
     "total": 640,
     "completed": 640,
     "unattempted": 0,
-    "verified": 1,
+    "verified": 0,
     "providers": {
       "BigBasket": {
         "searched": 160,
-        "verified": 1,
+        "verified": 0,
         "failed": 0,
-        "noQuote": 159,
-        "blocked": 117
+        "noQuote": 160,
+        "blocked": 119
       },
       "Blinkit": {
         "searched": 160,

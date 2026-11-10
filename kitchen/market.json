@@ -1,9 +1,6 @@
 {
-  "checkedAt": "2026-11-10T04:16:06.990932+00:00",
-  "errors": [
-    "rice: ValueError: No unambiguous source date found",
-    "dal: ValueError: No unambiguous source date found"
-  ],
+  "checkedAt": "2026-11-10T04:25:58.146471+00:00",
+  "errors": [],
   "records": [
     {
       "name": "Chana dal",
@@ -2948,6 +2945,15 @@
       "url": "https://www.vegetablemarketprice.com/market/bangalore/today"
     },
     {
+      "name": "Chana dal",
+      "unit": "kg",
+      "price": 80,
+      "date": "2026-11-10",
+      "source": "India Prices",
+      "basis": "Listed dal retail price",
+      "url": "https://www.indiaprices.co.in/dal/bengaluru-dal-price/"
+    },
+    {
       "name": "Coriander leaves",
       "unit": "kg",
       "price": 14.5,
@@ -3029,6 +3035,15 @@
       "url": "https://www.vegetablemarketprice.com/market/bangalore/today"
     },
     {
+      "name": "Idli rice",
+      "unit": "kg",
+      "price": 40,
+      "date": "2026-11-10",
+      "source": "India Prices",
+      "basis": "Listed rice retail price",
+      "url": "https://www.indiaprices.co.in/rice/bengaluru-rice-price/"
+    },
+    {
       "name": "Okra",
       "unit": "kg",
       "price": 45.5,
@@ -3045,6 +3060,15 @@
       "source": "Vegetable Market Price",
       "basis": "Retail range midpoint",
       "url": "https://www.vegetablemarketprice.com/market/bangalore/today"
+    },
+    {
+      "name": "Ponni rice (boiled)",
+      "unit": "kg",
+      "price": 55,
+      "date": "2026-11-10",
+      "source": "India Prices",
+      "basis": "Listed rice retail price",
+      "url": "https://www.indiaprices.co.in/rice/bengaluru-rice-price/"
     },
     {
       "name": "Potato",
@@ -3074,6 +3098,15 @@
       "url": "https://www.vegetablemarketprice.com/market/bangalore/today"
     },
     {
+      "name": "Red rice",
+      "unit": "kg",
+      "price": 80,
+      "date": "2026-11-10",
+      "source": "India Prices",
+      "basis": "Listed rice retail price",
+      "url": "https://www.indiaprices.co.in/rice/bengaluru-rice-price/"
+    },
+    {
       "name": "Ridge gourd",
       "unit": "kg",
       "price": 56.5,
@@ -3081,6 +3114,24 @@
       "source": "Vegetable Market Price",
       "basis": "Retail range midpoint",
       "url": "https://www.vegetablemarketprice.com/market/bangalore/today"
+    },
+    {
+      "name": "Sona Masuri rice (raw)",
+      "unit": "kg",
+      "price": 60,
+      "date": "2026-11-10",
+      "source": "India Prices",
+      "basis": "Listed rice retail price",
+      "url": "https://www.indiaprices.co.in/rice/bengaluru-rice-price/"
+    },
+    {
+      "name": "Sona Masuri rice (steamed)",
+      "unit": "kg",
+      "price": 50,
+      "date": "2026-11-10",
+      "source": "India Prices",
+      "basis": "Listed rice retail price",
+      "url": "https://www.indiaprices.co.in/rice/bengaluru-rice-price/"
     },
     {
       "name": "Spinach",
@@ -3099,6 +3150,15 @@
       "source": "Vegetable Market Price",
       "basis": "Retail range midpoint",
       "url": "https://www.vegetablemarketprice.com/market/bangalore/today"
+    },
+    {
+      "name": "Toor dal",
+      "unit": "kg",
+      "price": 110,
+      "date": "2026-11-10",
+      "source": "India Prices",
+      "basis": "Listed dal retail price",
+      "url": "https://www.indiaprices.co.in/dal/bengaluru-dal-price/"
     }
   ]
 }

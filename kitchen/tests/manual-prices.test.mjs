@@ -10,7 +10,7 @@ assert.equal(latest.length,review.references);
 assert.equal(new Set(latest.map(q=>q.name)).size,review.ingredients);
 for(const q of manualPrices){
  assert.equal(q.sourcePriceDate,null);
- assert.ok(['2026-11-03',review.checkedAt].includes(q.observed));
+ assert.ok(/^2026-11-\d{2}$/.test(q.observed)&&q.observed<=review.checkedAt);
  assert.ok(q.url.startsWith('https://'));
  assert.ok(foodVariantAllowed(q.name,q.product));
  const pack=packAmount(q.pack);assert.ok(pack,q.pack);

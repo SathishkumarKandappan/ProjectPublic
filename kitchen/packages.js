@@ -1,4 +1,4 @@
-import {dishes} from './dishes.js';
+import {dishes} from './dishes.js?v=24';
 import {estimateDish} from './costing.js';
 const quantity=(quantity,unit='kg')=>({quantity,unit});
 const morning=(id,name,state,ingredients,quantities)=>({id,name,state,base:ingredients[0],type:'Snack',ingredients,noOil:true,noSalt:!ingredients.includes('Salt'),quantities});

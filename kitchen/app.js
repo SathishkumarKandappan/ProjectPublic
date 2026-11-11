@@ -1,11 +1,11 @@
 import {defaults} from './seed.js';
 import {supplierSeed} from './supplier-seed.js';
 import {pdfRates} from './pdf-rates.js';
-import {retailerPrices,retailerQuote,otherQuote} from './retailers.js?v=23';
+import {retailerPrices,retailerQuote,otherQuote} from './retailers.js?v=24';
 import {todayIST,marketAsOf,comparePrices} from './model.js';
-import {dailyIdeas} from './dishes.js';
+import {dailyIdeas} from './dishes.js?v=24';
 import {estimateDish} from './costing.js';
-import {buildMealPackages} from './packages.js?v=23';
+import {buildMealPackages} from './packages.js?v=24';
 const $=selector=>document.querySelector(selector);
 const money=n=>n==null?'—':new Intl.NumberFormat('en-IN',{style:'currency',currency:'INR',minimumFractionDigits:0,maximumFractionDigits:2}).format(n);
 const quoteDate=q=>q?.date||q?.observed||q?.effectiveDate||null;
@@ -44,7 +44,7 @@ function renderDishes(){
  $('#dishList').replaceChildren(...ordered.map(d=>{
    const estimate=estimateDish(d,quoteForDish),card=document.createElement('details');card.className='dish';
    const summary=document.createElement('summary');
-   const identity=document.createElement('div');identity.className='dish-identity';const state=document.createElement('small');state.className='dish-state';state.textContent=d.state;const name=document.createElement('span');name.className='dish-name';name.textContent=d.name;identity.append(state,name);
+   const identity=document.createElement('div');identity.className='dish-identity';const state=document.createElement('small');state.className='dish-state';state.textContent=d.state+(d.introduced&&d.introduced<=selectedDate&&(Date.parse(selectedDate)-Date.parse(d.introduced))/86400000<30?' · New':'');const name=document.createElement('span');name.className='dish-name';name.textContent=d.name;identity.append(state,name);
    const cost=document.createElement('div');cost.className='dish-cost';const price=document.createElement('strong');price.textContent=!estimate.basePriced?'Price needed':(estimate.missing?'From ':'Est. ')+money(estimate.perPortion);const label=document.createElement('small');label.textContent=!estimate.basePriced?'main ingredient unpriced':estimate.missing?`/ portion · ${estimate.missing} quote(s) needed`:'/ portion · ingredient estimate';cost.append(price,label);summary.append(identity,cost);
    const content=document.createElement('div');content.className='dish-content';const description=document.createElement('p');description.className='dish-description';description.textContent=d.description;
    const title=document.createElement('div');title.className='ingredient-heading';title.textContent='SAMPLE INGREDIENTS · 10 PORTIONS';const list=document.createElement('div');list.className='ingredient-list';
@@ -77,7 +77,7 @@ async function refreshPrices(){
  const status=$('#refreshStatus');status.textContent='Refreshing prices…';
  $('#priceDate').setAttribute('aria-busy','true');
  const timeout=setTimeout(()=>controller.abort(),20000);
- const root='https://raw.githubusercontent.com/SathishkumarKandappan/ProjectPublic/gh-pages/kitchen/';
+ const root='./';
  const validQuote=r=>r&&typeof r.name==='string'&&typeof r.unit==='string'&&Number.isFinite(r.price)&&r.price>=0;
  const validDate=d=>typeof d==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(d)&&!Number.isNaN(Date.parse(d+'T12:00:00Z'))&&d<=todayIST();
  const read=async(file,field,validate)=>{

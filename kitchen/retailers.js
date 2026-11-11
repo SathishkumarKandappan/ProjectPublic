@@ -1,4 +1,4 @@
-import {manualPrices,rejectedPairs} from './manual-prices.js?v=23';
+import {manualPrices,rejectedPairs} from './manual-prices.js?v=24';
 import {scrapedPrices} from './retailer-data.js';
 import {extraPrices} from './extra-prices.js';
 // Public catalogue observations. Reference product prices, not checkout quotes.

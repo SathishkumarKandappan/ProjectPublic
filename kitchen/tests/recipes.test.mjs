@@ -1,8 +1,8 @@
 import assert from 'node:assert/strict';
 import {dishes,dailyIdeas} from '../dishes.js';
 import {marketAsOf,comparePrices} from '../model.js';
-assert.equal(dishes.length,150);assert.equal(new Set(dishes.map(d=>d.id)).size,150);
-for(const type of ['Curry','Palya','Snack'])assert.equal(dishes.filter(d=>d.type===type).length,50);
+assert.equal(dishes.length,180);assert.equal(new Set(dishes.map(d=>d.id)).size,180);
+for(const type of ['Curry','Palya','Snack'])assert.equal(dishes.filter(d=>d.type===type).length,60);
 assert.ok(dishes.every(d=>d.state&&d.base&&d.ingredients.length>=2));
 const quote=(name,unit)=>({price:name==='Potato'?25:60,unit,kind:'Test'});
 const a=dailyIdeas(quote,{type:'Palya',date:'2026-11-01'}),b=dailyIdeas(quote,{type:'Palya',date:'2026-11-02'});
@@ -16,4 +16,6 @@ assert.equal(dailyIdeas(quote,{type:'Snack',date:'2026-11-01',query:'DOES NOT EX
 const records=[{name:'Potato',unit:'kg',date:'2026-10-30',price:30},{name:'Potato',unit:'kg',date:'2026-11-01',price:40}];
 assert.equal(marketAsOf(records,'Potato','kg','2026-10-31').price,30);assert.equal(marketAsOf(records,'Potato','kg','2026-10-01'),null);
 assert.equal(comparePrices({price:80},{price:55,unit:'kg'},'kg').percent,-31.25);assert.equal(comparePrices({price:40},{price:50,unit:'piece'},'kg').comparable,false);
-console.log('PASS: 150 Indian dishes, category counts, region labels, daily rotation, stable refresh, price ranking, missing-price handling and date filtering');
+console.log('PASS: 180 Indian dishes, category counts, region labels, daily rotation, stable refresh, price ranking, missing-price handling and date filtering');
+
+for(const type of ['Curry','Palya','Snack'])assert.ok(dailyIdeas(quote,{type,date:'2026-11-11'}).filter(d=>d.introduced==='2026-11-11').length>=2);

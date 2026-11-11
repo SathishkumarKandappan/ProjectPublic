@@ -10,6 +10,7 @@ export function foodVariantAllowed(name,title){
  if(/capsules|tablet|chewy|candy|planting|microgreens|gardening|epsom|chewing|\bgum\b|smint|chicken|shrimp|fish|juice|ready.to.eat/.test(text))return false;
  if(['Whole masoor dal','Whole brown masoor dal'].includes(name)&&! /whole|sabut/i.test(text.replace(/whole farm/g,'')))return false;
  if(['Cowpeas','White cowpeas'].includes(name)&&/beans|phali/i.test(text))return false;
+ if(name==='Taro root'&&/leaf|leaves/.test(text))return false;
  if(name==='Mint'&&!/leav|pudina/.test(text))return false;
  if(name==='Mustard greens'&&!/leav|saag/.test(text))return false;
  if(name==='Drumstick'&&/leav|powder/.test(text))return false;

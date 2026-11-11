@@ -26,3 +26,5 @@ assert.deepEqual(packAmount('Cauliflower 1 pc (approx 400 - 600 g)'),{quantity:1
 
 assert.equal(foodVariantAllowed('Milk','Amul Taaza Milk 500 ml'),false);
 assert.equal(foodVariantAllowed('Curd','Nandini Curd 500 g'),true);
+
+assert.equal(foodVariantAllowed('Taro root','Fresho Colocasia Leaf 10 Pcs'),false);

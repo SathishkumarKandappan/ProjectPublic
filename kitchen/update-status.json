@@ -1,7 +1,7 @@
 {
-  "checkedAt": "2026-11-11T01:26:02.471Z",
+  "checkedAt": "2026-11-11T22:57:29.802Z",
   "retailers": {
-    "date": "2026-11-11",
+    "date": "2026-11-12",
     "total": 640,
     "completed": 640,
     "unattempted": 0,
@@ -12,14 +12,14 @@
         "verified": 1,
         "failed": 0,
         "noQuote": 159,
-        "blocked": 117
+        "blocked": 118
       },
       "Blinkit": {
         "searched": 160,
         "verified": 0,
         "failed": 0,
         "noQuote": 160,
-        "blocked": 105
+        "blocked": 118
       },
       "Instamart": {
         "searched": 160,

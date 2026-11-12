@@ -1,11 +1,12 @@
+import {buildCreativeIdeas} from './creative.js?v=25';
 import {defaults} from './seed.js';
 import {supplierSeed} from './supplier-seed.js';
 import {pdfRates} from './pdf-rates.js';
-import {retailerPrices,retailerQuote,otherQuote} from './retailers.js?v=24';
+import {retailerPrices,retailerQuote,otherQuote} from './retailers.js?v=25';
 import {todayIST,marketAsOf,comparePrices} from './model.js';
-import {dailyIdeas} from './dishes.js?v=24';
+import {dailyIdeas} from './dishes.js?v=25';
 import {estimateDish} from './costing.js';
-import {buildMealPackages} from './packages.js?v=24';
+import {buildMealPackages} from './packages.js?v=25';
 const $=selector=>document.querySelector(selector);
 const money=n=>n==null?'—':new Intl.NumberFormat('en-IN',{style:'currency',currency:'INR',minimumFractionDigits:0,maximumFractionDigits:2}).format(n);
 const quoteDate=q=>q?.date||q?.observed||q?.effectiveDate||null;
@@ -41,19 +42,30 @@ function renderDishes(){
  const featured=dailyIdeas(quoteForDish,{date:selectedDate,type:dishType});
  const all=dailyIdeas(quoteForDish,{date:selectedDate,type:dishType,all:true});
  const ordered=[...featured,...all.filter(d=>!featured.some(f=>f.id===d.id))];
- $('#dishList').replaceChildren(...ordered.map(d=>{
+ renderDishCards(ordered,$('#dishList'));
+}
+function renderCreativeCorner(){
+ const ideas=buildCreativeIdeas(quoteForDish,{date:selectedDate});
+ renderDishCards(ideas,$('#creativeList'));
+ if(!ideas.length){const note=document.createElement('p');note.className='cost-note';note.textContent='Choose a date with recorded ingredient prices to create budget-friendly ideas.';$('#creativeList').append(note);}
+}
+function renderDishCards(ordered,target){
+ target.replaceChildren(...ordered.map(d=>{
    const estimate=estimateDish(d,quoteForDish),card=document.createElement('details');card.className='dish';
    const summary=document.createElement('summary');
-   const identity=document.createElement('div');identity.className='dish-identity';const state=document.createElement('small');state.className='dish-state';state.textContent=d.state+(d.introduced&&d.introduced<=selectedDate&&(Date.parse(selectedDate)-Date.parse(d.introduced))/86400000<30?' · New':'');const name=document.createElement('span');name.className='dish-name';name.textContent=d.name;identity.append(state,name);
+   const identity=document.createElement('div');identity.className='dish-identity';const state=document.createElement('small');state.className='dish-state';state.textContent=(d.creative?d.type+' idea · Original · '+d.state+'-inspired':d.state)+(d.introduced&&d.introduced<=selectedDate&&(Date.parse(selectedDate)-Date.parse(d.introduced))/86400000<30?' · New':'');const name=document.createElement('span');name.className='dish-name';name.textContent=d.name;identity.append(state,name);
    const cost=document.createElement('div');cost.className='dish-cost';const price=document.createElement('strong');price.textContent=!estimate.basePriced?'Price needed':(estimate.missing?'From ':'Est. ')+money(estimate.perPortion);const label=document.createElement('small');label.textContent=!estimate.basePriced?'main ingredient unpriced':estimate.missing?`/ portion · ${estimate.missing} quote(s) needed`:'/ portion · ingredient estimate';cost.append(price,label);summary.append(identity,cost);
+   if(d.creative)label.textContent='/ portion · '+(estimate.missing?'from ':'')+money(estimate.perPortion*200)+' for 200'+(estimate.missing?' · '+estimate.missing+' prices needed':'');
    const content=document.createElement('div');content.className='dish-content';const description=document.createElement('p');description.className='dish-description';description.textContent=d.description;
+   if(d.creative){description.textContent+=' '+d.reason+' '+d.base+': '+money(d.basePrice)+'/kg.';}
    const title=document.createElement('div');title.className='ingredient-heading';title.textContent='SAMPLE INGREDIENTS · 10 PORTIONS';const list=document.createElement('div');list.className='ingredient-list';
    for(const i of estimate.ingredients){const row=document.createElement('div');row.className='ingredient-row';const ingredient=document.createElement('div');const ingredientName=document.createElement('span');ingredientName.textContent=i.name;const quantity=document.createElement('small');quantity.textContent=`${Number(i.quantity.toFixed(3))} ${i.unit}`;ingredient.append(ingredientName,quantity);
      const rate=document.createElement('div');rate.className='ingredient-rate';const amount=document.createElement('span');amount.textContent=i.quote?`${money(i.quote.price)}/${i.unit}`:'Quote needed';const source=document.createElement('small');source.textContent=i.quote?`${i.quote.source||'Price reference'} · ${i.quote.date?dateLabel(i.quote.date):i.quote.effectiveDate?dateLabel(i.quote.effectiveDate):'undated'}`:'Not included in subtotal';rate.append(amount,source);
      const total=document.createElement('span');total.className='ingredient-cost';total.textContent=money(i.cost);row.append(ingredient,rate,total);list.append(row);}
    const subtotal=document.createElement('div');subtotal.className='dish-subtotal';const subtotalLabel=document.createElement('span');subtotalLabel.textContent=estimate.missing?'Priced ingredients subtotal':'Sample ingredient subtotal';const subtotalAmount=document.createElement('strong');subtotalAmount.textContent=money(estimate.subtotal);subtotal.append(subtotalLabel,subtotalAmount);
    const note=document.createElement('p');note.className='cost-note';note.textContent='Illustrative quantities for 10 portions; adjust for recipe yield and student ages. Additional spices, toppings, fuel, labour and wastage are excluded.'+(estimate.missing?' Missing prices are excluded; this is a partial estimate.':'');
-   content.append(description,title,list,subtotal,note);card.append(summary,content);return card;
+   if(d.creative){const method=document.createElement('ol');method.className='creative-method';for(const step of d.steps){const li=document.createElement('li');li.textContent=step;method.append(li);}content.append(description,method);note.textContent='Original kitchen concept; try a small batch first. '+note.textContent;}
+   content.append(...(d.creative?[]:[description]),title,list,subtotal,note);card.append(summary,content);return card;
  }));
 }
 function renderMealPackages(){
@@ -70,7 +82,7 @@ function renderMealPackages(){
   detail.append(triangle,list);const note=document.createElement('p');note.className='cost-note';note.textContent='Illustrative portions: lunch uses 40 g dry red rice per person (PDF planning reference). Budget ₹1,900 for 200 people (₹9.50 each). Daily homemade buttermilk is included: estimated 2 × 100 ml glasses per person (40 L for 200), 1 part curd to 3 parts water. Monday uses purchased Nandini curd; other days use Nandini milk to set curd, assuming 1 L milk yields 1 L curd. Actual glass size, dilution and yield may differ. Small snack and side portions are shown below. Adjust quantities for students and recipe yield. Prices cover listed ingredients only; additional spices, fuel, labour and wastage are excluded.'+(pack.missing?' '+pack.missing+' ingredient price(s) are missing.':'');detail.append(note);content.append(menu,detail);card.append(summary,content);return card;
  }));
 }
-function render(){renderPrices();renderDishes();if(!$('#mealList').hidden)renderMealPackages();}
+function render(){renderPrices();renderDishes();if(!$('#mealList').hidden)renderMealPackages();if(!$('#creativeList').hidden)renderCreativeCorner();}
 async function refreshPrices(){
  const request=++requestId,date=selectedDate;
  refreshController?.abort();const controller=new AbortController();refreshController=controller;
@@ -90,7 +102,7 @@ async function refreshPrices(){
   const results=await Promise.allSettled([
    read('market.json','records',r=>validQuote(r)&&validDate(r.date)),
    read('supplier.json','quotes',r=>validQuote(r)&&(!r.effectiveDate||validDate(r.effectiveDate))),
-   read('retailer-prices.json','quotes',r=>validQuote(r)&&validDate(r.observed)&&typeof r.retailer==='string'&&typeof r.url==='string'&&r.url.startsWith('https://')),
+   Promise.all(['retailer-prices.json','manual-latest.json'].map(file=>read(file,'quotes',r=>validQuote(r)&&validDate(r.observed)&&typeof r.retailer==='string'&&typeof r.url==='string'&&r.url.startsWith('https://')))).then(feeds=>[...new Map(feeds.flat().map(q=>[[q.retailer,q.name,q.unit,q.observed,q.url].join('|'),q])).values()]),
    fetch(root+'update-status.json?t='+Date.now(),{cache:'no-store',signal:controller.signal}).then(async response=>{if(!response.ok)throw Error('Status unavailable');return response.json();})
   ]);
   if(request!==requestId)return;
@@ -117,6 +129,8 @@ async function refreshPrices(){
 }
 $('#priceDate').max=todayIST();$('#priceDate').value=selectedDate;$('#priceDate').addEventListener('change',()=>{const input=$('#priceDate');if(!input.value||!input.validity.valid){input.reportValidity();return;}selectedDate=input.value;render();refreshPrices();});
 const tabs=[...document.querySelectorAll('[data-type]')];
-function selectTab(button){const type=button.dataset.type,isPrice=type==='Price',isMeal=type==='Meal';if(!isPrice&&!isMeal)dishType=type;$('#pricePanel').hidden=!isPrice;$('#dishList').hidden=isPrice||isMeal;$('#mealList').hidden=!isMeal;for(const tab of tabs){const active=tab===button;tab.classList.toggle('active',active);tab.setAttribute('aria-selected',String(active));tab.tabIndex=active?0:-1;}if(isMeal)renderMealPackages();else if(!isPrice){$('#dishList').setAttribute('aria-labelledby',button.id);renderDishes();}}
+function selectTab(button){const type=button.dataset.type,isPrice=type==='Price',isMeal=type==='Meal',isCreative=type==='Creative';if(!isPrice&&!isMeal&&!isCreative)dishType=type;$('#pricePanel').hidden=!isPrice;$('#dishList').hidden=isPrice||isMeal||isCreative;$('#mealList').hidden=!isMeal;$('#creativeList').hidden=!isCreative;for(const tab of tabs){const active=tab===button;tab.classList.toggle('active',active);tab.setAttribute('aria-selected',String(active));tab.tabIndex=active?0:-1;}if(isMeal)renderMealPackages();else if(isCreative)renderCreativeCorner();else if(!isPrice){$('#dishList').setAttribute('aria-labelledby',button.id);renderDishes();}}
+
 for(const button of tabs){button.addEventListener('click',()=>selectTab(button));button.addEventListener('keydown',event=>{const index=tabs.indexOf(button);let next;if(event.key==='ArrowRight')next=(index+1)%tabs.length;else if(event.key==='ArrowLeft')next=(index+tabs.length-1)%tabs.length;else if(event.key==='Home')next=0;else if(event.key==='End')next=tabs.length-1;else return;event.preventDefault();tabs[next].focus();selectTab(tabs[next]);});}
 render();refreshPrices();
+

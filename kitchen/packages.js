@@ -1,4 +1,4 @@
-import {dishes} from './dishes.js?v=24';
+import {dishes} from './dishes.js?v=25';
 import {estimateDish} from './costing.js';
 const quantity=(quantity,unit='kg')=>({quantity,unit});
 const morning=(id,name,state,ingredients,quantities)=>({id,name,state,base:ingredients[0],type:'Snack',ingredients,noOil:true,noSalt:!ingredients.includes('Salt'),quantities});
@@ -52,3 +52,4 @@ export function buildMealPackages(getQuote,date){
   const missing=ingredients.filter(i=>i.cost==null).length,basePriced=components.every(c=>c.estimate.basePriced),totalForGroup=subtotal/10*packagePeople;return {id:'package-'+(i+1),components,ingredients,subtotal,perPortion:subtotal/10,missing,basePriced,totalForGroup,withinBudget:missing===0&&basePriced&&totalForGroup<=packageBudget,budget:packageBudget,people:packagePeople};
  }).sort((a,b)=>Number(b.withinBudget)-Number(a.withinBudget)||a.missing-b.missing||a.totalForGroup-b.totalForGroup);
 }
+

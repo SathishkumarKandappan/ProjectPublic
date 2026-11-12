@@ -1,0 +1,11 @@
+import assert from 'node:assert/strict';
+import {buildCreativeIdeas} from '../creative.js';
+const quote=(name,unit)=>({name,unit,price:name==='Pumpkin'?10:50});
+const date='2026-11-12',a=buildCreativeIdeas(quote,{date}),b=buildCreativeIdeas(quote,{date:'2026-11-13'});
+assert.equal(a.length,36);assert.equal(new Set(a.map(d=>d.id)).size,36);
+assert.ok(a.every(d=>d.creative&&d.state&&d.steps.length===3&&d.estimate.missing===0&&d.estimate.perPortion>0));
+assert.deepEqual(a,buildCreativeIdeas(quote,{date}));assert.notDeepEqual(a.map(d=>d.id),b.map(d=>d.id));
+const expensive=buildCreativeIdeas((name,unit)=>({name,unit,price:name==='Pumpkin'?500:50}),{date});assert.ok(expensive.every(d=>d.base!=='Pumpkin'));
+assert.deepEqual(buildCreativeIdeas(()=>null,{date}),[]);
+assert.ok(buildCreativeIdeas((name,unit)=>name==='Pumpkin'?null:quote(name,unit),{date}).every(d=>d.base!=='Pumpkin'));
+assert.ok(a.every((d,i)=>i===0||a[i-1].estimate.perPortion<=d.estimate.perPortion));

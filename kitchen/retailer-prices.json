@@ -20485,20 +20485,20 @@
       "source": "BigBasket search-indexed price reference"
     }
   ],
-  "checkedAt": "2026-11-11T22:57:29.802Z",
+  "checkedAt": "2026-11-13T02:04:07.441Z",
   "collection": {
-    "date": "2026-11-12",
+    "date": "2026-11-13",
     "total": 640,
     "completed": 640,
     "unattempted": 0,
-    "verified": 1,
+    "verified": 0,
     "providers": {
       "BigBasket": {
         "searched": 160,
-        "verified": 1,
+        "verified": 0,
         "failed": 0,
-        "noQuote": 159,
-        "blocked": 118
+        "noQuote": 160,
+        "blocked": 121
       },
       "Blinkit": {
         "searched": 160,

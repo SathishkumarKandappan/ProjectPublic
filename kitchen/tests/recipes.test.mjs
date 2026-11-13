@@ -1,8 +1,8 @@
 import assert from 'node:assert/strict';
 import {dishes,dailyIdeas} from '../dishes.js';
 import {marketAsOf,comparePrices} from '../model.js';
-assert.equal(dishes.length,180);assert.equal(new Set(dishes.map(d=>d.id)).size,180);
-for(const type of ['Curry','Palya','Snack'])assert.equal(dishes.filter(d=>d.type===type).length,60);
+assert.equal(dishes.length,186);assert.equal(new Set(dishes.map(d=>d.id)).size,186);
+for(const type of ['Curry','Palya','Snack'])assert.equal(dishes.filter(d=>d.type===type).length,type==='Snack'?66:60);
 assert.ok(dishes.every(d=>d.state&&d.base&&d.ingredients.length>=2));
 const quote=(name,unit)=>({price:name==='Potato'?25:60,unit,kind:'Test'});
 const a=dailyIdeas(quote,{type:'Palya',date:'2026-11-01'}),b=dailyIdeas(quote,{type:'Palya',date:'2026-11-02'});
@@ -19,3 +19,6 @@ assert.equal(comparePrices({price:80},{price:55,unit:'kg'},'kg').percent,-31.25)
 console.log('PASS: 180 Indian dishes, category counts, region labels, daily rotation, stable refresh, price ranking, missing-price handling and date filtering');
 
 for(const type of ['Curry','Palya','Snack'])assert.ok(dailyIdeas(quote,{type,date:'2026-11-11'}).filter(d=>d.introduced==='2026-11-11').length>=2);
+
+
+const chaats=dishes.filter(d=>d.introduced==='2026-11-13');assert.equal(chaats.length,6);assert.ok(chaats.every(d=>d.type==='Snack'&&d.base==='Kabuli channa'&&d.noOil&&d.quantities['Kabuli channa'].unit==='kg'));assert.ok(dailyIdeas(quote,{type:'Snack',date:'2026-11-13'}).filter(d=>d.introduced==='2026-11-13').length>=2);

@@ -25,3 +25,8 @@ assert.ok(tuesday.every(p=>p.components.length===6&&p.components[4].dish.base===
 assert.equal(monday[0].components[4].estimate.ingredients.find(i=>i.name==='Curd').quantity,.5);
 assert.equal(tuesday[0].components[4].estimate.ingredients.find(i=>i.name==='Milk').quantity,.5);
 assert.ok(tuesday[0].components[4].estimate.subtotal>=27);
+
+
+assert.equal(packages.filter(p=>p.components.some(c=>c.dish.international)).length,30);
+assert.equal(packages.filter(p=>p.components.every(c=>!c.dish.international)).length,10);
+assert.ok(packages.some(p=>p.components.some(c=>c.dish.international)&&p.components.some(c=>!c.dish.international&&['Curry','Palya','Snack'].includes(c.dish.type))));

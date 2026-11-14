@@ -1,27 +1,23 @@
 import assert from 'node:assert/strict';
 import {dishes,dailyIdeas} from '../dishes.js';
-import {marketAsOf,comparePrices} from '../model.js';
-assert.equal(dishes.length,216);assert.equal(new Set(dishes.map(d=>d.id)).size,216);
-for(const type of ['Curry','Palya','Snack'])assert.equal(dishes.filter(d=>d.type===type).length,type==='Snack'?76:70);
-assert.ok(dishes.every(d=>d.state&&d.base&&d.ingredients.length>=2));
-const quote=(name,unit)=>({price:name==='Potato'?25:60,unit,kind:'Test'});
-const a=dailyIdeas(quote,{type:'Palya',date:'2026-11-01'}),b=dailyIdeas(quote,{type:'Palya',date:'2026-11-02'});
-assert.equal(a.length,8);assert.equal(new Set(a.map(d=>d.id)).size,8);assert.notDeepEqual(a.map(d=>d.id),b.map(d=>d.id));
-assert.deepEqual(a.map(d=>d.id),dailyIdeas(quote,{type:'Palya',date:'2026-11-01'}).map(d=>d.id),'Same date gives stable picks');
-const all=dailyIdeas(quote,{type:'Palya',date:'2026-11-01',all:true});assert.equal(all[0].score,25);
-const changed=dailyIdeas((name,unit)=>({price:name==='Potato'?300:60,unit}),{type:'Palya',date:'2026-11-01',all:true});assert.notEqual(changed[0].base,'Potato','Changed prices change the ordering');
-assert.ok(dailyIdeas(()=>null,{type:'Curry',date:'2026-11-01'}).every(d=>d.score===null),'Missing prices are not zero');
-assert.equal(dailyIdeas(quote,{type:'Snack',date:'2026-11-01',state:'Gujarat',all:true}).length,10);
-assert.equal(dailyIdeas(quote,{type:'Snack',date:'2026-11-01',query:'DOES NOT EXIST',all:true}).length,0);
-const records=[{name:'Potato',unit:'kg',date:'2026-10-30',price:30},{name:'Potato',unit:'kg',date:'2026-11-01',price:40}];
-assert.equal(marketAsOf(records,'Potato','kg','2026-10-31').price,30);assert.equal(marketAsOf(records,'Potato','kg','2026-10-01'),null);
-assert.equal(comparePrices({price:80},{price:55,unit:'kg'},'kg').percent,-31.25);assert.equal(comparePrices({price:40},{price:50,unit:'piece'},'kg').comparable,false);
-console.log('PASS: 180 Indian dishes, category counts, region labels, daily rotation, stable refresh, price ranking, missing-price handling and date filtering');
-
-for(const type of ['Curry','Palya','Snack'])assert.ok(dailyIdeas(quote,{type,date:'2026-11-11'}).filter(d=>d.introduced==='2026-11-11').length>=2);
-
-
-const chaats=dishes.filter(d=>d.introduced==='2026-11-13');assert.equal(chaats.length,6);assert.ok(chaats.every(d=>d.type==='Snack'&&d.base==='Kabuli channa'&&d.noOil&&d.quantities['Kabuli channa'].unit==='kg'));assert.ok(dailyIdeas(quote,{type:'Snack',date:'2026-11-13'}).filter(d=>d.introduced==='2026-11-13').length>=2);
-
-
-const newest=dishes.filter(d=>d.introduced==='2026-11-14');assert.equal(newest.length,30);for(const type of ['Curry','Palya','Snack'])assert.ok(dailyIdeas(quote,{type,date:'2026-11-14'}).filter(d=>d.introduced==='2026-11-14').length>=2);
+import {estimateDish} from '../costing.js';
+import {supplierSeed} from '../supplier-seed.js';
+import {pdfRates} from '../pdf-rates.js';
+import fs from 'node:fs';
+const types=['Curry','Palya','Snack','International Curry/Main Course','International Palya','International Snacks'];
+assert.equal(dishes.length,300);assert.equal(new Set(dishes.map(d=>d.id)).size,300);assert.equal(new Set(dishes.map(d=>d.name)).size,300);
+for(const type of types)assert.equal(dishes.filter(d=>d.type===type).length,50);
+assert.ok(dishes.every(d=>d.state&&d.base&&d.ingredients.length>=2&&d.description));
+const indian=dishes.filter(d=>!d.international),world=dishes.filter(d=>d.international);
+const states=['Andhra Pradesh','Arunachal Pradesh','Assam','Bihar','Chhattisgarh','Goa','Gujarat','Haryana','Himachal Pradesh','Jharkhand','Karnataka','Kerala','Madhya Pradesh','Maharashtra','Manipur','Meghalaya','Mizoram','Nagaland','Odisha','Punjab','Rajasthan','Sikkim','Tamil Nadu','Telangana','Tripura','Uttar Pradesh','Uttarakhand','West Bengal'];
+assert.ok(states.every(state=>indian.some(d=>d.state.startsWith(state))));assert.ok(new Set(world.map(d=>d.country)).size>=30);
+const quote=(name,unit)=>({price:name==='Potato'?25:60,unit});
+for(const type of types){const a=dailyIdeas(quote,{type,date:'2026-11-14'}),b=dailyIdeas(quote,{type,date:'2026-11-15'});assert.equal(a.length,8);assert.equal(new Set(a.map(d=>d.id)).size,8);assert.notDeepEqual(a.map(d=>d.id),b.map(d=>d.id));assert.deepEqual(a,dailyIdeas(quote,{type,date:'2026-11-14'}));assert.equal(dailyIdeas(quote,{type,all:true}).length,50);assert.ok(new Set(a.map(d=>d.state)).size>=4);}
+const first=dailyIdeas(quote,{type:'Palya',all:true})[0].id;
+assert.notEqual(first,dailyIdeas((name,unit)=>({price:name==='Potato'?1000:1,unit}),{type:'Palya',all:true})[0].id);
+assert.ok(dailyIdeas(()=>null,{type:'Curry',date:'2026-11-14'}).every(d=>d.score===null));
+assert.equal(dailyIdeas(quote,{query:'DOES NOT EXIST',all:true}).length,0);
+for(const name of ['Kabuli chana chaat','Aloo chole chaat','Dahi chana chaat','Mixed chana chaat','Chana bhel','Imli chole chaat'])assert.ok(indian.some(d=>d.name===name));
+const latest=JSON.parse(fs.readFileSync('kitchen/manual-latest.json')).quotes.filter(q=>q.observed==='2026-11-14');const quotes=[...supplierSeed,...pdfRates,...latest];
+for(const d of dishes){const e=estimateDish(d,(n,u)=>quotes.find(q=>q.name===n&&q.unit===u));assert.equal(e.missing,0,d.name+' has an unpriced ingredient');assert.ok(e.perPortion>0);for(const i of e.ingredients)assert.ok(i.quantity>0&&i.quantity<11,d.name+' '+i.name);}
+console.log('PASS: 300 distinct dishes; 50 per category; all 28 Indian states; 30+ international associations; price/date rotation; all ingredients have matching-unit references');

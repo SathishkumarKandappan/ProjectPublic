@@ -1,4 +1,4 @@
-import {dishes} from './dishes.js?v=27';
+import {dishes} from './dishes.js?v=28';
 import {estimateDish} from './costing.js';
 const quantity=(quantity,unit='kg')=>({quantity,unit});
 const morning=(id,name,state,ingredients,quantities)=>({id,name,state,base:ingredients[0],type:'Snack',ingredients,noOil:true,noSalt:!ingredients.includes('Salt'),quantities});
@@ -41,15 +41,16 @@ export const packageBudget=1900,packagePeople=200;
 // School-PDF planning profile: 8 kg dry rice / 200 people; small snack quantities.
 export function buildMealPackages(getQuote,date){
  const cache=new Map();const cost=d=>{if(!cache.has(d.id))cache.set(d.id,estimateDish(d,getQuote));return cache.get(d.id);};
- const sorted=type=>dishes.filter(d=>d.type===type).sort((a,b)=>Number(!cost(a).basePriced)-Number(!cost(b).basePriced)||cost(a).missing-cost(b).missing||cost(a).perPortion-cost(b).perPortion||a.name.localeCompare(b.name)).slice(0,type==='Snack'?30:25);
- const curry=sorted('Curry'),palya=sorted('Palya'),snack=sorted('Snack');
+ const sorted=(type,international=false)=>dishes.filter(d=>d.type===(international?({'Curry':'International Curry/Main Course','Palya':'International Palya','Snack':'International Snacks'}[type]):type)).sort((a,b)=>Number(!cost(a).basePriced)-Number(!cost(b).basePriced)||cost(a).missing-cost(b).missing||cost(a).perPortion-cost(b).perPortion||a.name.localeCompare(b.name)).slice(0,type==='Snack'?30:25);
+ const local={curry:sorted('Curry'),palya:sorted('Palya'),snack:sorted('Snack')},world={curry:sorted('Curry',true),palya:sorted('Palya',true),snack:sorted('Snack',true)};
  const day=Math.floor(Date.parse(date+'T12:00:00Z')/86400000),offset=((day%5)+5)%5;
  return Array.from({length:40},(_,i)=>{
+  const international=i%4!==0,curry=international?world.curry:local.curry,palya=i%4===2?local.palya:international?world.palya:local.palya,snack=i%4===3?local.snack:international?world.snack:local.snack;
   const morning=mornings[(i+offset)%mornings.length],c=curry[(i+offset)%curry.length],p=palya[(i*3+Math.floor(i/curry.length)+offset)%palya.length],s=snack[(i*7+Math.floor(i/10)+offset)%snack.length];
   const components=[{slot:'Morning snack',dish:morning},{slot:'Lunch · red rice',dish:lunchRice},{slot:'Lunch · curry',dish:c},{slot:'Lunch · palya',dish:p},{slot:'Lunch · daily buttermilk',dish:dailyButtermilk(date)},{slot:'Evening snack',dish:s}].map(x=>({...x,estimate:cost(x.dish)}));
   const merged=new Map();for(const component of components)for(const ingredient of component.estimate.ingredients){const key=ingredient.name+'|'+ingredient.unit;if(!merged.has(key))merged.set(key,{...ingredient});else{const previous=merged.get(key);previous.quantity+=ingredient.quantity;previous.cost=previous.cost==null||ingredient.cost==null?null:previous.cost+ingredient.cost;}}
   const ingredients=[...merged.values()],subtotal=components.reduce((sum,c)=>sum+c.estimate.subtotal,0);
-  const missing=ingredients.filter(i=>i.cost==null).length,basePriced=components.every(c=>c.estimate.basePriced),totalForGroup=subtotal/10*packagePeople;return {id:'package-'+(i+1),components,ingredients,subtotal,perPortion:subtotal/10,missing,basePriced,totalForGroup,withinBudget:missing===0&&basePriced&&totalForGroup<=packageBudget,budget:packageBudget,people:packagePeople};
+  const missing=ingredients.filter(i=>i.cost==null).length,basePriced=components.every(c=>c.estimate.basePriced),totalForGroup=subtotal/10*packagePeople;return {id:'package-'+(i+1),cuisine:i%4===0?'Indian':i%4===1?'International lunch & snack':'Indian + international',components,ingredients,subtotal,perPortion:subtotal/10,missing,basePriced,totalForGroup,withinBudget:missing===0&&basePriced&&totalForGroup<=packageBudget,budget:packageBudget,people:packagePeople};
  }).sort((a,b)=>Number(b.withinBudget)-Number(a.withinBudget)||a.missing-b.missing||a.totalForGroup-b.totalForGroup);
 }
 

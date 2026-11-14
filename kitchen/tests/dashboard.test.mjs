@@ -1,3 +1,5 @@
+import {buildCreativeIdeas as buildArchivedCreativeIdeas} from '../creative-archive.js';
+import {buildMealPackages as buildArchivedMealPackages} from '../packages-archive.js';
 import {dishes as archivedDishes} from '../dishes-archive.js';
 import {buildCreativeIdeas} from '../creative.js';
 import {JSDOM} from 'jsdom';
@@ -12,7 +14,7 @@ import {pdfRates} from '../pdf-rates.js';
 import {retailerPrices,retailerQuote,otherQuote} from '../retailers.js';
 import {buildMealPackages} from '../packages.js';
 const dom=new JSDOM(readFileSync('kitchen/index.html','utf8'),{url:'https://example.org',runScripts:'outside-only'}),w=dom.window;
-Object.assign(w,model,dishModule,{archivedDishes,buildCreativeIdeas,searchEndpoint:'',defaults,supplierSeed,estimateDish,pdfRates,retailerPrices,retailerQuote,otherQuote,buildMealPackages});let fetches=0;
+Object.assign(w,model,dishModule,{buildArchivedCreativeIdeas,buildArchivedMealPackages,archivedDishes,buildCreativeIdeas,searchEndpoint:'',defaults,supplierSeed,estimateDish,pdfRates,retailerPrices,retailerQuote,otherQuote,buildMealPackages});let fetches=0;
 const feed=JSON.parse(readFileSync('kitchen/market.json','utf8'));
 // Pin one historical market quote so freshness checks do not depend on changing live data.
 feed.records=feed.records.filter(r=>r.name!=='Red rice');feed.records.push({name:'Red rice',unit:'kg',price:80,date:'2026-11-01',source:'Historical test fixture'});
@@ -58,6 +60,8 @@ const tabTypes=[...w.document.querySelectorAll('[data-type]')].map(t=>t.dataset.
 for(const type of tabTypes.slice(5,8)){w.document.querySelector('[data-type="'+type+'"]').click();assert.equal(w.document.querySelectorAll('#dishList .dish').length,50);assert.equal($('#creativeList').hidden,true);assert.equal($('#mealList').hidden,true);assert.ok($('#dishList .dish-state').textContent.length>2);assert.match($('#dishList .collection-note').textContent,/50/);}
 $('[data-type="Meal"]').click();assert.match($('#mealList').textContent,/International/);assert.match($('#mealList').textContent,/Indian \+ international/);
 
-$('[data-type="Reference"]').click();assert.equal($('#dishList').hidden,false);assert.equal($('#mealList').hidden,true);assert.equal(w.document.querySelectorAll('#dishList .dish').length,216);assert.equal(w.document.querySelectorAll('#dishList .reference-group').length,3);assert.match($('#dishList').textContent,/70 previous dishes/);assert.match($('#dishList').textContent,/76 previous dishes/);assert.match($('#dishList .dish-state').textContent,/Archived/);assert.equal(w.document.querySelector('#dishList .dish').open,false);w.document.querySelector('#dishList .dish summary').click();assert.equal(w.document.querySelector('#dishList .dish').open,true);assert.match($('#dishList').textContent,/10 PORTIONS/);
+$('[data-type="Reference"]').click();assert.equal($('#dishList').hidden,false);assert.equal($('#mealList').hidden,true);assert.equal(w.document.querySelectorAll('#dishList details.dish').length,252);assert.equal(w.document.querySelectorAll('#dishList .reference-group').length,5);assert.match($('#dishList').textContent,/70 previous dishes/);assert.match($('#dishList').textContent,/76 previous dishes/);assert.match($('#dishList .dish-state').textContent,/Archived/);assert.equal(w.document.querySelector('#dishList .dish').open,false);w.document.querySelector('#dishList .dish summary').click();assert.equal(w.document.querySelector('#dishList .dish').open,true);assert.match($('#dishList').textContent,/10 PORTIONS/);
 $('[data-type="Curry"]').click();assert.equal(w.document.querySelectorAll('#dishList .dish').length,50);assert.equal(w.document.querySelectorAll('#dishList .reference-group').length,0);
-console.log('PASS: reference tab last, 216 archived dishes grouped 70/70/76, expandable current-date estimates, current menus preserved');
+assert.equal(w.document.querySelectorAll('#dishList .meal-card').length,0);
+$('[data-type="Reference"]').click();assert.equal(w.document.querySelectorAll('#dishList .meal-card').length,40);assert.match($('#dishList').textContent,/Previous Creative Corner · 36/);assert.match($('#dishList').textContent,/Previous Meal Packages · 40/);
+console.log('PASS: complete old menu reference, 216 dishes, 36 Creative Corner ideas, 40 previous meal packages and current menus preserved');

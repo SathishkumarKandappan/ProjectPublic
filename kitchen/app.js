@@ -1,3 +1,4 @@
+import {dishes as archivedDishes} from './dishes-archive.js?v=29';
 import {buildCreativeIdeas} from './creative.js?v=28';
 import {defaults} from './seed.js';
 import {supplierSeed} from './supplier-seed.js';
@@ -39,6 +40,18 @@ function renderPrices(){$('#priceRows').replaceChildren(...[...catalog.values()]
  row.append(name,marketCell,supplierCell,...retailers.map((q,i)=>retailerCell(q,tone(q),['Blinkit','BigBasket','Instamart'][i])),retailerCell(reference,null));return row;
 }));}
 function renderDishes(){
+ if(dishType==='Reference'){
+  const target=$('#dishList');target.replaceChildren();
+  const note=document.createElement('p');note.className='collection-note';note.textContent='Old Menu Reference · 216 previous dishes. Original recipes retained for comparison; ingredient cost estimates use the selected date.';target.append(note);
+  for(const type of ['Curry','Palya','Snack']){
+   const group=document.createElement('div');group.className='reference-group';
+   const rows=archivedDishes.filter(d=>d.type===type).map(d=>({...d,archived:true}));
+   renderDishCards(rows,group);
+   const label=document.createElement('p');label.className='collection-note';label.textContent=(type==='Snack'?'Snacks':type)+' · '+rows.length+' previous dishes';target.append(label,group);
+  }
+  return;
+ }
+
  const featured=dailyIdeas(quoteForDish,{date:selectedDate,type:dishType});
  const all=dailyIdeas(quoteForDish,{date:selectedDate,type:dishType,all:true});
  const ordered=[...featured,...all.filter(d=>!featured.some(f=>f.id===d.id))];
@@ -54,7 +67,7 @@ function renderDishCards(ordered,target){
  target.replaceChildren(...ordered.map(d=>{
    const estimate=estimateDish(d,quoteForDish),card=document.createElement('details');card.className='dish';
    const summary=document.createElement('summary');
-   const identity=document.createElement('div');identity.className='dish-identity';const state=document.createElement('small');state.className='dish-state';state.textContent=(d.creative?d.type+' idea · Original · '+d.state+'-inspired':d.state)+(d.introduced&&d.introduced<=selectedDate&&(Date.parse(selectedDate)-Date.parse(d.introduced))/86400000<30?' · New':'');const name=document.createElement('span');name.className='dish-name';name.textContent=d.name;const preview=document.createElement('small');preview.className='dish-preview';preview.textContent=d.ingredients.slice(0,3).join(' · ');identity.append(state,name,preview);
+   const identity=document.createElement('div');identity.className='dish-identity';const state=document.createElement('small');state.className='dish-state';state.textContent=(d.archived?'Archived · ':'')+(d.creative?d.type+' idea · Original · '+d.state+'-inspired':d.state)+(!d.archived&&d.introduced&&d.introduced<=selectedDate&&(Date.parse(selectedDate)-Date.parse(d.introduced))/86400000<30?' · New':'');const name=document.createElement('span');name.className='dish-name';name.textContent=d.name;const preview=document.createElement('small');preview.className='dish-preview';preview.textContent=d.ingredients.slice(0,3).join(' · ');identity.append(state,name,preview);
    const cost=document.createElement('div');cost.className='dish-cost';const price=document.createElement('strong');price.textContent=!estimate.basePriced?'Price needed':(estimate.missing?'From ':'Est. ')+money(estimate.perPortion);const label=document.createElement('small');label.textContent=!estimate.basePriced?'main ingredient unpriced':estimate.missing?`/ portion · ${estimate.missing} quote(s) needed`:'/ portion · ingredient estimate';cost.append(price,label);summary.append(identity,cost);
    if(d.creative)label.textContent='/ portion · '+(estimate.missing?'from ':'')+money(estimate.perPortion*200)+' for 200'+(estimate.missing?' · '+estimate.missing+' prices needed':'');
    const content=document.createElement('div');content.className='dish-content';const description=document.createElement('p');description.className='dish-description';description.textContent=d.description;

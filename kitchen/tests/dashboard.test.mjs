@@ -20,9 +20,9 @@ w.eval(readFileSync('kitchen/app.js','utf8').replace(/^import .*;\n/gm,''));awai
 const $=s=>w.document.querySelector(s);
 assert.equal(w.document.querySelectorAll('input').length,1);assert.equal(w.document.querySelectorAll('button').length,6);assert.equal(w.document.querySelectorAll('th').length,7);assert.equal(w.document.querySelectorAll('header,footer,nav,select,h1,h2').length,0);
 const red=[...w.document.querySelectorAll('#priceRows tr')].find(r=>r.firstChild.textContent==='Red rice');assert.match(red.children[1].textContent,/₹80/);assert.match(red.children[2].textContent,/₹55/);assert.ok(red.children[1].classList.contains('stale-price'));assert.equal(red.children[2].classList.contains('stale-price'),false);
-assert.equal(w.document.querySelectorAll('#dishList .dish').length,60);assert.ok([...w.document.querySelectorAll('#dishList small')].every(e=>e.textContent.length>2));
+assert.equal(w.document.querySelectorAll('#dishList .dish').length,70);assert.ok([...w.document.querySelectorAll('#dishList small')].every(e=>e.textContent.length>2));
 assert.equal($('#pricePanel').hidden,false);assert.equal($('#dishList').hidden,true);
-$('[data-type="Snack"]').click();assert.equal($('#pricePanel').hidden,true);assert.equal($('#dishList').hidden,false);assert.equal(w.document.querySelectorAll('#dishList .dish').length,66);assert.match($('#dishList').textContent,/Dhokla/);
+$('[data-type="Snack"]').click();assert.equal($('#pricePanel').hidden,true);assert.equal($('#dishList').hidden,false);assert.equal(w.document.querySelectorAll('#dishList .dish').length,76);assert.match($('#dishList').textContent,/Dhokla/);
 const previous=$('#dishList').textContent;$('#priceDate').value='2026-10-30';$('#priceDate').dispatchEvent(new w.Event('change'));await new Promise(r=>setTimeout(r,0));assert.equal(fetches,10);assert.notEqual($('#dishList').textContent,previous);
 $('#priceDate').value='2020-01-01';$('#priceDate').dispatchEvent(new w.Event('change'));await new Promise(r=>setTimeout(r,0));assert.ok([...w.document.querySelectorAll('#priceRows tr')].every(r=>r.children[1].textContent==='No dated quote'));
 $('[data-type="Curry"]').dispatchEvent(new w.KeyboardEvent('keydown',{key:'ArrowRight'}));assert.equal($('[data-type="Palya"]').getAttribute('aria-selected'),'true');
@@ -51,3 +51,4 @@ const currentMilk=retailerQuote('BigBasket','Milk','litre','2026-11-05');assert.
 
 
 $('#priceDate').value=model.todayIST();$('#priceDate').dispatchEvent(new w.Event('change'));await new Promise(r=>setTimeout(r,0));$('[data-type="Creative"]').click();assert.equal($('#creativeList').hidden,false);assert.equal($('#dishList').hidden,true);assert.equal($('#mealList').hidden,true);assert.equal(w.document.querySelectorAll('#creativeList .dish').length,36);assert.match($('#creativeList').textContent,/Original/);const idea=w.document.querySelector('#creativeList .dish');idea.querySelector('summary').click();assert.ok(idea.querySelectorAll('.creative-method li').length>=3);
+

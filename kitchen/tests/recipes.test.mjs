@@ -1,8 +1,8 @@
 import assert from 'node:assert/strict';
 import {dishes,dailyIdeas} from '../dishes.js';
 import {marketAsOf,comparePrices} from '../model.js';
-assert.equal(dishes.length,186);assert.equal(new Set(dishes.map(d=>d.id)).size,186);
-for(const type of ['Curry','Palya','Snack'])assert.equal(dishes.filter(d=>d.type===type).length,type==='Snack'?66:60);
+assert.equal(dishes.length,216);assert.equal(new Set(dishes.map(d=>d.id)).size,216);
+for(const type of ['Curry','Palya','Snack'])assert.equal(dishes.filter(d=>d.type===type).length,type==='Snack'?76:70);
 assert.ok(dishes.every(d=>d.state&&d.base&&d.ingredients.length>=2));
 const quote=(name,unit)=>({price:name==='Potato'?25:60,unit,kind:'Test'});
 const a=dailyIdeas(quote,{type:'Palya',date:'2026-11-01'}),b=dailyIdeas(quote,{type:'Palya',date:'2026-11-02'});
@@ -11,7 +11,7 @@ assert.deepEqual(a.map(d=>d.id),dailyIdeas(quote,{type:'Palya',date:'2026-11-01'
 const all=dailyIdeas(quote,{type:'Palya',date:'2026-11-01',all:true});assert.equal(all[0].score,25);
 const changed=dailyIdeas((name,unit)=>({price:name==='Potato'?300:60,unit}),{type:'Palya',date:'2026-11-01',all:true});assert.notEqual(changed[0].base,'Potato','Changed prices change the ordering');
 assert.ok(dailyIdeas(()=>null,{type:'Curry',date:'2026-11-01'}).every(d=>d.score===null),'Missing prices are not zero');
-assert.equal(dailyIdeas(quote,{type:'Snack',date:'2026-11-01',state:'Gujarat',all:true}).length,8);
+assert.equal(dailyIdeas(quote,{type:'Snack',date:'2026-11-01',state:'Gujarat',all:true}).length,10);
 assert.equal(dailyIdeas(quote,{type:'Snack',date:'2026-11-01',query:'DOES NOT EXIST',all:true}).length,0);
 const records=[{name:'Potato',unit:'kg',date:'2026-10-30',price:30},{name:'Potato',unit:'kg',date:'2026-11-01',price:40}];
 assert.equal(marketAsOf(records,'Potato','kg','2026-10-31').price,30);assert.equal(marketAsOf(records,'Potato','kg','2026-10-01'),null);
@@ -22,3 +22,6 @@ for(const type of ['Curry','Palya','Snack'])assert.ok(dailyIdeas(quote,{type,dat
 
 
 const chaats=dishes.filter(d=>d.introduced==='2026-11-13');assert.equal(chaats.length,6);assert.ok(chaats.every(d=>d.type==='Snack'&&d.base==='Kabuli channa'&&d.noOil&&d.quantities['Kabuli channa'].unit==='kg'));assert.ok(dailyIdeas(quote,{type:'Snack',date:'2026-11-13'}).filter(d=>d.introduced==='2026-11-13').length>=2);
+
+
+const newest=dishes.filter(d=>d.introduced==='2026-11-14');assert.equal(newest.length,30);for(const type of ['Curry','Palya','Snack'])assert.ok(dailyIdeas(quote,{type,date:'2026-11-14'}).filter(d=>d.introduced==='2026-11-14').length>=2);

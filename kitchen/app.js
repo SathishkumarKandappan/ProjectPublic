@@ -1,12 +1,12 @@
-import {buildCreativeIdeas} from './creative.js?v=26';
+import {buildCreativeIdeas} from './creative.js?v=27';
 import {defaults} from './seed.js';
 import {supplierSeed} from './supplier-seed.js';
 import {pdfRates} from './pdf-rates.js';
-import {retailerPrices,retailerQuote,otherQuote} from './retailers.js?v=26';
+import {retailerPrices,retailerQuote,otherQuote} from './retailers.js?v=27';
 import {todayIST,marketAsOf,comparePrices} from './model.js';
-import {dailyIdeas} from './dishes.js?v=26';
+import {dailyIdeas} from './dishes.js?v=27';
 import {estimateDish} from './costing.js';
-import {buildMealPackages} from './packages.js?v=26';
+import {buildMealPackages} from './packages.js?v=27';
 const $=selector=>document.querySelector(selector);
 const money=n=>n==null?'—':new Intl.NumberFormat('en-IN',{style:'currency',currency:'INR',minimumFractionDigits:0,maximumFractionDigits:2}).format(n);
 const quoteDate=q=>q?.date||q?.observed||q?.effectiveDate||null;
@@ -133,5 +133,6 @@ function selectTab(button){const type=button.dataset.type,isPrice=type==='Price'
 
 for(const button of tabs){button.addEventListener('click',()=>selectTab(button));button.addEventListener('keydown',event=>{const index=tabs.indexOf(button);let next;if(event.key==='ArrowRight')next=(index+1)%tabs.length;else if(event.key==='ArrowLeft')next=(index+tabs.length-1)%tabs.length;else if(event.key==='Home')next=0;else if(event.key==='End')next=tabs.length-1;else return;event.preventDefault();tabs[next].focus();selectTab(tabs[next]);});}
 render();refreshPrices();
+
 
 

@@ -1,4 +1,6 @@
-import {dishes as archivedDishes} from './dishes-archive.js?v=29';
+import {buildCreativeIdeas as buildArchivedCreativeIdeas} from './creative-archive.js?v=30';
+import {buildMealPackages as buildArchivedMealPackages} from './packages-archive.js?v=30';
+import {dishes as archivedDishes} from './dishes-archive.js?v=30';
 import {buildCreativeIdeas} from './creative.js?v=28';
 import {defaults} from './seed.js';
 import {supplierSeed} from './supplier-seed.js';
@@ -42,13 +44,20 @@ function renderPrices(){$('#priceRows').replaceChildren(...[...catalog.values()]
 function renderDishes(){
  if(dishType==='Reference'){
   const target=$('#dishList');target.replaceChildren();
-  const note=document.createElement('p');note.className='collection-note';note.textContent='Old Menu Reference · 216 previous dishes. Original recipes retained for comparison; ingredient cost estimates use the selected date.';target.append(note);
+  const note=document.createElement('p');note.className='collection-note';note.textContent='Old Menu Reference · All 216 previous dishes, Creative Corner and meal packages. Original recipes retained for comparison; ingredient cost estimates use the selected date.';target.append(note);
   for(const type of ['Curry','Palya','Snack']){
    const group=document.createElement('div');group.className='reference-group';
    const rows=archivedDishes.filter(d=>d.type===type).map(d=>({...d,archived:true}));
    renderDishCards(rows,group);
    const label=document.createElement('p');label.className='collection-note';label.textContent=(type==='Snack'?'Snacks':type)+' · '+rows.length+' previous dishes';target.append(label,group);
   }
+  const creative=document.createElement('div');creative.className='reference-group';
+  const ideas=buildArchivedCreativeIdeas(quoteForDish,{date:selectedDate}).map(d=>({...d,archived:true}));renderDishCards(ideas,creative);
+  const creativeLabel=document.createElement('p');creativeLabel.className='collection-note';creativeLabel.textContent='Previous Creative Corner · '+ideas.length+' price-based ideas';target.append(creativeLabel,creative);
+  if(!ideas.length){const empty=document.createElement('p');empty.className='collection-note';empty.textContent='Choose a date with ingredient prices to generate previous Creative Corner ideas.';target.append(empty);}
+  const meals=document.createElement('div');meals.className='reference-group';
+  const packages=buildArchivedMealPackages(quoteForDish,selectedDate);renderMealPackages(meals,packages);
+  const mealLabel=document.createElement('p');mealLabel.className='collection-note';mealLabel.textContent='Previous Meal Packages · '+packages.length+' Indian menus';target.append(mealLabel,meals);
   return;
  }
 
@@ -82,10 +91,10 @@ function renderDishCards(ordered,target){
    content.append(...(d.creative?[]:[description]),title,list,subtotal,note);card.append(summary,content);return card;
  }));
 }
-function renderMealPackages(){
- $('#mealList').replaceChildren(...buildMealPackages(quoteForDish,selectedDate).map((pack,index)=>{
+function renderMealPackages(target=$('#mealList'),packages=buildMealPackages(quoteForDish,selectedDate)){
+ target.replaceChildren(...packages.map((pack,index)=>{
   const card=document.createElement('article');card.className='dish meal-card';const summary=document.createElement('div');summary.className='meal-card-head';
-  const identity=document.createElement('div');identity.className='dish-identity';const label=document.createElement('small');label.className='dish-state';label.textContent=pack.cuisine+' · MORNING · LUNCH · EVENING';const name=document.createElement('span');name.className='dish-name';name.textContent='Meal package '+(index+1);identity.append(label,name);
+  const identity=document.createElement('div');identity.className='dish-identity';const label=document.createElement('small');label.className='dish-state';label.textContent=(pack.cuisine||'Previous Indian menu')+' · MORNING · LUNCH · EVENING';const name=document.createElement('span');name.className='dish-name';name.textContent='Meal package '+(index+1);identity.append(label,name);
   const cost=document.createElement('div');cost.className='dish-cost';const price=document.createElement('strong');price.textContent=!pack.basePriced?'Price needed':(pack.missing?'From ':'Est. ')+money(pack.perPortion);const perPerson=document.createElement('small');perPerson.textContent='/ person · '+money(pack.totalForGroup)+' / 200'+(pack.missing?' · incomplete':pack.withinBudget?' · within ₹1,900':' · over ₹1,900');price.className=pack.missing?'neutral':pack.withinBudget?'cheap':'expensive';cost.append(price,perPerson);summary.append(identity,cost);
   const content=document.createElement('div');content.className='dish-content';
   const menu=document.createElement('div');menu.className='meal-menu';

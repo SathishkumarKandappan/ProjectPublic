@@ -19,3 +19,5 @@
 .tabs button.active,.tabs button.active:hover{color:#fffdf4;background:#365940;border-color:#365940}
 
 .reference-group{display:contents}
+
+.search{display:flex;align-items:center;gap:16px;font-size:11px;font-weight:650;color:#627956;margin:0 0 20px}.search input{flex:1;min-width:0;background:#fffefa;font-size:13px;letter-spacing:0;text-transform:none;padding:13px 15px}.search input:focus{border-color:#729164}#searchResults{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px;align-items:start}@media(max-width:600px){.search{display:block}.search input{display:block;width:100%;margin-top:8px;font-size:12px}#searchResults{grid-template-columns:minmax(0,1fr)}}

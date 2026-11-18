@@ -30,3 +30,5 @@ assert.ok(tuesday[0].components[4].estimate.subtotal>=27);
 assert.equal(packages.filter(p=>p.components.some(c=>c.dish.international)).length,30);
 assert.equal(packages.filter(p=>p.components.every(c=>!c.dish.international)).length,10);
 assert.ok(packages.some(p=>p.components.some(c=>c.dish.international)&&p.components.some(c=>!c.dish.international&&['Curry','Palya','Snack'].includes(c.dish.type))));
+
+for(const kind of ['indian','fusion']){const group=buildMealPackages(getQuote,'2026-11-18',{kind});assert.equal(group.length,40);assert.equal(new Set(group.map(p=>p.components.map(c=>c.dish.id).join('|'))).size,40);assert.ok(group.every(p=>p.components.some(c=>c.dish.international)===(kind==='fusion')));assert.ok(group.every(p=>p.components[1].dish.base==='Red rice'&&p.components[4].dish.base==='Milk'&&p.budget===1900));}

@@ -1,3 +1,4 @@
+import {searchDishes} from '../search.js';
 import {buildCreativeIdeas as buildArchivedCreativeIdeas} from '../creative-archive.js';
 import {buildMealPackages as buildArchivedMealPackages} from '../packages-archive.js';
 import {dishes as archivedDishes} from '../dishes-archive.js';
@@ -12,16 +13,16 @@ import * as dishModule from '../dishes.js';
 import {estimateDish} from '../costing.js';
 import {pdfRates} from '../pdf-rates.js';
 import {retailerPrices,retailerQuote,otherQuote} from '../retailers.js';
-import {buildMealPackages} from '../packages.js';
+import {buildMealPackages,mornings,lunchRice,dailyButtermilk} from '../packages.js';
 const dom=new JSDOM(readFileSync('kitchen/index.html','utf8'),{url:'https://example.org',runScripts:'outside-only'}),w=dom.window;
-Object.assign(w,model,dishModule,{buildArchivedCreativeIdeas,buildArchivedMealPackages,archivedDishes,buildCreativeIdeas,searchEndpoint:'',defaults,supplierSeed,estimateDish,pdfRates,retailerPrices,retailerQuote,otherQuote,buildMealPackages});let fetches=0;
+Object.assign(w,model,dishModule,{searchDishes,mornings,lunchRice,dailyButtermilk,buildArchivedCreativeIdeas,buildArchivedMealPackages,archivedDishes,buildCreativeIdeas,searchEndpoint:'',defaults,supplierSeed,estimateDish,pdfRates,retailerPrices,retailerQuote,otherQuote,buildMealPackages});let fetches=0;
 const feed=JSON.parse(readFileSync('kitchen/market.json','utf8'));
 // Pin one historical market quote so freshness checks do not depend on changing live data.
 feed.records=feed.records.filter(r=>r.name!=='Red rice');feed.records.push({name:'Red rice',unit:'kg',price:80,date:'2026-11-01',source:'Historical test fixture'});
 w.fetch=async url=>{fetches++;return{ok:true,json:async()=>url.includes('supplier.json')?{quotes:[...supplierSeed,...pdfRates]}:(url.includes('retailer-prices.json')||url.includes('manual-latest.json'))?{quotes:[...retailerPrices]}:feed}};
 w.eval(readFileSync('kitchen/app.js','utf8').replace(/^import .*;\n/gm,''));await new Promise(r=>setTimeout(r,0));
 const $=s=>w.document.querySelector(s);
-assert.equal(w.document.querySelectorAll('input').length,1);assert.equal(w.document.querySelectorAll('button').length,10);assert.equal(w.document.querySelectorAll('th').length,7);assert.equal(w.document.querySelectorAll('header,footer,nav,select,h1,h2').length,0);
+assert.equal(w.document.querySelectorAll('input').length,2);assert.equal(w.document.querySelectorAll('button').length,11);assert.equal(w.document.querySelectorAll('th').length,7);assert.equal(w.document.querySelectorAll('header,footer,nav,select,h1,h2').length,0);
 const red=[...w.document.querySelectorAll('#priceRows tr')].find(r=>r.firstChild.textContent==='Red rice');assert.match(red.children[1].textContent,/₹80/);assert.match(red.children[2].textContent,/₹55/);assert.ok(red.children[1].classList.contains('stale-price'));assert.equal(red.children[2].classList.contains('stale-price'),false);
 assert.equal(w.document.querySelectorAll('#dishList .dish').length,50);assert.ok([...w.document.querySelectorAll('#dishList small')].every(e=>e.textContent.length>2));
 assert.equal($('#pricePanel').hidden,false);assert.equal($('#dishList').hidden,true);
@@ -33,9 +34,9 @@ const card=w.document.querySelector('.dish');assert.equal(card.open,false);card.
 $('#priceDate').value=model.todayIST();$('#priceDate').dispatchEvent(new w.Event('change'));await new Promise(r=>setTimeout(r,0));
 const ragi=[...w.document.querySelectorAll('#priceRows tr')].find(r=>r.firstChild.textContent==='Ragi flour');assert.match(ragi.children[2].textContent,/₹100/);assert.ok([...ragi.children].slice(3).every(c=>c.textContent.includes('₹')));
 const masoor=[...w.document.querySelectorAll('#priceRows tr')].find(r=>r.firstChild.textContent==='Masoor dal');assert.match(masoor.children[2].textContent,/₹110/);
-$('[data-type="Meal"]').click();assert.equal($('#mealList').hidden,false);assert.equal($('#dishList').hidden,true);assert.equal(w.document.querySelectorAll('#mealList .meal-card').length,40);assert.ok([...w.document.querySelectorAll('.meal-menu')].every(menu=>menu.textContent.includes('Red rice')));
+$('[data-type="MealIndian"]').click();assert.equal($('#mealList').hidden,false);assert.equal($('#dishList').hidden,true);assert.equal(w.document.querySelectorAll('#mealList .meal-card').length,40);assert.ok([...w.document.querySelectorAll('.meal-menu')].every(menu=>menu.textContent.includes('Red rice')));
 assert.equal($('#error').hidden,true);
-console.log('PASS: date-only control, seven price columns, ten tabs, association labels, automatic date refresh, rotating dishes and missing history');
+console.log('PASS: date-only control, seven price columns, eleven tabs, association labels, automatic date refresh, rotating dishes and missing history');
 
 assert.ok([...w.document.querySelectorAll('#priceRows td')].every(c=>c.textContent.trim().length>0));
 
@@ -56,12 +57,17 @@ const currentMilk=retailerQuote('BigBasket','Milk','litre','2026-11-05');assert.
 $('#priceDate').value=model.todayIST();$('#priceDate').dispatchEvent(new w.Event('change'));await new Promise(r=>setTimeout(r,0));$('[data-type="Creative"]').click();assert.equal($('#creativeList').hidden,false);assert.equal($('#dishList').hidden,true);assert.equal($('#mealList').hidden,true);assert.equal(w.document.querySelectorAll('#creativeList .dish').length,36);assert.match($('#creativeList').textContent,/Original/);const idea=w.document.querySelector('#creativeList .dish');idea.querySelector('summary').click();assert.ok(idea.querySelectorAll('.creative-method li').length>=3);
 
 
-const tabTypes=[...w.document.querySelectorAll('[data-type]')].map(t=>t.dataset.type);assert.equal(tabTypes.at(-1),'Reference');assert.equal(tabTypes.at(-2),'Meal');assert.deepEqual(tabTypes.slice(4,8),['Creative','International Curry/Main Course','International Palya','International Snacks']);
+const tabTypes=[...w.document.querySelectorAll('[data-type]')].map(t=>t.dataset.type);assert.equal(tabTypes.at(-1),'Reference');assert.equal(tabTypes.at(-2),'MealFusion');assert.equal(tabTypes.at(-3),'MealIndian');assert.deepEqual(tabTypes.slice(4,8),['Creative','International Curry/Main Course','International Palya','International Snacks']);
 for(const type of tabTypes.slice(5,8)){w.document.querySelector('[data-type="'+type+'"]').click();assert.equal(w.document.querySelectorAll('#dishList .dish').length,50);assert.equal($('#creativeList').hidden,true);assert.equal($('#mealList').hidden,true);assert.ok($('#dishList .dish-state').textContent.length>2);assert.match($('#dishList .collection-note').textContent,/50/);}
-$('[data-type="Meal"]').click();assert.match($('#mealList').textContent,/International/);assert.match($('#mealList').textContent,/Indian \+ international/);
+$('[data-type="MealIndian"]').click();assert.match($('#mealList').textContent,/Indian/);$('[data-type="MealFusion"]').click();assert.match($('#mealList').textContent,/Indian–International Fusion/);
 
 $('[data-type="Reference"]').click();assert.equal($('#dishList').hidden,false);assert.equal($('#mealList').hidden,true);assert.equal(w.document.querySelectorAll('#dishList details.dish').length,252);assert.equal(w.document.querySelectorAll('#dishList .reference-group').length,5);assert.match($('#dishList').textContent,/70 previous dishes/);assert.match($('#dishList').textContent,/76 previous dishes/);assert.match($('#dishList .dish-state').textContent,/Archived/);assert.equal(w.document.querySelector('#dishList .dish').open,false);w.document.querySelector('#dishList .dish summary').click();assert.equal(w.document.querySelector('#dishList .dish').open,true);assert.match($('#dishList').textContent,/10 PORTIONS/);
 $('[data-type="Curry"]').click();assert.equal(w.document.querySelectorAll('#dishList .dish').length,50);assert.equal(w.document.querySelectorAll('#dishList .reference-group').length,0);
 assert.equal(w.document.querySelectorAll('#dishList .meal-card').length,0);
 $('[data-type="Reference"]').click();assert.equal(w.document.querySelectorAll('#dishList .meal-card').length,40);assert.match($('#dishList').textContent,/Previous Creative Corner · 36/);assert.match($('#dishList').textContent,/Previous Meal Packages · 40/);
 console.log('PASS: complete old menu reference, 216 dishes, 36 Creative Corner ideas, 40 previous meal packages and current menus preserved');
+
+$('[data-type="Price"]').click();$('#dishSearch').value='chickpeas';$('#dishSearch').dispatchEvent(new w.Event('input'));assert.equal($('#searchResults').hidden,false);assert.equal($('#pricePanel').hidden,true);assert.match($('#searchResults').textContent,/Kabuli chana chaat/);assert.match($('#searchResults').textContent,/Revithada/);assert.ok(w.document.querySelectorAll('#searchResults .dish').length>10);
+$('#dishSearch').value='NOT A REAL INGREDIENT ZZZ';$('#dishSearch').dispatchEvent(new w.Event('input'));assert.match($('#searchResults').textContent,/No matching dishes/);assert.equal(w.document.querySelectorAll('#searchResults .dish').length,0);
+$('#dishSearch').value='';$('#dishSearch').dispatchEvent(new w.Event('input'));assert.equal($('#pricePanel').hidden,false);assert.equal($('#searchResults').hidden,true);
+console.log('PASS: two package categories and global ingredient search from Price tab');

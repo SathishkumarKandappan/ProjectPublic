@@ -1,15 +1,15 @@
 {
-  "checkedAt": "2026-11-14",
+  "checkedAt": "2026-11-18",
   "ingredients": 160,
-  "references": 294,
-  "notice": "Manually checked public listings and search results. Check dates are not seller price-effective dates; Bangalore checkout prices and availability are unverified.",
-  "searches": 480,
-  "primaryPagesOpened": 290,
+  "references": 293,
+  "notice": "Public listed and search-indexed price references rechecked on 18 November 2026. Some source pages are cached. Seller price-effective dates, Bangalore checkout prices and availability are not verified. Sold-out and regional references retain their labels.",
+  "primaryPagesOpened": 282,
+  "searches": 45,
   "byRetailer": {
-    "BigBasket": 166,
+    "BigBasket": 165,
     "Instamart": 97,
-    "Blinkit": 21,
-    "Zepto": 4,
+    "Blinkit": 22,
+    "Zepto": 3,
     "JammuBasket": 1,
     "Sidhi Marwadi": 2,
     "1mg": 1,
@@ -242,13 +242,15 @@
     ]
   },
   "dishes": {
-    "total": 216,
-    "curry": 70,
-    "palya": 70,
-    "snacks": 76,
-    "introducedToday": 30
+    "total": 300,
+    "perCategory": 50,
+    "archived": 216,
+    "creative": 36,
+    "mealPackages": {
+      "indian": 40,
+      "fusion": 40
+    }
   },
-  "supplier": "User-provided prices retained unchanged",
-  "dairy": "Nandini only; daily homemade buttermilk and first-day curd purchase retained"
+  "supplier": "User-provided rates retained unchanged",
+  "dairy": "Nandini only; purchased curd on Monday and milk-set curd on other days retained"
 }
-

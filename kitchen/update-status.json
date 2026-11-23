@@ -1,7 +1,7 @@
 {
-  "checkedAt": "2026-11-17T23:07:38.656Z",
+  "checkedAt": "2026-11-23T13:06:17.249Z",
   "retailers": {
-    "date": "2026-11-18",
+    "date": "2026-11-23",
     "total": 640,
     "completed": 640,
     "unattempted": 0,
@@ -71,12 +71,5 @@
     ],
     "governmentRecords": 0,
     "apiQuotes": 0
-  },
-  "manualReview": {
-    "checkedAt": "2026-11-23",
-    "ingredients": 160,
-    "references": 291,
-    "notice": "Public listed and search-indexed price references rechecked on 23 November 2026. Some source pages are cached. Seller price-effective dates, Bangalore checkout prices and availability are not verified. Sold-out and regional references retain their labels."
-  },
-  "manualCheckedAt": "2026-11-23T09:40:16.379Z"
+  }
 }

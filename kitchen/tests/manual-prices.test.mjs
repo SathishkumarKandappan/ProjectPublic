@@ -5,7 +5,7 @@ import {retailerPrices,retailerQuote} from '../retailers.js';
 import {foodVariantAllowed,packAmount} from '../server/search-prices.mjs';
 const review=JSON.parse(fs.readFileSync('kitchen/manual-review.json'));
 assert.equal(new Set(manualPrices.map(q=>q.name)).size,review.ingredients);
-const latest=JSON.parse(fs.readFileSync('kitchen/manual-latest.json')).quotes.filter(q=>q.observed===review.checkedAt);
+const latest=JSON.parse(fs.readFileSync('kitchen/'+review.currentFeed)).quotes.filter(q=>q.observed===review.checkedAt);
 assert.equal(latest.length,review.references);
 assert.equal(new Set(latest.map(q=>q.name)).size,review.ingredients);
 for(const q of [...manualPrices,...latest]){

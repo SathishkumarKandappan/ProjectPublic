@@ -1,16 +1,20 @@
-import {searchDishes} from './search.js?v=31';
-import {buildCreativeIdeas as buildArchivedCreativeIdeas} from './creative-archive.js?v=31';
-import {buildMealPackages as buildArchivedMealPackages} from './packages-archive.js?v=31';
-import {dishes as archivedDishes} from './dishes-archive.js?v=31';
-import {buildCreativeIdeas} from './creative.js?v=31';
+import {dishes as november18Dishes} from './dishes-nov18.js?v=32';
+import {buildCreativeIdeas as buildNovember18CreativeIdeas} from './creative-nov18.js?v=32';
+import {buildMealPackages as buildNovember18MealPackages,mornings as november18Mornings} from './packages-nov18.js?v=32';
+import {searchDishes} from './search.js?v=32';
+import {buildCreativeIdeas as buildArchivedCreativeIdeas} from './creative-archive.js?v=32';
+import {buildMealPackages as buildArchivedMealPackages,mornings as archivedMornings} from './packages-archive.js?v=32';
+import {dishes as originalArchivedDishes} from './dishes-archive.js?v=32';
+import {buildCreativeIdeas} from './creative.js?v=32';
 import {defaults} from './seed.js';
 import {supplierSeed} from './supplier-seed.js';
 import {pdfRates} from './pdf-rates.js';
-import {retailerPrices,retailerQuote,otherQuote} from './retailers.js?v=31';
+import {retailerPrices,retailerQuote,otherQuote} from './retailers.js?v=32';
 import {todayIST,marketAsOf,comparePrices} from './model.js';
-import {dishes,dailyIdeas} from './dishes.js?v=31';
+import {dishes,dailyIdeas} from './dishes.js?v=32';
 import {estimateDish} from './costing.js';
-import {buildMealPackages,mornings,lunchRice,dailyButtermilk} from './packages.js?v=31';
+import {buildMealPackages,mornings,lunchRice,dailyButtermilk} from './packages.js?v=32';
+const archivedDishes=[...originalArchivedDishes,...november18Dishes];
 const $=selector=>document.querySelector(selector);
 const money=n=>n==null?'—':new Intl.NumberFormat('en-IN',{style:'currency',currency:'INR',minimumFractionDigits:0,maximumFractionDigits:2}).format(n);
 const quoteDate=q=>q?.date||q?.observed||q?.effectiveDate||null;
@@ -47,20 +51,20 @@ function renderPrices(){$('#priceRows').replaceChildren(...[...catalog.values()]
 function renderDishes(){
  if(dishType==='Reference'){
   const target=$('#dishList');target.replaceChildren();
-  const note=document.createElement('p');note.className='collection-note';note.textContent='Old Menu Reference · All 216 previous dishes, Creative Corner and meal packages. Original recipes retained for comparison; ingredient cost estimates use the selected date.';target.append(note);
-  for(const type of ['Curry','Palya','Snack']){
+  const note=document.createElement('p');note.className='collection-note';note.textContent='Old Menu Reference · All 516 previous dishes, 72 Creative Corner ideas and 120 meal packages. Previous collections retained in full. Original recipes retained for comparison; ingredient cost estimates use the selected date.';target.append(note);
+  for(const type of ['Curry','Palya','Snack','International Curry/Main Course','International Palya','International Snacks']){
    const group=document.createElement('div');group.className='reference-group';
    const rows=archivedDishes.filter(d=>d.type===type).map(d=>({...d,archived:true}));
    renderDishCards(rows,group);
    const label=document.createElement('p');label.className='collection-note';label.textContent=(type==='Snack'?'Snacks':type)+' · '+rows.length+' previous dishes';target.append(label,group);
   }
   const creative=document.createElement('div');creative.className='reference-group';
-  const ideas=buildArchivedCreativeIdeas(quoteForDish,{date:selectedDate}).map(d=>({...d,archived:true}));renderDishCards(ideas,creative);
+  const ideas=[...buildArchivedCreativeIdeas(quoteForDish,{date:selectedDate}),...buildNovember18CreativeIdeas(quoteForDish,{date:selectedDate})].map(d=>({...d,archived:true}));renderDishCards(ideas,creative);
   const creativeLabel=document.createElement('p');creativeLabel.className='collection-note';creativeLabel.textContent='Previous Creative Corner · '+ideas.length+' price-based ideas';target.append(creativeLabel,creative);
   if(!ideas.length){const empty=document.createElement('p');empty.className='collection-note';empty.textContent='Choose a date with ingredient prices to generate previous Creative Corner ideas.';target.append(empty);}
   const meals=document.createElement('div');meals.className='reference-group';
-  const packages=buildArchivedMealPackages(quoteForDish,selectedDate);renderMealPackages(meals,packages);
-  const mealLabel=document.createElement('p');mealLabel.className='collection-note';mealLabel.textContent='Previous Meal Packages · '+packages.length+' Indian menus';target.append(mealLabel,meals);
+  const packages=[...buildArchivedMealPackages(quoteForDish,selectedDate),...buildNovember18MealPackages(quoteForDish,selectedDate,{kind:'indian'}),...buildNovember18MealPackages(quoteForDish,selectedDate,{kind:'fusion'})];renderMealPackages(meals,packages);
+  const mealLabel=document.createElement('p');mealLabel.className='collection-note';mealLabel.textContent='Previous Meal Packages · '+packages.length+' previous Indian and fusion menus';target.append(mealLabel,meals);
   return;
  }
 
@@ -110,7 +114,7 @@ function renderMealPackages(target=$('#mealList'),packages=buildMealPackages(quo
 }
 function renderSearch(){
  const query=$('#dishSearch').value.trim();if(!query)return;
- const catalog=[...dishes,...buildCreativeIdeas(quoteForDish,{date:selectedDate}),...mornings,lunchRice,dailyButtermilk(selectedDate),...archivedDishes.map(d=>({...d,archived:true})),...buildArchivedCreativeIdeas(quoteForDish,{date:selectedDate}).map(d=>({...d,archived:true}))];
+ const catalog=[...dishes,...buildCreativeIdeas(quoteForDish,{date:selectedDate}),...mornings,lunchRice,dailyButtermilk(selectedDate),...[...archivedMornings,...november18Mornings].map(d=>({...d,archived:true})),...archivedDishes.map(d=>({...d,archived:true})),...buildNovember18CreativeIdeas(quoteForDish,{date:selectedDate}).map(d=>({...d,archived:true})),...buildArchivedCreativeIdeas(quoteForDish,{date:selectedDate}).map(d=>({...d,archived:true}))];
  const results=searchDishes(catalog,query).map(d=>({...d,searchCategory:d.creative?'Creative idea':d.type==='Snack'?'Snack':d.type}));
  renderDishCards(results,$('#searchResults'));
  const note=document.createElement('p');note.className='collection-note';note.setAttribute('role','status');note.textContent=results.length?results.length+' matching dishes across Indian, international and old menus · Names, ingredients and places · Costs use the selected date':'No matching dishes. Try an ingredient such as potato, chickpea, ragi or curd.';$('#searchResults').prepend(note);
@@ -136,7 +140,7 @@ async function refreshPrices(){
   const results=await Promise.allSettled([
    read('market.json','records',r=>validQuote(r)&&validDate(r.date)),
    read('supplier.json','quotes',r=>validQuote(r)&&(!r.effectiveDate||validDate(r.effectiveDate))),
-   Promise.all(['retailer-prices.json','manual-latest.json'].map(file=>read(file,'quotes',r=>validQuote(r)&&validDate(r.observed)&&typeof r.retailer==='string'&&typeof r.url==='string'&&r.url.startsWith('https://')))).then(feeds=>[...new Map(feeds.flat().map(q=>[[q.retailer,q.name,q.unit,q.observed,q.url].join('|'),q])).values()]),
+   Promise.all(['retailer-prices.json','manual-latest.json','manual-2026-11-23.json'].map(file=>read(file,'quotes',r=>validQuote(r)&&validDate(r.observed)&&typeof r.retailer==='string'&&typeof r.url==='string'&&r.url.startsWith('https://')))).then(feeds=>[...new Map(feeds.flat().map(q=>[[q.retailer,q.name,q.unit,q.observed,q.url].join('|'),q])).values()]),
    fetch(root+'update-status.json?t='+Date.now(),{cache:'no-store',signal:controller.signal}).then(async response=>{if(!response.ok)throw Error('Status unavailable');return response.json();})
   ]);
   if(request!==requestId)return;
@@ -172,6 +176,7 @@ $('#dishSearch').addEventListener('input',()=>{
  else selectTab(tabs.find(t=>t.getAttribute('aria-selected')==='true')||tabs[0]);
 });
 render();refreshPrices();
+
 
 
 

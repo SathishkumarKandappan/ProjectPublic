@@ -1,13 +1,14 @@
 {
-  "checkedAt": "2026-11-18",
+  "checkedAt": "2026-11-23",
+  "currentFeed": "manual-2026-11-23.json",
   "ingredients": 160,
-  "references": 293,
-  "notice": "Public listed and search-indexed price references rechecked on 18 November 2026. Some source pages are cached. Seller price-effective dates, Bangalore checkout prices and availability are not verified. Sold-out and regional references retain their labels.",
-  "primaryPagesOpened": 282,
-  "searches": 45,
+  "references": 291,
+  "notice": "Public listed and search-indexed price references rechecked on 23 November 2026. Some source pages are cached. Seller price-effective dates, Bangalore checkout prices and availability are not verified. Sold-out and regional references retain their labels.",
+  "primaryPagesOpened": 286,
+  "searches": 42,
   "byRetailer": {
     "BigBasket": 165,
-    "Instamart": 97,
+    "Instamart": 95,
     "Blinkit": 22,
     "Zepto": 3,
     "JammuBasket": 1,
@@ -178,6 +179,7 @@
     "Instamart": [
       "Baby brinjal",
       "Bitter gourd",
+      "Black salt",
       "Black soybeans",
       "Bottle gourd",
       "Bread rolls",
@@ -190,6 +192,7 @@
       "Collard greens",
       "Cooking oil (unspecified)",
       "Coriander seeds",
+      "Cowpeas",
       "Cucumber",
       "Curry leaves",
       "Dried yellow peas",
@@ -244,12 +247,17 @@
   "dishes": {
     "total": 300,
     "perCategory": 50,
-    "archived": 216,
+    "archived": 516,
     "creative": 36,
     "mealPackages": {
       "indian": 40,
       "fusion": 40
-    }
+    },
+    "archivedCreative": 72,
+    "archivedMealPackages": 120,
+    "introducedToday": 300,
+    "morningOptions": 25,
+    "collectionDate": "2026-11-23"
   },
   "supplier": "User-provided rates retained unchanged",
   "dairy": "Nandini only; purchased curd on Monday and milk-set curd on other days retained"
